@@ -148,6 +148,30 @@ app.post("/login", (req, res) =>{
 
 });
 
+app.post('/home', (req, res) =>{
+    let {username} = req.body
+
+    pool.query("SELECT * FROM user WHERE username = ?", [username], function(error, results, fields){
+        if (error) {
+            res.json({
+                result: false,
+                message: error.message
+            });
+        }
+
+        if (results.length) {
+            res.json({
+                result: true,
+                data:results[0].role_id
+            });
+        } else {
+            res.json({
+                result:false,
+                message: "ไม่พบ Username หรือ Password ไม่ถูกต้อง"
+            });
+        }
+    });
+})
 
 
 app.listen(port, () => {

@@ -11,6 +11,7 @@ export default function Login(){
     const [password, setPassword] =useState("");
 
     let navigate = useNavigate();
+    
     const onLogin = (event) =>{
         const form = event.currentTarget;
         event.preventDefault();
@@ -19,6 +20,7 @@ export default function Login(){
             event.stopPropagation();
         }else{
             doLogin();
+            console.log("do else");
         }
 
         setValidated(true);
@@ -35,35 +37,11 @@ export default function Login(){
         localStorage.setItem("access_token", data2.data.access_token);
         localStorage.setItem("user_id", data2.data.account_info.user_id);
         localStorage.setItem("username",username);
-        localStorage.setItem("first_name", data2.data.account_info.first_name);
-        localStorage.setItem("last_name", data2.data.account_info.last_name);
-        localStorage.setItem("email", data2.data.account_info.email);
         localStorage.setItem("role_id", data2.data.account_info.role_id);
         localStorage.setItem("role_name", data2.data.account_info.role_name);
 
         navigate("home", {replace: false});
-        // const response = await fetch(
-        //     "http://localhost:8080/login",
-        //     {
-        //         method: "POST",
-        //         headers: {
-        //             Accept: "application/json",
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify({
-        //             username: username,
-        //             password: password
-        //         })
-        //     }
-        // );
 
-        // const data = await response.json();
-
-        // console.log(data);
-
-        // if( data.result) {
-        //     navigate("home", { replace: false});
-        // }
     }
 
     const getAuthenToken = async () => {
