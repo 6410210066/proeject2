@@ -33,13 +33,13 @@ export default function Login(){
         const authToken = data1.data.auth_token;
 
         const data2 = await getAccessToken(authToken);
-
+        console.log(data2);
         localStorage.setItem("access_token", data2.data.access_token);
         localStorage.setItem("user_id", data2.data.account_info.user_id);
         localStorage.setItem("username",username);
         localStorage.setItem("role_id", data2.data.account_info.role_id);
         localStorage.setItem("role_name", data2.data.account_info.role_name);
-
+        
         navigate("home", {replace: false});
 
     }
@@ -60,7 +60,6 @@ export default function Login(){
         );
 
         const data = await response.json();
-        
         
         console.log(data);
 

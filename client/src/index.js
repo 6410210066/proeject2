@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import Login from './Login';
+import Users from './components/admin/Users';
 import reportWebVitals from './reportWebVitals';
 import {
   BrowserRouter,
@@ -17,6 +18,7 @@ root.render(
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="home" element={<Home />} />
+
     </Routes>
   </BrowserRouter>,
   // document.getElementById('root')

@@ -1,0 +1,27 @@
+.content{
+    /* background-color: aquamarine; */
+    height: 100vh;
+
+}
+
+.nav{
+    background-color: blueviolet;
+    
+}
+
+a{
+    background-color: aquamarine;
+    display: block;
+    padding: 1.5em;
+    padding-top: 1.3em;
+    width: 100%;
+}
+
+.sidebar{
+    margin: 0;
+    padding: 0;
+}
+
+.a-style{
+    padding: 10px 0px 10px 10px;
+}

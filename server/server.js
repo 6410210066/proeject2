@@ -7,13 +7,14 @@ const bodyParser = require('body-parser');
 const cors = require("cors");
 const util = require('util');
 // const multer = require("multer");
-
+const users = require('../server/libs/users');
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
 // app.use('/images', express.static('images'));
 
 var mysql = require('mysql');
+const { response } = require("express");
 var pool = mysql.createPool({
     connectionLimit: 10,
     host: "localhost",
@@ -173,7 +174,97 @@ app.post('/home', (req, res) =>{
     });
 })
 
+app.get('/api/users', (req,res)=>{
+    pool.query("SELECT * FROM user",function(error,results,fields){
+        if(error){
+            res.json({
+                result: false,
+                message: error.message
+            });
+        }
 
+        if(results.length){
+            res.json({
+                result:true,
+                data: results
+            });
+        }else{
+            res.json({
+                result: false,
+                message: "ไม่พบบัญชีผู้ใช้"
+            });
+        }
+    });
+});
+
+app.post('/api/users/add',checkAuth ,async(req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await users.createUser(pool,input.username,input.password,input.role_id);
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
+app.post('/api/users/update',checkAuth,async(req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await users.updateUser(pool,input.user_id,input.username,input.password,input.role_id);
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
+app.post('/api/users/delete',checkAuth,async(req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await users.deleteUsers(pool,input.user_id);
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
+app.get('/api/users/:user_id',async(req,res)=>{
+    const userid = req.params.user_id;
+
+    try{
+        var result = await users.getByUserId(pool,userid);
+        res.json({
+            result: true,
+            data: result
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
 app.listen(port, () => {
     console.log("Running");
 });
