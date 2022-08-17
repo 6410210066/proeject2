@@ -12,6 +12,7 @@ export default function ManagerUser(){
     const [validated,setValidated] =useState(false);
     const [username,setUsername] =useState("");
     const [role_id,setRoleId] = useState(0);
+    const [role,setRole] = useState([]);
     const [password,setPassword] =useState("");
     const [user_id,setUserId]  = useState(0);
     const [newpassword,setNewPassword] = useState("");
