@@ -6,6 +6,7 @@ import {  Table,Form,Col,Row,Button } from 'react-bootstrap'
 import { Link } from "react-router-dom";
 
 export default function Users(){
+
     const [data,setData] =useState([]);
     const [users,setUsers] = useState([]);
     const [username,setUsername] =useState("");
@@ -27,15 +28,18 @@ export default function Users(){
 
             let json = await response.json();
             setUsers(json.data);
-            
+            setData(json.data);
         }
         fetchData();
     },[]);
 
     useEffect( ()=>{
-       onSearch();
-       fetchData();
-    },[username,setData]);
+        if(username!=""){
+            
+        }else{
+            setData(users);
+        }
+    },[username]);
 
 
     const ondelete = async(data) =>{
@@ -47,65 +51,42 @@ export default function Users(){
         }
     }
 
-    // const onFind =async(event)=>{
+    const onSearch = async(event)=>{
 
-    //     const form = event.currentTarget;
-    //     event.preventDefault();
+        const form = event.currentTarget;
+        event.preventDefault();
 
-    //     if(form.checkValidity()=== false){
-    //         event.stopPropagation();
-    //     }else{
-    //         onSearch();
-    //         fetchData();
-    //         setUsername("");
-    //     }
-
-    // }
-
-    const onSearch = async()=>{
-        console.log("onsearch user:"+username);
-        const response = await fetch(
-            "http://localhost:8080/api/users/search",
-            {
-                method: "POST",
-                headers: {
-                    Accept: "application/json",
-                    'Content-Type': 'application/json',
-                    Authorization : "Bearer "+localStorage.getItem("access_token")
-                },
-                body:JSON.stringify({
-                    username:username
-                })
+        if (form.checkValidity() === false) {
+            event.stopPropagation();
+        } else {
+            if(username !=""){
+                let searchdata = [];
+                users.filter(users =>users.username.includes(username)).map(item => {
+                    searchdata.push(item);
+                    console.log()
+                }) 
+                fetchSearch(searchdata);
+            }else{
+                setData(users);
             }
-        )
-        let json = await response.json();
-
-        if(json.result){
-            console.log("พบข้อมูล");
-            console.log(json.data)
-            setData(json.data);
-        //  window.location="/home";
         }
     }
 
     const  fetchData = async()=>{
         
-        if(username===""){
             let json =await API_GET("users");
             console.log("if data" +json.data);
             setUsers(json.data);
-        }else{
-            let json = await data; 
-            console.log("else data" +json);
-            setUsers(json);
 
-        }
+    }
 
+    const fetchSearch = async(searchdata)=>{
+        setData(searchdata);
     }
     return(
         <>
             <h1 className="header">จัดการบัญชีผู้ใช้</h1><br/>
-                    <Form noValidate validated={validated}  >
+                    <Form noValidate validated={validated}  onClick={onSearch}>
                         <div className="row ms-5">
                             <div className="col-9 mt-2 ">
                                 <Form.Group as={Col} controlId="validateUserName" >
@@ -135,7 +116,7 @@ export default function Users(){
                 <Userheader />
                 <tbody>
                     {
-                        users.map(item => (
+                        data.map(item => (
                             <Useritem key={item.user_id} data={item} ondelete={ondelete} num={num}/>
                         ))
                     }
