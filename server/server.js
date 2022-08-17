@@ -216,9 +216,9 @@ app.post('/api/users/add',checkAuth ,async(req,res)=>{
 
 app.post('/api/users/update',checkAuth,async(req,res)=>{
     const input = req.body;
-
+    
     try{
-        var result = await users.updateUser(pool,input.user_id,input.username,input.password,input.role_id);
+        var result = await users.updateUser(pool,input.user_id,input.username,input.password,input.role_id,input.checkpassword);
         res.json({
             result: true
         });
@@ -238,6 +238,42 @@ app.post('/api/users/delete',checkAuth,async(req,res)=>{
         var result = await users.deleteUsers(pool,input.user_id);
         res.json({
             result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
+app.post('/api/users/search',async(req,res)=>{
+    let {username} = req.body;
+    console.log(username);
+    try{
+
+        pool.query(`SELECT * FROM user WHERE username LIKE '%${username}%'`, function(error,results,fields){
+            console.log("inquery"+results);
+            if (error) {
+                res.json({
+                    result: false,
+                    message: error.message
+                });
+            }
+    
+            if (results.length) {
+                res.json({
+                    result: true,
+                    data:results
+                });
+                
+            } else {
+                res.json({
+                    result:false,
+                    message: "ไม่พบ user นี้"
+                });
+            }
         });
 
     }catch(ex){

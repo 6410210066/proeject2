@@ -8,8 +8,12 @@ module.exports={
         sql = mysql.format(sql,[username,password,role_id]);
         return await pool.query(sql);
     },
-    updateUser: async (pool,user_id,username,password,role_id) =>{
-        var sql = "UPDATE user SET username = ?,password = MD5(?),role_id =? WHERE user_id = ?";
+    updateUser: async (pool,user_id,username,password,role_id,checkpassword) =>{
+        if(checkpassword===true){
+            var sql = "UPDATE user SET username = ?,password = MD5(?),role_id =? WHERE user_id = ?";
+        }else if(checkpassword===false){
+            var sql = "UPDATE user SET username = ?,password = ?,role_id =? WHERE user_id = ?";
+        }
         sql = mysql.format(sql,[username,password,role_id,user_id]);
         return await pool.query(sql);
     },
@@ -21,6 +25,11 @@ module.exports={
     getByUserId: async(pool,user_id) =>{
         var sql = "SELECT * FROM user WHERE user_id = ?";
         sql = mysql.format(sql,[user_id]);
+        return await pool.query(sql);
+    },
+    searchUser: async(pool,username)=>{
+        var sql ="SELECT * FROM user WHERE username LIKE '%?%'";
+        sql = mysql.format(sql,[username]);
         return await pool.query(sql);
     }
 };

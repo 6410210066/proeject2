@@ -9,19 +9,105 @@
     
 }
 
-a{
-    background-color: aquamarine;
+.navadmin{
+    background-color: #FFC700;
+}
+.navadmin a{
+    /* background-color: #FFC700; */
     display: block;
-    padding: 1.5em;
+    padding: 1.0em 0em 1em 0.2em;
     padding-top: 1.3em;
     width: 100%;
+    font-size: 1.0em;
+    color: black;
+}
+.bg-action{
+    background-color: rgb(194, 191, 191);
 }
 
-.sidebar{
-    margin: 0;
-    padding: 0;
-}
 
 .a-style{
-    padding: 10px 0px 10px 10px;
+    
+    text-decoration: none;
+}
+
+.a-style a{
+    padding: 17px 0px 17px 12px;
+    text-decoration: none;
+}
+.button{
+
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+
+}
+
+.btn-edit{
+    background-color: rgb(221, 147, 36); 
+    color: rgb(255, 255, 255); 
+    border-radius: 10px;
+}
+
+.btn-delete{
+    background-color: rgb(207, 16, 45);
+    color: rgb(255, 255, 255); 
+    border-radius: 10px;
+}
+
+/* .line-buttom{
+    border-bottom: solid 2px  rgb(54, 54, 54);
+} */
+
+.sub-text{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+}
+table{
+    text-align: center;
+    
+}
+.table-striped>tbody>tr:nth-child(odd)>td, 
+.table-striped>tbody>tr:nth-child(odd)>th {
+    background-color: #e1e1e1; /* Choose your own color here */
+}
+
+.user-grid{
+    width: 80%;
+    margin: auto;
+}
+
+.active{
+    background-color: #cd680a;
+}
+
+.logout{
+    background-color: #d00909;
+    bottom: 0;
+    vertical-align: bottom;
+}
+
+.btn-add{
+    float: right;
+    margin:10px 20px 10px 20px;
+}
+
+.header{
+    margin-top: 10px;
+    text-align: center;
+}
+
+.form-search{
+    margin: auto;
+    text-align: center;
 }

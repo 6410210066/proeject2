@@ -4,12 +4,14 @@ import './index.css';
 import Login from './Login';
 import Users from './components/admin/Users';
 import reportWebVitals from './reportWebVitals';
+import ManagerMgs from './components/admin/ManagerMgs';
 import {
   BrowserRouter,
   Routes,
   Route,
 } from "react-router-dom";
 import Home from './Home';
+import ManagerUser from './components/admin/ManageUser';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -18,7 +20,8 @@ root.render(
     <Routes>
       <Route path="/" element={<Login />} />
       <Route path="home" element={<Home />} />
-
+      <Route path="users/:user_id" element={<ManagerUser/>} />
+      <Route path="manager" element={<ManagerMgs/>} />
     </Routes>
   </BrowserRouter>,
   // document.getElementById('root')

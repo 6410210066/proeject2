@@ -3,9 +3,9 @@ import "../admin/admin.css"
 import Adminnav from './Adminnav';
 import Users from './Users';
 
-export default function Admin (){
+export default function ManagerMgs (){
 
-    let page =1;
+    let page =2;
     return(
         <>
             <div  className="container-fluid">
@@ -15,7 +15,8 @@ export default function Admin (){
                     </div>
                     <div className="col-lg-10 col-sm-12 content" style={{padding:"0"}}>
                         <div className='user-grid'>
-                            <Users page={page}/>
+                            <h1 className="header">จัดการบัญชีผู้จัดการ</h1><br/>
+                            {/* <Users page={page}/> */}
                         </div>
                     </div>
                 </div>

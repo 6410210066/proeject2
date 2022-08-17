@@ -1,8 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import HeaderLogin from './HeaderLogin';
 import {useState } from 'react';
 import {Form ,Row,Col,Button } from 'react-bootstrap';
 import {useNavigate} from 'react-router-dom';
+import "./style.css";
 
 var md5 = require("md5");
 export default function Login(){
@@ -89,44 +90,50 @@ export default function Login(){
         return data;
     };
     return(
-        <div className='container m-auto'>
-            <Form noValidate validated={validated} onSubmit={onLogin}>
-                <Row className='md-3'>
-                    <Form.Group as={Col} controlId="validateUsername">
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control 
-                            required
-                            type="text"
-                            placeholder="Uesrname"
-                            onChange={(e) => setUsername(e.target.value)}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            กรุณากรอก username
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Row>
-                <Row className="md-3">
-                    <Form.Group as={Col} controlId="validatePassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control 
-                            required
-                            type="password"
-                            placeholder="Password"
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
+        <div className='containerfluid m-auto bg-login'>
+            <div className='header-login'>
+                <HeaderLogin />
+            </div>
+            <div className='bg-warning login-form' >
+                <Form noValidate validated={validated} onSubmit={onLogin}>
+                    <Row className='md-3'>
+                        <Form.Group as={Col} controlId="validateUsername">
+                            <Form.Label>Username</Form.Label>
+                            <Form.Control 
+                                required
+                                type="text"
+                                placeholder="Uesrname"
+                                onChange={(e) => setUsername(e.target.value)}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                กรุณากรอก username
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Row>
+                    <Row className="md-3">
+                        <Form.Group as={Col} controlId="validatePassword">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control 
+                                required
+                                type="password"
+                                placeholder="Password"
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
 
-                        <Form.Control.Feedback type="invalid">
-                            กรุณากรอก Password
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Row>
-                <Row>
-                    <Col md={3}>
-                        <br></br>
-                        <Button type="submit">Login</Button>
-                    </Col>
-                </Row>
-            </Form>
+                            <Form.Control.Feedback type="invalid">
+                                กรุณากรอก Password
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Row>
+                    <Row>
+                        <Col md={3}>
+                            <br></br>
+                            <Button type="submit">Login</Button>
+                        </Col>
+                    </Row>
+                </Form>
+            </div>
+            
         </div>
     );
 }
