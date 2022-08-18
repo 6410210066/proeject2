@@ -13,7 +13,7 @@ export default function Admin (){
                     <div className="col-lg-2  col-sm-12 content" style={{padding:"0"}}>
                         <Adminnav page={page}/>
                     </div>
-                    <div className="col-lg-10 col-sm-12 content" style={{padding:"0"}}>
+                    <div className="col-lg-10 col-sm-12 content " style={{padding:"0"}}>
                         <div className='user-grid'>
                             <Users page={page}/>
                         </div>

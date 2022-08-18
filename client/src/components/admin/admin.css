@@ -1,5 +1,5 @@
 .content{
-    /* background-color: aquamarine; */
+    background-color:rgb(241, 244, 176);
     height: 100vh;
 
 }
@@ -75,7 +75,7 @@
 }
 table{
     text-align: center;
-    
+    background-color:white;
 }
 .table-striped>tbody>tr:nth-child(odd)>td, 
 .table-striped>tbody>tr:nth-child(odd)>th {
@@ -111,3 +111,4 @@ table{
     margin: auto;
     text-align: center;
 }
+

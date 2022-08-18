@@ -1,9 +1,9 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "../owner/owner.css"
-import Ownernav from './Ownernav';
-import Dashboard from './Dashboard';
-export default function Owner (){
-    let page =1;
+import Ownernav from "./Ownernav";
+
+
+
+export default function OwnerEmloyee(){
+    let page=4;
     return(
         <>
             <div  className="container-fluid" >
@@ -12,7 +12,7 @@ export default function Owner (){
                          <Ownernav page={page} />
                     </div>
                     <div className="col-lg-10 content" style={{padding:"0"}}>
-                        <Dashboard page={page}/>
+                        <h1 className="header">จัดการข้อมูลพนักงาน</h1>
                     </div>
                 </div>
             </div>

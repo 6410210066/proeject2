@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import Login from './Login';
-import Users from './components/admin/Users';
 import reportWebVitals from './reportWebVitals';
 import ManagerMgs from './components/admin/ManagerMgs';
 import {
@@ -12,6 +11,9 @@ import {
 } from "react-router-dom";
 import Home from './Home';
 import ManagerUser from './components/admin/ManageUser';
+import Product from './components/owner/Product';
+import OwnerEmloyee from './components/owner/OwnerEmployee';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -22,6 +24,8 @@ root.render(
       <Route path="home" element={<Home />} />
       <Route path="users/:user_id" element={<ManagerUser/>} />
       <Route path="manager" element={<ManagerMgs/>} />
+      <Route path="product" element={<Product />} />
+      <Route path="owner/employee" element={<OwnerEmloyee />} />
     </Routes>
   </BrowserRouter>,
   // document.getElementById('root')
