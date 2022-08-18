@@ -8,6 +8,7 @@ const cors = require("cors");
 const util = require('util');
 // const multer = require("multer");
 const users = require('../server/libs/users');
+const product = require('../server/libs/product');
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());

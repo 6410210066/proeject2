@@ -73,11 +73,10 @@ export default function Users(){
     }
 
     const  fetchData = async()=>{
-        
             let json =await API_GET("users");
             console.log("if data" +json.data);
             setUsers(json.data);
-
+            setData(json.data);
     }
 
     const fetchSearch = async(searchdata)=>{
@@ -87,7 +86,7 @@ export default function Users(){
         <>
             <h1 className="header">จัดการบัญชีผู้ใช้</h1><br/>
                     <Form noValidate validated={validated}  onClick={onSearch}>
-                        <div className="row ms-5">
+                        <div className="row ms-5 mb-3">
                             <div className="col-9 mt-2 ">
                                 <Form.Group as={Col} controlId="validateUserName" >
                                     <Form.Control
@@ -102,7 +101,7 @@ export default function Users(){
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
-                            <div className="col-1 me-5 ms-4"> 
+                            <div className="col-1 me-4 ms-3"> 
                                 <Button className="button btn-edit" as="input" type="submit" value="ค้นหา"/>
                             </div>
                             <div className="col-1">                             

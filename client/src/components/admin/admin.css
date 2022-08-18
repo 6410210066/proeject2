@@ -1,17 +1,16 @@
+
 .content{
-    /* background-color: aquamarine; */
     height: 100vh;
-
+    background-color:rgb(241, 244, 176);
 }
 
-.nav{
-    background-color: blueviolet;
-    
-}
 
 .navadmin{
     background-color: #FFC700;
+    height: 100vh;
+    
 }
+
 .navadmin a{
     /* background-color: #FFC700; */
     display: block;
@@ -75,7 +74,7 @@
 }
 table{
     text-align: center;
-    
+    background-color:white;
 }
 .table-striped>tbody>tr:nth-child(odd)>td, 
 .table-striped>tbody>tr:nth-child(odd)>th {
@@ -111,3 +110,4 @@ table{
     margin: auto;
     text-align: center;
 }
+
