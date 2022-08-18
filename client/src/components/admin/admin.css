@@ -1,17 +1,16 @@
+
 .content{
+    height: 100vh;
     background-color:rgb(241, 244, 176);
+}
+
+
+.navadmin{
+    background-color: #FFC700;
     height: 100vh;
     
 }
 
-.nav{
-    background-color: blueviolet;
-    
-}
-
-.navadmin{
-    background-color: #FFC700;
-}
 .navadmin a{
     /* background-color: #FFC700; */
     display: block;
