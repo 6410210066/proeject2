@@ -304,6 +304,101 @@ app.get('/api/users/:user_id',async(req,res)=>{
     }
 });
 
+app.get('/api/product', (req,res)=>{
+    pool.query("SELECT * FROM product",function(error,results,fields){
+        if(error){
+            res.json({
+                result: false,
+                message: error.message
+            });
+        }
+
+        if(results.length){
+            res.json({
+                result:true,
+                data: results
+            });
+        }else{
+            res.json({
+                result: false,
+                message: "ไม่พบสินค้า"
+            });
+        }
+    });
+});
+
+app.post('/api/product/add',checkAuth, async(req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await product.createProduct(pool,input.product_name,input.product_price,input.product_size,
+                                                input.product_weight,input.product_img,input.product_type_id);
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
+app.post('/api/product/update',checkAuth,async(req,res)=>{
+    const input = req.body;
+    
+    try{
+        var result = await product.updataProduct(pool,input.product_id,input.product_name,input.product_price,input.product_size,
+                                                input.product_weight,input.product_img,input.product_type_id);
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
+
+app.post('/api/product/delete',async(req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await product.deleteProduct(pool,input.product_id);
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
+app.get('/api/product/:product_id',async(req,res)=>{
+    const product_id = req.params.product_id;
+
+    try{
+        var result = await product.getByproductId(pool,product_id);
+        res.json({
+            result: true,
+            data: result
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
 app.get('/api/employee', (req,res)=>{
     pool.query("SELECT * FROM employee",function(error,results,fields){
         if(error){
@@ -312,7 +407,6 @@ app.get('/api/employee', (req,res)=>{
                 message: error.message
             });
         }
-
         if(results.length){
             res.json({
                 result:true,
