@@ -493,7 +493,6 @@ app.get('/api/employee/:emp_id',async(req,res)=>{
 });
 
 
-
 app.listen(port, () => {
     console.log("Running");
 });
