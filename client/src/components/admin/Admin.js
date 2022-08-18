@@ -8,7 +8,7 @@ export default function Admin (){
     let page =1;
     return(
         <>
-            <div  className="container-fluid">
+            <div  className="container-fluid ">
                 <div className="row">
                     <div className="col-lg-2  col-sm-12 content" style={{padding:"0"}}>
                         <Adminnav page={page}/>

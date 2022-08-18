@@ -73,11 +73,10 @@ export default function Users(){
     }
 
     const  fetchData = async()=>{
-        
             let json =await API_GET("users");
             console.log("if data" +json.data);
             setUsers(json.data);
-
+            setData(json.data);
     }
 
     const fetchSearch = async(searchdata)=>{
