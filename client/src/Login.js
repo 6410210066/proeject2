@@ -21,7 +21,7 @@ export default function Login(){
             event.stopPropagation();
         }else{
             doLogin();
-            console.log("do else");
+          
         }
 
         setValidated(true);
@@ -34,7 +34,7 @@ export default function Login(){
         const authToken = data1.data.auth_token;
 
         const data2 = await getAccessToken(authToken);
-        console.log(data2);
+      
         localStorage.setItem("access_token", data2.data.access_token);
         localStorage.setItem("user_id", data2.data.account_info.user_id);
         localStorage.setItem("username",username);
