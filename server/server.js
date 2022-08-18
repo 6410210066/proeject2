@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 
 var mysql = require('mysql');
 const { response } = require("express");
+const employee = require("./libs/employee");
 var pool = mysql.createPool({
     connectionLimit: 10,
     host: "localhost",
@@ -301,6 +302,102 @@ app.get('/api/users/:user_id',async(req,res)=>{
         });
     }
 });
+
+app.get('/api/employee', (req,res)=>{
+    pool.query("SELECT * FROM employee",function(error,results,fields){
+        if(error){
+            res.json({
+                result: false,
+                message: error.message
+            });
+        }
+
+        if(results.length){
+            res.json({
+                result:true,
+                data: results
+            });
+        }else{
+            res.json({
+                result: false,
+                message: "ไม่พบบัญชีผู้ใช้"
+            });
+        }
+    });
+});
+
+app.post('/api/employee/add',checkAuth,async(req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await employee.createEmp(pool,input.firstname,input.lastname,input.address,
+                                            input.salary,input.phone_number,input.branch_id,input.user_id);
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
+app.post('/api/employee/update',checkAuth,async(req,res)=>{
+    const input = req.body;
+    
+    try{
+        var result = await employee.updateEmp(pool,input.emp_id,input.firstname,input.lastname,input.address,
+                                            input.salary,input.phone_number,input.branch_id);
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
+app.post('/api/employee/delete',checkAuth,async(req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await employee.deleteEmp(pool,input.emp_id);
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
+app.get('/api/employee/:emp_id',async(req,res)=>{
+    const empid = req.params.emp_id;
+
+    try{
+        var result = await employee.getByEmpId(pool,empid);
+        res.json({
+            result: true,
+            data: result
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
 app.listen(port, () => {
     console.log("Running");
 });
+
