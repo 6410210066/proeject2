@@ -16,6 +16,7 @@ app.use(bodyParser.json());
 
 var mysql = require('mysql');
 const { response } = require("express");
+const employee = require("./libs/employee");
 var pool = mysql.createPool({
     connectionLimit: 10,
     host: "localhost",
@@ -406,7 +407,6 @@ app.get('/api/employee', (req,res)=>{
                 message: error.message
             });
         }
-
         if(results.length){
             res.json({
                 result:true,
@@ -492,7 +492,7 @@ app.get('/api/employee/:emp_id',async(req,res)=>{
     }
 });
 
-
 app.listen(port, () => {
     console.log("Running");
 });
+
