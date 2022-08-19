@@ -25,7 +25,6 @@ export default function Home() {
             }
         );
         const data = await response.json();
-        console.log(data.result)
         if(data.result === false){
             setRole(5);
         }else{

@@ -13,7 +13,7 @@ import Home from './Home';
 import ManagerUser from './components/admin/ManageUser';
 import Product from './components/owner/Product';
 import OwnerEmloyee from './components/owner/OwnerEmployee';
-
+import ProductForm from './components/owner/ProductForm';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -24,8 +24,9 @@ root.render(
       <Route path="home" element={<Home />} />
       <Route path="users/:user_id" element={<ManagerUser/>} />
       <Route path="manager" element={<ManagerMgs/>} />
-      <Route path="product" element={<Product />} />
+      <Route path="owner/product" element={<Product />} />
       <Route path="owner/employee" element={<OwnerEmloyee />} />
+      <Route path="product/:product_id" element={<ProductForm />} />
     </Routes>
   </BrowserRouter>,
   // document.getElementById('root')

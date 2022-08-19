@@ -318,6 +318,7 @@ app.get('/api/product', (req,res)=>{
                 result:true,
                 data: results
             });
+            
         }else{
             res.json({
                 result: false,
@@ -334,7 +335,8 @@ app.post('/api/product/add',checkAuth, async(req,res)=>{
         var result = await product.createProduct(pool,input.product_name,input.product_price,input.product_size,
                                                 input.product_weight,input.product_img,input.product_type_id);
         res.json({
-            result: true
+            result: true,
+            data: result
         });
 
     }catch(ex){
@@ -390,6 +392,7 @@ app.get('/api/product/:product_id',async(req,res)=>{
             result: true,
             data: result
         });
+        console.log("re ="+ result);
 
     }catch(ex){
         res.json({

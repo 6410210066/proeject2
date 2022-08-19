@@ -6,7 +6,8 @@ export default function Useritem(props){
     }
 
     return(
-        <>    <tr>
+        <>    
+             <tr>
                     <td className="align-middle">{props.data.user_id} </td>
                     <td className="align-middle">{props.data.username}</td>
                     <td className="align-middle sub-text">{props.data.password}</td>
