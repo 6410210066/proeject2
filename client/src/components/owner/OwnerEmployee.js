@@ -1,10 +1,81 @@
+import { useEffect, useState } from "react";
 import Ownernav from "./Ownernav";
-
-
+import "./owner.css";
+import { Table,Form, Col, Button } from "react-bootstrap";
+import { API_GET , API_POST } from "../../api";
+import EmployeeItem from "./EmployeeItem";
+import { Link } from "react-router-dom";
 
 export default function OwnerEmloyee(){
     let page=4;
+        const [data,setData] = useState([]);
+        const [employee,setemployee] = useState([]);
+        const [firstname,setFirstname] = useState("");
+        const [validated,setValidated] =useState(false);
+
+    useEffect(()=>{
+        async function fetchData(){
+            let json = await API_GET("employee");
+            setData(json.data);
+            setemployee(json.data);
+            console.log(json.data);
+        }
+        fetchData();
+    },[])
+
+    useEffect( ()=>{
+        if(firstname!=""){
+            
+        }else{
+            setData(employee);
+        }
+    },[firstname]);
+
+
+    const ondelete = async(data) =>{
+        let json = await API_POST("employee/delete",{
+            emp_id : data.emp_id
+        });
+        if(json.result){
+            fetchData();
+        }
+    }
+
+    const onSearch = async(event)=>{
+
+        const form = event.currentTarget;
+        event.preventDefault();
+
+        if (form.checkValidity() === false) {
+            event.stopPropagation();
+        } else {
+            if(firstname !=""){
+                let searchdata = [];
+                employee.filter(employee =>employee.firstname.includes(firstname)).map(item => {
+                    searchdata.push(item);
+                    console.log()
+                }) 
+                fetchSearch(searchdata);
+            }else{
+                setData(employee);
+            }
+        }
+    }
+
+    const  fetchData = async()=>{
+        let json =await API_GET("employee");
+        console.log("if data" +json.data);
+        setData(json.data);
+        setemployee(json.data);
+    }   
+
+    const fetchSearch = async(searchdata)=>{
+        setData(searchdata);
+    }
+    
     return(
+
+        
         <>
             <div  className="container-fluid" >
                 <div className="row">
@@ -13,6 +84,50 @@ export default function OwnerEmloyee(){
                     </div>
                     <div className="col-lg-10 content" style={{padding:"0"}}>
                         <h1 className="header">จัดการข้อมูลพนักงาน</h1>
+                        <Form noValidate validated={validated}  onClick={onSearch}>
+                        <div className="row ms-5 mb-3">
+                            <div className="col-9 mt-2 ">
+                                <Form.Group as={Col} controlId="validateUserName" >
+                                    <Form.Control
+                                        required
+                                        type="text"
+                                        value={firstname}
+                                        placeholder="ค้นหาชื่อพนักงาน"
+                                        onChange={(e) => setFirstname(e.target.value)}  
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        กรุณากรอก ชื่อพนักงาน
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </div>
+                            <div className="col-1 me-4 ms-3"> 
+                                <Button className="button btn-edit" as="input" type="submit" value="ค้นหา"/>
+                            </div>
+                            <div className="col-1">                             
+                                <Link to={`/employee/add`} className="button btn-edit">เพิ่ม</Link>
+                            </div>
+                            <div className="col-1"></div>
+                        </div>
+                    </Form>
+                        <Table striped className="mx-5">
+                            <thead>
+                                <tr>
+                                    <th>ชื่อพนักงาน</th>
+                                    <th>นามสกุล</th>
+                                    <th>ที่อยู่</th>
+                                    <th>เงินเดือน</th>
+                                    <th>เบอร์โทรศัพท์</th>
+                                    <th>สาขา</th>
+                                </tr>
+                            </thead>
+                        <tbody>
+                        {
+                        data.map(item => (
+                            <EmployeeItem key={item.emp_id} data={item} ondelete={ondelete} />
+                        ))
+                        }
+                        </tbody>
+                        </Table>
                     </div>
                 </div>
             </div>

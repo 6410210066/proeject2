@@ -205,7 +205,8 @@ app.post('/api/users/add',checkAuth ,async(req,res)=>{
     try{
         var result = await users.createUser(pool,input.username,input.password,input.role_id);
         res.json({
-            result: true
+            result: true,
+            data: result
         });
 
     }catch(ex){
