@@ -97,7 +97,7 @@ export default function Product(){
                                 <Button className="button btn-edit" as="input" type="submit" value="ค้นหา"/>
                             </div>
                             <div className="col-1">                             
-                                <Link to={`/users/add`} className="button btn-edit">เพิ่ม</Link>
+                                <Link to={`/product/add`} className="button btn-edit">เพิ่ม</Link>
                             </div>
                             <div className="col-1"></div>
                         </div>
@@ -119,13 +119,10 @@ export default function Product(){
                             </thead>
                             <tbody>
                                 {
-                                    data.map(item => (
-                                         <Productitem key={item.product_id} data={item} ondelete={ondelete} />
                                    data.map(item => (
                                         <Productitem key={item.product_id} data={item} ondelete={ondelete} />
                                    ))
 
-                                    ))
                                 }
                             </tbody>
                         </Table>
