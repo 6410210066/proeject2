@@ -121,6 +121,9 @@ export default function Product(){
                                 {
                                     data.map(item => (
                                          <Productitem key={item.product_id} data={item} ondelete={ondelete} />
+                                   data.map(item => (
+                                        <Productitem key={item.product_id} data={item} ondelete={ondelete} />
+                                   ))
 
                                     ))
                                 }
