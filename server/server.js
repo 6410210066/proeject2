@@ -517,6 +517,23 @@ app.get('/api/stock', (req,res)=>{
     });
 });
 
+app.post('api/transfer',(req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await employee.createEmp(pool,input.firstname,input.lastname,input.address,
+                                            input.salary,input.phone_number,input.branch_id,input.user_id);
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+})
 app.listen(port, () => {
     console.log("Running");
 });
