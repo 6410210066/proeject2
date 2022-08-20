@@ -75,7 +75,7 @@ export default function BranchForm(){
         <>
             <Form className='container' noValidate validated={validated} onSubmit={onsave}>
                 <Form.Group controlId='validateBranch_name'>
-                    <Form.Label>สาขา</Form.Label>
+                    <Form.Label>ชื่อสาขา</Form.Label>
                     <Form.Control
                         type='text'
                         value={branch_name}
@@ -90,8 +90,8 @@ export default function BranchForm(){
                 </Form.Group>
 
                 <Form.Group controlId='validateBranch_address'>
-                    <Form.Label>ที่อยู่</Form.Label>
-                    <Form.Control
+                    <Form.Label>ชื่อที่อยู่</Form.Label>
+                    <Form.Control 
                         type='text'
                         value={branch_address}
                         placeholder="ที่อยู่"

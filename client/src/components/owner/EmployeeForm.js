@@ -19,6 +19,7 @@ export default function EmployeeForm(){
     const [salary,setSalary] = useState(0.0);
     const [phone_number,setPhone_number] = useState("");
     const [branch_id,setBranch_id] = useState(0);
+    const [branch,setBranch] = useState([]);
    
     const [validated,setValidate] = useState(false);
 
@@ -38,6 +39,12 @@ export default function EmployeeForm(){
             fetchData([params.emp_id]);
         }
     },[params.emp_id]);
+
+    useEffect(async()=>{
+        let json = await API_GET("branch");
+        var data = json.data;
+        setBranch(data);
+    },[]);
 
     const onsave = async (event) => {
         const form = event.currentTarget;
@@ -182,18 +189,23 @@ export default function EmployeeForm(){
                     </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group controlId='validateaddress'>
+                <Form.Group as={Col} >
                     <Form.Label>สาขา</Form.Label>
-                    <Form.Control
-                        type='text'
+                    <Form.Select
                         value={branch_id}
-                        placeholder="สาขา"
-                        required 
-                        onChange={(e)=>setBranch_id(e.target.value)}
-                    />
+                        onChange={(e) => setBranch_id(e.target.value)}
+                        required>
+                        <option label="กรุณาเลือกสาขา"></option>
+                        {
+                            branch.map(item => (
+                                <option key={item.branch_id} value={item.branch_id}>
+                                {item.branch_name} </option>
+                            ))
+                        }
+                    
+                    </Form.Select>
                     <Form.Control.Feedback type="invalid" >
-                        กรุณากรอกสาขา
-
+                        กรุณาเลือก สาขา
                     </Form.Control.Feedback>
                 </Form.Group>
 
