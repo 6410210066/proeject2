@@ -121,8 +121,6 @@ export default function Ownerbranch(){
                             </thead>
                         <tbody>
                         {
-                        data.map(item => (
-                            
                              data.map(item => (
                             <BranchItem key={item.branch_id} data={item} ondelete={ondelete} />
                         ))
