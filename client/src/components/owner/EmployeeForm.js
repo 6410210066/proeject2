@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import {Form,Row,Col,Button} from 'react-bootstrap';
+import { Form, Row, Col, Button} from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
-import {API_GET, API_POST } from '../../api';
+import { API_GET, API_POST } from '../../api';
 
 
 export default function EmployeeForm(){

@@ -20,7 +20,7 @@ module.exports={
         return await pool.query(sql);
     },
 
-    getByEmpId: async (pool,emp_id) =>{
+    getByEmpId: async (pool,emp_id) => {
         var sql = "SELECT * FROM employee WHERE emp_id = ?";
         sql = mysql.format(sql,[emp_id]);
         return await pool.query(sql);

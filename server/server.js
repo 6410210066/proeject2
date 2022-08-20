@@ -15,8 +15,10 @@ app.use(bodyParser.json());
 // app.use('/images', express.static('images'));
 
 var mysql = require('mysql');
-const { response } = require("express");
+const { response, query } = require("express");
 const employee = require("./libs/employee");
+const branch = require("./libs/branch");
+
 var pool = mysql.createPool({
     connectionLimit: 10,
     host: "localhost",
@@ -517,12 +519,42 @@ app.get('/api/stock', (req,res)=>{
     });
 });
 
+<<<<<<< Updated upstream
 app.post('api/transfer',(req,res)=>{
     const input = req.body;
 
     try{
         var result = await employee.createEmp(pool,input.firstname,input.lastname,input.address,
                                             input.salary,input.phone_number,input.branch_id,input.user_id);
+=======
+app.get('/api/branch', (req,res)=>{
+    pool.query("SELECT a.branch_id,a.branch_name,a.branch_address,b.firstname,b.lastname  FROM branch a JOIN employee b ON a.emp_id = b.emp_id",function(error,results,fields){
+        if(error){
+            res.json({
+                result: false,
+                message: error.message
+            });
+        }
+        if(results.length){
+            
+            res.json({
+                result:true,
+                data: results
+            });
+        }else{
+            res.json({
+                result: false,
+                message: "ไม่พบข้อมูลจัดการคำขอ"
+            });
+        }
+    });
+});
+
+app.post('/api/branch/add',checkAuth,async(req,res)=>{
+    const input = req.body;
+    console.log(input);
+    try{
+        var result = await branch.createBranch(pool,input.branch_name,input.branch_address);
         res.json({
             result: true
         });
@@ -533,7 +565,65 @@ app.post('api/transfer',(req,res)=>{
             message: ex.message
         });
     }
+});
+
+app.post('/api/branch/update',checkAuth,async(req,res)=>{
+    const input = req.body;
+    
+    try{
+        var result = await branch.updateBranch(pool,input.branch_id,input.branch_name,input.branch_address);
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
+app.post('/api/branch/delete',checkAuth,async(req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await branch.deleteBranchId(pool,input.branch_id);
+>>>>>>> Stashed changes
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+<<<<<<< Updated upstream
 })
+=======
+});
+
+app.get('/api/branch/:branch_id',async(req,res)=>{
+    const branchid = req.params.branch_id;
+
+    try{
+        var result = await branch.getByBranchId(pool,branchid);
+        res.json({
+            result: true,
+            data: result
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
+>>>>>>> Stashed changes
 app.listen(port, () => {
     console.log("Running");
 });

@@ -74,7 +74,6 @@ export default function OwnerEmloyee(){
     }
     
     return(
-
         
         <>
             <div  className="container-fluid" >
