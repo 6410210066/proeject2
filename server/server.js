@@ -179,7 +179,7 @@ app.post('/home', (req, res) =>{
 })
 
 app.get('/api/users', (req,res)=>{
-    pool.query("SELECT * FROM user",function(error,results,fields){
+    pool.query("SELECT a.user_id, a.username,a.password ,b.role_name FROM user a JOIN roles b ON a.role_id = b.role_id",function(error,results,fields){
         if(error){
             res.json({
                 result: false,
@@ -616,7 +616,27 @@ app.get('/api/branch/:branch_id',async(req,res)=>{
     }
 });
 
-
+app.get('/api/roles',async(req,res)=>{
+    pool.query("SELECT * FROM roles",function(error,results,fields){
+        if(error){
+            res.json({
+                result: false,
+                message: error.message
+            });
+        }
+        if(results.length){
+            res.json({
+                result:true,
+                data: results
+            });
+        }else{
+            res.json({
+                result: false,
+                message: "ไม่พบประเภท"
+            });
+        }
+    });
+})
 app.listen(port, () => {
     console.log("Running");
 });

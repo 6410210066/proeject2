@@ -8,7 +8,7 @@ export default function ManagerUser(){
     let params = useParams();
     // let password;
 
-
+    const [roles,setRoles] =useState([]);
     const [validated,setValidated] =useState(false);
     const [username,setUsername] =useState("");
     const [role_id,setRoleId] = useState(0);
@@ -28,13 +28,22 @@ export default function ManagerUser(){
             setUsername(data.username);
             setPassword(data.password);
             setRoleId(data.role_id);
+            
         }
 
+        
         if(params.user_id != "add"){
             fetchData([params.user_id]);
         }
 
     },[params.user_id]);
+       
+    useEffect(async()=>{
+        let json = await API_GET("roles");
+        var data = json.data;
+        setRoles(data);
+    },[]);
+
 
     useEffect(()=>{
         setPassword(newpassword);
@@ -118,6 +127,9 @@ export default function ManagerUser(){
         }
     }
 
+
+  
+
     return(
         <>
             <div className="container">
@@ -151,7 +163,7 @@ export default function ManagerUser(){
                 </Form.Group>
 
 
-                
+{/*                 
                 <Form.Group as={Col} controlId="validatePassword">
                     <Form.Label>ประเภทผู้ใช้</Form.Label>
                     <Form.Control
@@ -164,9 +176,9 @@ export default function ManagerUser(){
                     <Form.Control.Feedback type="invalid">
                         กรุณากรอก ประเภทผู้ใช้
                     </Form.Control.Feedback>
-                </Form.Group>
+                </Form.Group> */}
                   
-                        {/* <Form.Group as={Col} controlId="validateRoleType">
+                        <Form.Group as={Col} >
                             <Form.Label>ประเภทผู้ใช้งาน</Form.Label>
                             <Form.Select
                                 value={role_id}
@@ -183,7 +195,7 @@ export default function ManagerUser(){
                                 <Form.Control.Feedback type="invalid">
                                     กรุณาเลือก ประเภทผู้ใช้งาน
                                 </Form.Control.Feedback>
-                        </Form.Group> */}
+                        </Form.Group>
 
                     <Row className="mb-3">
                         <Button variant="primary" as="input" type="submit" value="SAVE"/>
