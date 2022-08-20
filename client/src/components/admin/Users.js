@@ -96,6 +96,7 @@ export default function Users(){
                                         placeholder="ค้นหาชื่อผู้ใช้"
                                         onChange={(e) => setUsername(e.target.value)}  
                                     />
+
                                     <Form.Control.Feedback type="invalid">
                                         กรุณากรอก ชื่อผู้ใช้งาน
                                     </Form.Control.Feedback>
@@ -105,7 +106,7 @@ export default function Users(){
                                 <Button className="button btn-edit" as="input" type="submit" value="ค้นหา"/>
                             </div>
                             <div className="col-1">                             
-                                <Link to={`/users/add`} className="button btn-edit">เพิ่ม</Link>
+                                <Link to={`/users/add`} className="button btn-add">เพิ่ม</Link>
                             </div>
                             <div className="col-1"></div>
                         </div>

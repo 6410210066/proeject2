@@ -78,7 +78,7 @@ export default function Product(){
                         <h1 className="header">จัดการรายการสินค้า</h1>
                         
                         <Form noValidate validated={validated}  onClick={onSearch}>
-                        <div className="row ms-5 mb-3">
+                        <div className="row ms-5 mb-3 grid">
                             <div className="col-9 mt-2 ">
                                 <Form.Group as={Col} controlId="validateUserName" >
                                     <Form.Control
@@ -97,22 +97,23 @@ export default function Product(){
                                 <Button className="button btn-edit" as="input" type="submit" value="ค้นหา"/>
                             </div>
                             <div className="col-1">                             
-                                <Link to={`/product/add`} className="button btn-edit">เพิ่ม</Link>
+                                <Link to={`/product/add`} className="button btn-add">เพิ่ม</Link>
                             </div>
                             <div className="col-1"></div>
                         </div>
                     </Form>
                         
-                        <Table striped className="mx-5">
+                        <Table striped className="mx-5 grid">
                             <thead>
                                 <tr>
                                     <th>รหัสสินค้า     </th>
-                                    <th>ภาพ        </th>
+                                    {/* <th>ภาพ        </th> */}
                                     <th>ชื่อสินค้า     </th>
                                     <th>ราคาสินค้า   </th>
-                                    <th>ขนาด       </th>
-                                    <th>น้ำหนัก      </th>
+                                    {/* <th>ขนาด       </th>
+                                    <th>น้ำหนัก      </th> */}
                                     <th>ประเภทสินค้า </th>
+                                    <th>รายละเอียด</th>
                                     <th>แก้ไข       </th>
                                     <th>ลบ         </th>
                                 </tr>

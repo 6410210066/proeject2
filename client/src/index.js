@@ -15,6 +15,7 @@ import Product from './components/owner/Product';
 import OwnerEmloyee from './components/owner/OwnerEmployee';
 import ProductForm from './components/owner/ProductForm';
 import EmployeeForm from './components/owner/EmployeeForm';
+import OwnerStock from './components/owner/OwnerStock';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -29,6 +30,8 @@ root.render(
       <Route path="owner/employee" element={<OwnerEmloyee />} />
       <Route path="product/:product_id" element={<ProductForm />} />
       <Route path="employee/:emp_id" element={<EmployeeForm />} /> 
+      <Route path="owner/stock" element={<OwnerStock />} />
+      <Route path="product/detail/:product_id" element={<ProductForm />} />
     </Routes>
   </BrowserRouter>,
   // document.getElementById('root')

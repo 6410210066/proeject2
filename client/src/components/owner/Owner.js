@@ -12,7 +12,9 @@ export default function Owner (){
                          <Ownernav page={page} />
                     </div>
                     <div className="col-lg-10 content" style={{padding:"0"}}>
-                        <Dashboard page={page}/>
+                        <div className='grid'>
+                            <Dashboard page={page}/>
+                        </div>
                     </div>
                 </div>
             </div>

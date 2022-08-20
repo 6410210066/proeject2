@@ -495,6 +495,27 @@ app.get('/api/employee/:emp_id',async(req,res)=>{
         });
     }
 });
+app.get('/api/stock', (req,res)=>{
+    pool.query("SELECT a.stock_id,b.m_name, a.stock_amount, b.m_unit,c.branch_name FROM stock a join material b join branch c WHERE a.m_id = b.m_id AND a.branch_id =c.branch_id",function(error,results,fields){
+        if(error){
+            res.json({
+                result: false,
+                message: error.message
+            });
+        }
+        if(results.length){
+            res.json({
+                result:true,
+                data: results
+            });
+        }else{
+            res.json({
+                result: false,
+                message: "ไม่พบรายการ"
+            });
+        }
+    });
+});
 
 app.listen(port, () => {
     console.log("Running");

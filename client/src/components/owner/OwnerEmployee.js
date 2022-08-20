@@ -85,7 +85,7 @@ export default function OwnerEmloyee(){
                     <div className="col-lg-10 content" style={{padding:"0"}}>
                         <h1 className="header">จัดการข้อมูลพนักงาน</h1>
                         <Form noValidate validated={validated}  onClick={onSearch}>
-                        <div className="row ms-5 mb-3">
+                        <div className="row ms-5 mb-3 grid">
                             <div className="col-9 mt-2 ">
                                 <Form.Group as={Col} controlId="validateUserName" >
                                     <Form.Control
@@ -104,20 +104,23 @@ export default function OwnerEmloyee(){
                                 <Button className="button btn-edit" as="input" type="submit" value="ค้นหา"/>
                             </div>
                             <div className="col-1">                             
-                                <Link to={`/employee/add`} className="button btn-edit">เพิ่ม</Link>
+                                <Link to={`/employee/add`} className="button btn-add">เพิ่ม</Link>
                             </div>
                             <div className="col-1"></div>
                         </div>
                     </Form>
-                        <Table striped className="mx-5">
+                        <Table striped className="mx-5 grid">
                             <thead>
                                 <tr>
+                                    <th>รหัสพนักงาน</th>
                                     <th>ชื่อพนักงาน</th>
                                     <th>นามสกุล</th>
                                     <th>ที่อยู่</th>
                                     <th>เงินเดือน</th>
                                     <th>เบอร์โทรศัพท์</th>
                                     <th>สาขา</th>
+                                    <th>ลบ</th>
+                                    <th>แก้ไข</th>
                                 </tr>
                             </thead>
                         <tbody>
