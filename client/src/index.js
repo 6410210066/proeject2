@@ -16,13 +16,10 @@ import OwnerEmloyee from './components/owner/OwnerEmployee';
 import ProductForm from './components/owner/ProductForm';
 import EmployeeForm from './components/owner/EmployeeForm';
 import OwnerStock from './components/owner/OwnerStock';
-<<<<<<< Updated upstream
 import Transfer from './components/owner/Transfer';
-=======
 import Ownerbranch from './components/owner/Ownerbranch';
 import BranchForm from './components/owner/BranchForm';
 
->>>>>>> Stashed changes
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -40,11 +37,7 @@ root.render(
       <Route path="employee/:emp_id" element={<EmployeeForm />} /> 
       <Route path="owner/stock" element={<OwnerStock />} />
       <Route path="product/detail/:product_id" element={<ProductForm />} />
-<<<<<<< Updated upstream
       <Route path="transfer" element={<Transfer /> } />
-=======
-      
->>>>>>> Stashed changes
     </Routes>
   </BrowserRouter>,
   // document.getElementById('root')

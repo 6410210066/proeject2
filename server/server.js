@@ -519,14 +519,8 @@ app.get('/api/stock', (req,res)=>{
     });
 });
 
-<<<<<<< Updated upstream
-app.post('api/transfer',(req,res)=>{
-    const input = req.body;
 
-    try{
-        var result = await employee.createEmp(pool,input.firstname,input.lastname,input.address,
-                                            input.salary,input.phone_number,input.branch_id,input.user_id);
-=======
+
 app.get('/api/branch', (req,res)=>{
     pool.query("SELECT a.branch_id,a.branch_name,a.branch_address,b.firstname,b.lastname  FROM branch a JOIN employee b ON a.emp_id = b.emp_id",function(error,results,fields){
         if(error){
@@ -589,7 +583,6 @@ app.post('/api/branch/delete',checkAuth,async(req,res)=>{
 
     try{
         var result = await branch.deleteBranchId(pool,input.branch_id);
->>>>>>> Stashed changes
         res.json({
             result: true
         });
@@ -600,10 +593,10 @@ app.post('/api/branch/delete',checkAuth,async(req,res)=>{
             message: ex.message
         });
     }
-<<<<<<< Updated upstream
+
 })
-=======
-});
+
+
 
 app.get('/api/branch/:branch_id',async(req,res)=>{
     const branchid = req.params.branch_id;
@@ -623,7 +616,7 @@ app.get('/api/branch/:branch_id',async(req,res)=>{
     }
 });
 
->>>>>>> Stashed changes
+
 app.listen(port, () => {
     console.log("Running");
 });
