@@ -19,7 +19,7 @@ export default function Ownerbranch(){
                 let json = await API_GET("branch");
                 setData(json.data);
                 setBranch(json.data);
-                console.log(data.lastname)
+                
             }
             fetchData();
         },[])
@@ -123,6 +123,7 @@ export default function Ownerbranch(){
                         {
                         data.map(item => (
                             
+                             data.map(item => (
                             <BranchItem key={item.branch_id} data={item} ondelete={ondelete} />
                         ))
                         }
