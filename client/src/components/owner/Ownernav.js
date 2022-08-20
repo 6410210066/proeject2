@@ -14,7 +14,7 @@ export default function Ownernav(props){
                             <Link className={props.page===2 && "active"} to="/owner/stock">จัดการสต๊อกสินค้า</Link>
                             <Link className={props.page===3 && "active"} to="/transfer">ย้ายสต๊อกสินค้า</Link>
                             <Link className={props.page===4 && "active"} to="/owner/employee">พนักงาน</Link>
-                            <Link className={props.page===5 && "active"} to="#">จัดการคำขอ</Link>
+                            <Link className={props.page===5 && "active"} to="/request">จัดการคำขอ</Link>
                             <Link className={props.page===6 && "active"} to="/owner/product">จัดการสินค้า</Link>
                             <Link className={props.page===7 && "active"} to="/owner/branch">จัดการสาขา</Link>
                         <div className="logout">
