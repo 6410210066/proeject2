@@ -104,7 +104,7 @@ export default function BranchForm(){
                     </Form.Control.Feedback>
                 </Form.Group>
 
-                <Button variant="success" as="input" type="submit" value="บันทึก" />
+                <Button variant="success" as="input" type="submit" value="บันทึก" className="mt-3"/>
             </Form>
         </>
     )

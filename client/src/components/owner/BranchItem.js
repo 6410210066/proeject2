@@ -9,7 +9,7 @@ export default function BranchItem(props){
     return(
         <>
         <tr>
-            {console.log("initem"+props.data.name)}
+
             <td className="align-middle">{props.data.branch_id}</td>
             <td className="align-middle">{props.data.branch_name}</td>
             <td className="align-middle">{props.data.branch_address}</td>

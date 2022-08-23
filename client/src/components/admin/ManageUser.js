@@ -18,7 +18,6 @@ export default function ManagerUser(){
     const [newpassword,setNewPassword] = useState("");
     let checkpassword = false;
 
-    
     useEffect(()=>{
         async function fetchData(user_id){
             let json = await API_GET("users/"+user_id);
@@ -161,22 +160,7 @@ export default function ManagerUser(){
                         กรุณากรอก รหัสผ่าน
                     </Form.Control.Feedback>
                 </Form.Group>
-
-
-{/*                 
-                <Form.Group as={Col} controlId="validatePassword">
-                    <Form.Label>ประเภทผู้ใช้</Form.Label>
-                    <Form.Control
-                        // required
-                        type="text"
-                        value={role_id}
-                        placeholder="ประเภทผู้ใช้"
-                        onChange={(e) => setRoleId(e.target.value)}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        กรุณากรอก ประเภทผู้ใช้
-                    </Form.Control.Feedback>
-                </Form.Group> */}
+ 
                   
                         <Form.Group as={Col} >
                             <Form.Label>ประเภทผู้ใช้งาน</Form.Label>

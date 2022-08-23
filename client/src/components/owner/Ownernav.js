@@ -1,15 +1,25 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "../owner/owner.css";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export default function Ownernav(props){
+    let navigate = useNavigate();
+    useEffect( ()=>{
+        if(localStorage.getItem("access_token")==null){
+            console.log(localStorage.getItem("access_token"));
+            navigate("/", {replace:true});
+        }
+    },[]);
     const clear = ()=>{
         localStorage.clear();
     }
+
     return(
         <>
             <div className="container-fluid  content  sidebar navadmin" style={{padding:"0"}}>
-                <div className="row a-style" style={{margin:"0"}}>                              
+                <div className="row a-style" style={{margin:"0"}}>
+                            <h2>{localStorage.getItem("username")}</h2>                              
                             <Link className={props.page===1 && "active"} to="/home">Dashboard</Link> 
                             <Link className={props.page===2 && "active"} to="/owner/stock">จัดการสต๊อกสินค้า</Link>
                             <Link className={props.page===3 && "active"} to="/transfer">ย้ายสต๊อกสินค้า</Link>

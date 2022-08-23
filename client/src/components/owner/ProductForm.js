@@ -17,6 +17,7 @@ export default function ProductForm(){
     const [product_img,setProductimg] =useState("");
     const [product_type_id,setProducttypeid] =useState(0);
     const [validated,setValidate] =useState(false);
+    const [producttype,setProducttype] =useState([]);
 
     useEffect(()=>{
         
@@ -36,6 +37,11 @@ export default function ProductForm(){
         }
     },[params.product_id]);
 
+    useEffect(async()=>{
+        let json = await API_GET("producttype");
+        var data = json.data;
+        setProducttype(data);
+    },[]);
 
     const onsave = async (event)=>{
         const form = event.currentTarget;
@@ -157,20 +163,25 @@ export default function ProductForm(){
                     </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group controlId='validateProducttypeid'>
-                    <Form.Label>ประเภทสินค้า</Form.Label>
-                    <Form.Control 
-                        type='text'
-                        value={product_type_id}
-                        placeholder="ประเภทสินค้า"
-                        required
-                        onChange={(e)=>setProducttypeid(e.target.value)}
-                    />
-                    <Form.Control.Feedback type="invalid" >
-                            กรุณากรอกประเภทสินค้า
-                    </Form.Control.Feedback>
-                </Form.Group>
-                <Button variant="success" as="input" type="submit"  value="บันทึก" />
+                <Form.Group as={Col} >
+                            <Form.Label>ประเภทสินค้า</Form.Label>
+                            <Form.Select
+                                value={product_type_id}
+                                onChange={(e) => setProducttypeid(e.target.value)}
+                                required>
+                                <option label="กรุณาเลือกประเภทสินค้า"></option> 
+                                {
+                                   producttype.map(item => (
+                                    <option key={item.product_type_id} value={item.product_type_id}> 
+                                    {item.product_type_name} </option>
+                                ))
+                                }
+                            </Form.Select>
+                                <Form.Control.Feedback type="invalid">
+                                    กรุณาเลือก ประเภทผู้ใช้งาน
+                                </Form.Control.Feedback>
+                        </Form.Group>
+                <Button variant="success" as="input" type="submit"  value="บันทึก" className='mt-3'/>
             </Form>
         </>
     )

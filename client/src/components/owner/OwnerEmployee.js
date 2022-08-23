@@ -14,13 +14,7 @@ export default function OwnerEmloyee(){
         const [validated,setValidated] =useState(false);
 
     useEffect(()=>{
-        async function fetchData(){
-            let json = await API_GET("employee");
-            setData(json.data);
-            setemployee(json.data);
-            console.log(json.data);
-        }
-        fetchData();
+        fetchEmployee();
     },[])
 
     useEffect( ()=>{
@@ -32,6 +26,11 @@ export default function OwnerEmloyee(){
     },[firstname]);
 
 
+    const fetchEmployee = async()=>{
+        let json = await API_GET("employee");
+        setData(json.data);
+        setemployee(json.data);
+    }
     const ondelete = async(data) =>{
         let json = await API_POST("employee/delete",{
             emp_id : data.emp_id
@@ -112,8 +111,7 @@ export default function OwnerEmloyee(){
                             <thead>
                                 <tr>
                                     <th>รหัสพนักงาน</th>
-                                    <th>ชื่อพนักงาน</th>
-                                    <th>นามสกุล</th>
+                                    <th>ชื่อ-สกุล</th>
                                     <th>ที่อยู่</th>
                                     <th>เงินเดือน</th>
                                     <th>เบอร์โทรศัพท์</th>

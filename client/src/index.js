@@ -20,6 +20,7 @@ import Transfer from './components/owner/Transfer';
 import Ownerbranch from './components/owner/Ownerbranch';
 import BranchForm from './components/owner/BranchForm';
 import Managerquest from './components/owner/Managerequest';
+import ProductDetail from './components/owner/ProductDetail';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -36,7 +37,7 @@ root.render(
       <Route path="product/:product_id" element={<ProductForm />} />
       <Route path="employee/:emp_id" element={<EmployeeForm />} /> 
       <Route path="owner/stock" element={<OwnerStock />} />
-      <Route path="product/detail/:product_id" element={<ProductForm />} />
+      <Route path="product/detail/:product_id" element={<ProductDetail />} />
       <Route path="transfer" element={<Transfer /> } />
       <Route path="request" element={<Managerquest />} />
 

@@ -41,7 +41,7 @@ export default function Login(){
         localStorage.setItem("role_id", data2.data.account_info.role_id);
         localStorage.setItem("role_name", data2.data.account_info.role_name);
         
-        navigate("home", {replace: false});
+        navigate("home", {replace:true});
 
     }
 
@@ -61,8 +61,7 @@ export default function Login(){
         );
 
         const data = await response.json();
-        
-        console.log(data);
+    
 
         return data;
     };

@@ -6,6 +6,7 @@ import { API_GET,API_POST } from "../../api";
 import Stockitem from "./Stockitem";
 
 export default function OwnerStock(){
+
     let page=2;
     const [data,setData] =useState([]);
     const [stock,setStock] =useState([]);
@@ -15,7 +16,6 @@ export default function OwnerStock(){
             let json = await API_GET("stock");
             setData(json.data);
             setStock(json.data);
-            console.log(json.data);
         }
         fetchData();
     },[])
@@ -73,7 +73,7 @@ export default function OwnerStock(){
                                 </thead>
                                 <tbody>
                                     {
-                                       data.map(item => (
+                                       data.map( item => (
                                             <Stockitem key={item.stock_id} data={item} ondelete={ondelete} />
                                        ))
                                     }

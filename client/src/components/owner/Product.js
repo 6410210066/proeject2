@@ -26,7 +26,8 @@ export default function Product(){
         if(product_name===""){
             setData(product);
         }
-    },[product_name])
+    },[product_name]);
+
     const ondelete = async(data) =>{
         let json = await API_POST("product/delete",{
             product_id : data.product_id
@@ -48,7 +49,6 @@ export default function Product(){
                 let searchdata = [];
                 product.filter(product =>product.product_name.includes(product_name)).map(item => {
                     searchdata.push(item);
-                    console.log()
                 }) 
                 fetchSearch(searchdata);
             }else{

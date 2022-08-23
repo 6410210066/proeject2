@@ -18,6 +18,7 @@ var mysql = require('mysql');
 const { response, query } = require("express");
 const employee = require("./libs/employee");
 const branch = require("./libs/branch");
+const stock = require("./libs/stock");
 
 var pool = mysql.createPool({
     connectionLimit: 10,
@@ -308,7 +309,7 @@ app.get('/api/users/:user_id',async(req,res)=>{
 });
 
 app.get('/api/product', (req,res)=>{
-    pool.query("SELECT * FROM product",function(error,results,fields){
+    pool.query("SELECT a.*,b.product_type_name FROM product a JOIN product_type b ON a.product_type_id = b.product_type_id",function(error,results,fields){
         if(error){
             res.json({
                 result: false,
@@ -406,7 +407,7 @@ app.get('/api/product/:product_id',async(req,res)=>{
 });
 
 app.get('/api/employee', (req,res)=>{
-    pool.query("SELECT * FROM employee",function(error,results,fields){
+    pool.query("SELECT a.*,b.branch_name FROM employee a JOIN branch b ON a.branch_id = b.branch_id ",function(error,results,fields){
         if(error){
             res.json({
                 result: false,
@@ -498,7 +499,7 @@ app.get('/api/employee/:emp_id',async(req,res)=>{
     }
 });
 app.get('/api/stock', (req,res)=>{
-    pool.query("SELECT a.stock_id,b.m_name, a.stock_amount, b.m_unit,c.branch_name FROM stock a join material b join branch c WHERE a.m_id = b.m_id AND a.branch_id =c.branch_id",function(error,results,fields){
+    pool.query("SELECT a.stock_id,b.m_name, a.stock_amount, b.m_unit,c.branch_name,a.branch_id FROM stock a join material b join branch c WHERE a.m_id = b.m_id AND a.branch_id =c.branch_id",function(error,results,fields){
         if(error){
             res.json({
                 result: false,
@@ -518,8 +519,6 @@ app.get('/api/stock', (req,res)=>{
         }
     });
 });
-
-
 
 app.get('/api/branch', (req,res)=>{
     pool.query("SELECT a.branch_id,a.branch_name,a.branch_address,b.firstname,b.lastname  FROM branch a JOIN employee b ON a.emp_id = b.emp_id",function(error,results,fields){
@@ -636,7 +635,49 @@ app.get('/api/roles',async(req,res)=>{
             });
         }
     });
-})
+});
+
+
+app.post('/api/stock/update',async(req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await stock.updataStock(pool,input.stock_id,input.stock_amount);
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
+app.get('/api/producttype',async(req,res)=>{
+    pool.query("SELECT * FROM product_type",function(error,results,fields){
+        if(error){
+            res.json({
+                result: false,
+                message: error.message
+            });
+        }
+        if(results.length){
+            res.json({
+                result:true,
+                data: results
+            });
+        }else{
+            res.json({
+                result: false,
+                message: "ไม่พบประเภท"
+            });
+        }
+    });
+});
+
+
 app.listen(port, () => {
     console.log("Running");
 });
