@@ -677,7 +677,21 @@ app.get('/api/producttype',async(req,res)=>{
     });
 });
 
-
+app.post('/api/checkoriginbranch',async(req,res)=>{
+    const input= req.body
+    try{
+        var result = await stock.checkStockBybranch(pool,input.branch_id);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+})
 app.listen(port, () => {
     console.log("Running");
 });

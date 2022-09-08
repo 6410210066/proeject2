@@ -112,7 +112,7 @@ export default function Users(){
                         </div>
                     </Form>
 
-            <Table striped className="mx-5">
+            <Table striped responsive className="">
                 <Userheader />
                 <tbody>
                     {

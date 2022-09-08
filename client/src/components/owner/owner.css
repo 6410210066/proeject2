@@ -52,13 +52,11 @@
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+    margin:auto;
     transition-duration: 0.4s;
     cursor: pointer;
 
 }
-
-
 
 .btn-edit{
     background-color: rgb(221, 147, 36); 

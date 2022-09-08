@@ -84,7 +84,7 @@ export default function OwnerEmloyee(){
                         <h1 className="header">จัดการข้อมูลพนักงาน</h1>
                         <Form noValidate validated={validated}  onClick={onSearch}>
                         <div className="row ms-5 mb-3 grid">
-                            <div className="col-9 mt-2 ">
+                            <div className="col-lg-8 col-md-7 col-sm-6 mt-1">
                                 <Form.Group as={Col} controlId="validateUserName" >
                                     <Form.Control
                                         required
@@ -98,13 +98,13 @@ export default function OwnerEmloyee(){
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
-                            <div className="col-1 me-4 ms-3"> 
+                            <div className="col-lg-1 col-sm-2 me-4 ms-3 "> 
                                 <Button className="button btn-edit" as="input" type="submit" value="ค้นหา"/>
                             </div>
-                            <div className="col-1">                             
+                            <div className="col-lg-2 col-sm-2 me-3">                             
                                 <Link to={`/employee/add`} className="button btn-add">เพิ่ม</Link>
                             </div>
-                            <div className="col-1"></div>
+                            <div className="col-lg-0 col-md-1"></div>
                         </div>
                     </Form>
                         <Table striped className="mx-5 grid">

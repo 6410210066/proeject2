@@ -11,6 +11,13 @@
     
 }
 
+@media only screen and (max-width: 992px) {
+    .navadmin{
+        background-color: #151bb755;
+        height: 100%;
+        
+    }
+  }
 .navadmin a{
     /* background-color: #FFC700; */
     display: block;
