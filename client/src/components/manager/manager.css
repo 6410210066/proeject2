@@ -1,0 +1,47 @@
+
+.content{
+    height: 100vh;
+    background-color:rgb(241, 244, 176);
+}
+
+
+.navadmin{
+    background-color: #FFC700;
+    height: 100vh;
+    
+}
+
+@media only screen and (max-width: 992px) {
+    .navadmin{
+        background-color: #151bb755;
+        height: 100%;
+        
+    }
+  }
+.navadmin a{
+    /* background-color: #FFC700; */
+    display: block;
+    padding: 1.0em 0em 1em 0.2em;
+    padding-top: 1.3em;
+    width: 100%;
+    font-size: 1.0em;
+    color: black;
+}
+.bg-action{
+    background-color: rgb(194, 191, 191);
+}
+
+
+.a-style{
+    
+    text-decoration: none;
+}
+
+.a-style a{
+    padding: 17px 0px 17px 12px;
+    text-decoration: none;
+}
+
+.active{
+    background-color: #cd680a;
+}

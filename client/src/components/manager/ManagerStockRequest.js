@@ -1,9 +1,7 @@
-
 import Managernav from "./Managernav";
+export default function ManagerstockRequest(){
 
-export default function Manager(){
-
-    let page=1;
+    let page =2;
     return(
         <>
             <div  className="container-fluid ">
@@ -13,7 +11,7 @@ export default function Manager(){
                     </div>
                     <div className="col-lg-10 col-sm-12 content " style={{padding:"0"}}>
                         <div className='user-grid'>
-                            {/* <Users page={page}/> */}
+                           <h1>คำขอเพิ่มสต๊อกสินค้า</h1>
                         </div>
                     </div>
                 </div>
