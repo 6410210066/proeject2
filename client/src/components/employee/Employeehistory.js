@@ -1,11 +1,11 @@
 import Employeenav from "./Employeenav";
 
-export default function Employee(){
+export default function Employeehistory(){
 
-    let page=1;
+    let page = 2;
     return(
         <>
-             <div  className="container-fluid ">
+            <div  className="container-fluid ">
                 <div className="row">
                     <div className="col-lg-2  col-sm-12 " style={{padding:"0"}}>
                         <Employeenav page={page}/>
