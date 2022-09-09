@@ -121,7 +121,7 @@ export default function Transfer(){
                                                     กรุณาเลือกรายการสต๊อก
                                                 </Form.Control.Feedback>
                                     </Form.Group>
-w
+
                                     <Form.Group as={Col} controlId="validateUserName">
                                         <Form.Label>จำนวนในสต๊อก</Form.Label>
                                         <Form.Control
