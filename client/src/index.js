@@ -22,6 +22,10 @@ import BranchForm from './components/owner/BranchForm';
 import Managerquest from './components/owner/Managerequest';
 import ProductDetail from './components/owner/ProductDetail';
 import Employeehistory from './components/employee/Employeehistory';
+import Managerstock from './components/manager/Managerstock';
+import ManagerEmployeee from './components/manager/ManagerEmployee';
+import ManagerstockRequest from './components/manager/ManagerStockRequest';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -42,7 +46,9 @@ root.render(
       <Route path="transfer" element={<Transfer /> } />
       <Route path="request" element={<Managerquest />} />
       <Route path="employee/salehistory" element={<Employeehistory />} />
-
+      <Route path="manager/stock" element={<Managerstock />} />
+      <Route path="manager/employee" element={<ManagerEmployeee/> } />
+      <Route path="manager/stockrequest" element={<ManagerstockRequest />} />
 
     </Routes>
   </BrowserRouter>,
