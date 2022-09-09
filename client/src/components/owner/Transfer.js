@@ -7,7 +7,7 @@ import Ownernav from "./Ownernav";
 
 export default function Transfer(){
     let page =3;
-    let searchdata = [];
+    // let searchdata = [];
     const [branch,setBranch] = useState([]);
     const [stock,setStock] =useState([]);
     const [branch_id,setBranchId] = useState(0);
@@ -17,8 +17,7 @@ export default function Transfer(){
     const [amount,setAmount] =useState(0);
     const [stockid,setStockId] =useState(0);
     const [validated,setValidated] =useState(false);
-    
-   
+
     useEffect(()=>{
         // fetchDataStock();
         fetchDataBranch();
@@ -122,7 +121,7 @@ export default function Transfer(){
                                                     กรุณาเลือกรายการสต๊อก
                                                 </Form.Control.Feedback>
                                     </Form.Group>
-
+w
                                     <Form.Group as={Col} controlId="validateUserName">
                                         <Form.Label>จำนวนในสต๊อก</Form.Label>
                                         <Form.Control
@@ -151,7 +150,6 @@ export default function Transfer(){
                                             กรุณากรอกจำนวน
                                         </Form.Control.Feedback>
                                     </Form.Group>
-
                                     <Form.Group as={Col} >
                                             <Form.Label>สาขาปลายทาง</Form.Label>
                                             <Form.Select
@@ -164,12 +162,11 @@ export default function Transfer(){
                                                     <option key={item.branch_id} value={item.branch_id}> 
                                                     {item.branch_name} </option>
                                                 ))
-                                                }
-                                              
+                                                }                                             
                                             </Form.Select>
                                                 <Form.Control.Feedback type="invalid">
                                                     กรุณาเลือกสาขาปลายทาง
-                                                </Form.Control.Feedback>
+                                                </Form.Control.Feedback>                                               
                                     </Form.Group>
                                         <Row className="mb-3 " style={{width:"10%",margin:"auto",paddingTop:"20px"}}>
                                             <Button variant="primary" as="input" type="submit" value="ตกลง"/>

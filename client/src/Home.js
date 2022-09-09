@@ -4,6 +4,9 @@ import { Navigate } from "react-router-dom";
 
 import Admin from "./components/admin/Admin";
 import Owner from "./components/owner/Owner";
+import Employee from "./components/employee/Employee";
+import Manager from "./components/manager/Manager";
+
 export default function Home() {
 
     const [roleid,setRole] = useState(0);
@@ -41,8 +44,8 @@ export default function Home() {
         <>
                 {roleid === 5 && <Navigate to="/" replace />}
                 {roleid === 1 && <Admin/>}
-                {roleid === 2 && <h1>emp</h1>}
-                {roleid === 3 && <h1>manager</h1>}
+                {roleid === 2 && <Employee />}
+                {roleid === 3 && <Manager />}
                 {roleid === 4 && <Owner />} 
         </>
        
