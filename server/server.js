@@ -19,6 +19,7 @@ const { response, query } = require("express");
 const employee = require("./libs/employee");
 const branch = require("./libs/branch");
 const stock = require("./libs/stock");
+const { request } = require("http");
 
 var pool = mysql.createPool({
     connectionLimit: 10,
@@ -596,7 +597,6 @@ app.post('/api/branch/delete',checkAuth,async(req,res)=>{
 })
 
 
-
 app.get('/api/branch/:branch_id',async(req,res)=>{
     const branchid = req.params.branch_id;
 
@@ -691,7 +691,55 @@ app.post('/api/checkoriginbranch',async(req,res)=>{
             message: ex.message
         });
     }
-})
+});
+
+app.get('/api/request',async(req,res)=>{
+    pool.query(`SELECT a.*,
+            b.branch_name,
+            e.firstname,
+            e.lastname,
+            m.m_name
+            FROM stockrequest a JOIN branch b ON a.branch_id = b.branch_id
+            JOIN employee e ON a.emp_id = e.emp_id
+            JOIN stock s ON a.stock_id = s.stock_id
+            JOIN material m ON s.m_id = m.m_id`,function(error,results,fields){
+        if(error){
+            res.json({
+                result: false,
+                message: error.message
+            });
+        }
+        if(results.length){
+            res.json({
+                result:true,
+                data: results
+            });
+        }else{
+            res.json({
+                result: false,
+                message: "ไม่พบคำขอ"
+            });
+        }
+    });
+});
+
+app.post('/api/request/delete',checkAuth,async(req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await request.deleteRequest(pool,input.request_id);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+});
+
 app.listen(port, () => {
     console.log("Running");
 });

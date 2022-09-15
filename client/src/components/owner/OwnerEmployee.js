@@ -11,7 +11,7 @@ export default function OwnerEmloyee(){
         const [data,setData] = useState([]);
         const [employee,setemployee] = useState([]);
         const [firstname,setFirstname] = useState("");
-        const [validated,setValidated] =useState(false);
+        const [validated,setValidated] = useState(false);
 
     useEffect(()=>{
         fetchEmployee();
