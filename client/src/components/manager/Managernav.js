@@ -21,7 +21,7 @@ export default function Managernav(props){
                             <Link className={props.page===1 && "active"} to="/home">Dashboard</Link> 
                             <Link className={props.page===2 && "active"} to="/manager/stock">จัดการสต๊อกสินค้า</Link>
                             <Link className={props.page===3 && "active"} to="/manager/employee">จัดการพนักงาน</Link>
-                            <Link className={props.page===4 && "active"} to="/">ขอเพิ่มสต๊อกสินค้า</Link>
+                            <Link className={props.page===4 && "active"} to="/manager/stockrequest">ขอเพิ่มสต๊อกสินค้า</Link>
                         <div className="logout">
                             <Link onClick={clear} to="/">ออกจากระบบ</Link>  
                         </div>                         

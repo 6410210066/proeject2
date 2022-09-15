@@ -5,6 +5,7 @@ import { Table,Form,Col,Row,Button  } from "react-bootstrap";
 import { API_GET,API_POST } from "../../api";
 import Productitem from "./Productitem";
 import { Link } from "react-router-dom";
+import {Detailproductmodal}  from "../../modals";
 
 export default function Product(){
     let page=6;
@@ -12,6 +13,10 @@ export default function Product(){
         const [product,setProduct] =useState([]);
         const [product_name,setProductname] =useState("");
         const [validated,setValidated] =useState(false);
+        const [productId,setProductId] =useState(0);
+        const [showModal,setShowModal] =useState(false);
+        const [modelTitle,setModalTitle] =useState("");
+        const [modelProductInfo,setModalProductInfo] =useState([]);
 
     useEffect(()=>{
         async function fetchData(){
@@ -28,6 +33,7 @@ export default function Product(){
         }
     },[product_name]);
 
+    
     const ondelete = async(data) =>{
         let json = await API_POST("product/delete",{
             product_id : data.product_id
@@ -66,9 +72,18 @@ export default function Product(){
     const fetchSearch = async(searchdata)=>{
         setData(searchdata);
     }
+
+    const onConfirm = () =>{
+        setShowModal(false);
+    }
+
+    const onShowDetail = async()=>{
+        setShowModal(true);
+    }
     return (
 
         <>
+
             <div  className="container-fluid" >
                 <div className="row">
                     <div className="col-lg-2 nav" style={{padding:"0"}}>
@@ -103,6 +118,13 @@ export default function Product(){
                         </div>
                     </Form>
                         
+
+                        
+                        <Detailproductmodal 
+                            show={showModal}
+                            info={modelProductInfo}
+                            onComfirm={onConfirm} 
+                        />
                         <Table striped className="mx-5 grid">
                             <thead>
                                 <tr>
@@ -121,7 +143,7 @@ export default function Product(){
                             <tbody>
                                 {
                                    data.map(item => (
-                                        <Productitem key={item.product_id} data={item} ondelete={ondelete} />
+                                        <Productitem key={item.product_id} data={item} ondelete={ondelete} onShowDetail={onShowDetail} modelProductInfo={setModalProductInfo}/>
                                    ))
 
                                 }

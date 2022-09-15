@@ -13,25 +13,30 @@ export default function Transfer(){
     const [branch_id,setBranchId] = useState(0);
     const [origin_branch,setOriginBranch] =useState(0);
     const [destination_branch,setDestinationBranch] =useState(0);
-    const [stock_amount,setStockAmount] =useState(0);
-    const [amount,setAmount] =useState(0);
+    const [stock_amount,setStockAmount] =useState(0); //จำนวนที่กรอก
+    const [amount,setAmount] =useState(0);  // จำนวนในสต๊อก
     const [stockid,setStockId] =useState(0);
     const [validated,setValidated] =useState(false);
 
     useEffect(()=>{
-        // fetchDataStock();
         fetchDataBranch();
-        
     },[]);
 
     useEffect(()=>{
-        checkOriginBranch();
+        
+        if(origin_branch==0){
+            setStock([]);
+        }else{
+            checkOriginBranch();
+        }
     },[origin_branch]);
 
     useEffect(()=>{
+        if(stockid==0){
+            checkOriginBranch();
+        }
         checkOriginBranch();
         checkAmount();
-
     },[stockid]);
 
     const fetchDataBranch = async ()=>{
@@ -62,6 +67,10 @@ export default function Transfer(){
         } 
     };
 
+
+    const checkStockAmount = async()=>{
+        console.log("In check Stock Amount");
+    }
     const onsave = async (event)=>{
         const form = event.currentTarget;
         event.preventDefault();
@@ -88,7 +97,7 @@ export default function Transfer(){
                                                 value={origin_branch}
                                                 onChange={(e) => setOriginBranch(e.target.value)}
                                                 required>
-                                                <option label="กรุณาเลือกสาขาต้นทาง"></option> 
+                                                <option label="กรุณาเลือกสาขาต้นทาง" value={0}></option> 
                                                 {
                                                 branch.map(item => (
                                                     <option key={item.branch_id} value={item.branch_id}> 
@@ -107,7 +116,7 @@ export default function Transfer(){
                                                 value={stockid}
                                                 onChange={(e) => setStockId(e.target.value)}
                                                 required>
-                                                <option label="กรุณาเลือกรายการสต๊อก"></option>    
+                                                <option label="กรุณาเลือกรายการสต๊อก" value={0}></option>    
                                                           
                                                 {
                                                 stock.map(item => (
@@ -150,6 +159,7 @@ export default function Transfer(){
                                             กรุณากรอกจำนวน
                                         </Form.Control.Feedback>
                                     </Form.Group>
+
                                     <Form.Group as={Col} >
                                             <Form.Label>สาขาปลายทาง</Form.Label>
                                             <Form.Select
