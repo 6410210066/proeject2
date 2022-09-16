@@ -29,7 +29,7 @@
 }
 
 .header{
-    margin-top: 10px;
+    padding-top:0.8em;
     text-align: center;
 }
 
@@ -79,4 +79,14 @@
     background-color: rgb(23, 119, 228);
     color: rgb(255, 255, 255); 
     border-radius: 10px;
+}
+
+.formcontent{
+    width: 60%;
+    margin: auto;
+    margin-top:2em;
+}
+
+.form-group{
+    padding-top:0.7em;
 }
