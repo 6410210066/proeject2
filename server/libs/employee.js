@@ -20,6 +20,13 @@ module.exports={
         return await pool.query(sql);
     },
 
+    ManagerEmployee: async (pool,branch_id) => {
+        console.log(branch_id);
+        var sql = "SELECT b.branch_name,e.* FROM employee e JOIN branch b ON b.branch_id = e.branch_id WHERE e.branch_id = ?";
+        sql = mysql.format(sql,[branch_id]);
+        return await pool.query(sql);
+    },
+
     getByEmpId: async (pool,emp_id) => {
         var sql = "SELECT * FROM employee WHERE emp_id = ?";
         sql = mysql.format(sql,[emp_id]);

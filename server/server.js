@@ -740,6 +740,40 @@ app.post('/api/request/delete',checkAuth,async(req,res)=>{
     }
 });
 
+app.post('/api/manager/employee',async (req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await employee.ManagerEmployee(pool,input.branch_id);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+});
+
+app.post('/api/getbranchId',async (req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await branch.getbranchIdbyuserId(pool,input.user_id);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+});
+
 app.listen(port, () => {
     console.log("Running");
 });

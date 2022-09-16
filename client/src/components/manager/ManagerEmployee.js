@@ -1,16 +1,122 @@
 import Managernav from "./Managernav";
-export default function ManagerEmployeee(){
+import "./manager.css";
+import { useEffect, useState } from "react";
+import { Table,Form, Col, Button } from "react-bootstrap";
+import { API_POST } from "../../api";
+import ManagerEmployeeItem from "./ManagerEmployeeItem";
+import { Link } from "react-router-dom";
+
+
+
+export default function ManagerEmployee(){
     let page=3;
+        const [data,setData] = useState([]);
+        const [employee,setemployee] = useState([]);
+        const [branch_id,setBranchid] = useState(0);
+        const [user_id,setUserid] = useState(0); 
+
+
+        const [validated,setValidated] = useState(false);
+        
+
+    useEffect(()=>{
+        let user_id = localStorage.getItem("user_id");
+        setUserid(user_id);
+        console.log(user_id);
+        setBranchid(getBranchId(user_id));
+        
+    },[])
+
+    
+    const fetchData = async(id)=>{
+       console.log(id);
+        let json = await API_POST("manager/employee",{
+            branch_id : id
+        });
+        console.log(json.data);
+        setData(json.data);
+        setemployee(json.data);
+        console.log(branch_id);
+    }   
+
+    const getBranchId = async(user_id) => {
+        let json = await API_POST("getbranchId",{
+            user_id : user_id
+        });
+        setBranchid(json.data[0].branch_id);
+        fetchData(json.data[0].branch_id);
+        return json.data[0].branch_id;
+    }
+
+    const ondelete = async(data) =>{
+        let json = await API_POST("employee/delete",{
+            emp_id : data.emp_id
+        });
+        if(json.result){
+            fetchData();
+        }
+    }
+
+    // const fetchSearch = async(searchdata)=>{
+    //     setData(searchdata);
+    // }
+
     return(
         <>
-                    <div  className="container-fluid ">
+         {console.log(user_id)}
+                <div  className="container-fluid ">
                 <div className="row">
                     <div className="col-lg-2  col-sm-12 " style={{padding:"0"}}>
                         <Managernav page={page}/>
                     </div>
                     <div className="col-lg-10 col-sm-12 content " style={{padding:"0"}}>
                         <div className='user-grid'>
-                           <h1>จัดการพนักงาน</h1>
+                           <h1 className="header">จัดการพนักงาน</h1>
+                            {/* <Form noValidate validated={validated}  onClick={onSearch}>
+                            <div className="row ms-5 mb-3 grid">
+                                <div className="col-lg-8 col-md-7 col-sm-6 mt-1">
+                                    <Form.Group as={Col} controlId="validateUserName" >
+                                        <Form.Control
+                                            required
+                                            type="text"
+                                            value={firstname}
+                                            placeholder="ค้นหาชื่อพนักงาน"
+                                            onChange={(e) => setFirstname(e.target.value)}  
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                            กรุณากรอก ชื่อพนักงาน
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
+                                </div>
+                                <div className="col-lg-1 col-sm-2 me-4 ms-3 "> 
+                                    <Button className="button btn-edit" as="input" type="submit" value="ค้นหา"/>
+                                </div>
+                                <div className="col-lg-2 col-sm-2 me-3">                             
+                                    <Link to={`/employee/add`} className="button btn-add">เพิ่ม</Link>
+                                </div>
+                                <div className="col-lg-0 col-md-1"></div>
+                            </div>
+                        </Form> */}
+                        <Table striped className="mx-5 grid">
+                            <thead>
+                                <tr>
+                                    <th>รหัสพนักงาน</th>
+                                    <th>ชื่อ-สกุล</th>
+                                    <th>ที่อยู่</th>
+                                    <th>เงินเดือน</th>
+                                    <th>เบอร์โทรศัพท์</th>
+                                    <th>ลบ</th>
+                                    <th>แก้ไข</th>
+                                </tr>
+                            </thead>
+                        <tbody>
+                        {
+                        data.map(item => (
+                            <ManagerEmployeeItem key={item.emp_id} data={item} ondelete={ondelete} />
+                        ))
+                        }
+                        </tbody>
+                        </Table>
                         </div>
                     </div>
                 </div>
