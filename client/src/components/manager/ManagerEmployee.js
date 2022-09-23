@@ -6,16 +6,13 @@ import { API_POST } from "../../api";
 import ManagerEmployeeItem from "./ManagerEmployeeItem";
 import { Link } from "react-router-dom";
 
-
-
 export default function ManagerEmployee(){
     let page=3;
         const [data,setData] = useState([]);
         const [employee,setemployee] = useState([]);
         const [branch_id,setBranchid] = useState(0);
         const [user_id,setUserid] = useState(0); 
-
-
+        
         const [validated,setValidated] = useState(false);
         
 
@@ -97,6 +94,8 @@ export default function ManagerEmployee(){
                                 <div className="col-lg-0 col-md-1"></div>
                             </div>
                         </Form> */}
+
+                       
                         <Table striped className="mx-5 grid">
                             <thead>
                                 <tr>

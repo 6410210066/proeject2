@@ -1,27 +1,38 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"
+import { useState } from "react";
+import { Detailmanagerrequest } from "../../modals";
+import { Button } from "react-bootstrap";
 
-export default function ManagerquestItem(props){
+export default function ManagerRequestItem(props){
 
-    const ondelete = async () => {
-        props.ondelete(props.data);
+    // const onShowDetail = async()=>{
+    //     props.onShowDetail();
+    //     props.modelRequestInfo(props.data);
+        
+    // }
+    const [showModal,setShowModal] = useState(false);
+
+    const onConfirm = async() =>{
+        setShowModal(false);
     }
 
+    const onShowDetail = async() => {
+        setShowModal(true);
+    }
+    
     return(
         <>
-        <tr>
+        
+            <Button className="me-4" variant="success">อนุมัติ</Button>
+            <Button className="me-4" variant="danger">ไม่อนุมัติ</Button>
+            <button className="button btn-detail" onClick={onShowDetail}>รายละเอียด</button>
+            
 
-            <td className="align-middle">{props.data.request_id}</td>
-            <td className="align-middle">{props.data.request_amount}</td>
-            <td className="align-middle">{props.data.request_description}</td>
-            <td className="align-middle">{props.data.request_status}</td>
-            <td className="align-middle">{props.data.stock_id}</td>
-            <td className="align-middle">{props.data.stock_name}</td>
-            <td className="align-middle">{props.data.user_id}</td>
-            <td className="align-middle">{props.data.branch_id}</td>
-            <td className="align-middle">{props.data.request_date}</td>
-            <td className="align-middle">{props.data.firstname +"  "}{props.data.lastname}</td>
-            <td className="align-middle"><button onClick={ondelete} className="button btn-delete">ลบ</button></td>
-        </tr>
+        <Detailmanagerrequest
+            show = {showModal}
+            info = {props.data}
+            onComfirm={onConfirm}
+            />
         </>
     )
 }
