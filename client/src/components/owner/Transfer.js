@@ -13,6 +13,7 @@ export default function Transfer(){
     const [branch_id,setBranchId] = useState(0);
     const [origin_branch,setOriginBranch] =useState(0);
     const [destination_branch,setDestinationBranch] =useState(0);
+    const [destination_branch_stock_amount,setDestinationBranchstockamount] = useState(0);
     const [stock_amount,setStockAmount] =useState(0); //จำนวนที่กรอก
     const [amount,setAmount] =useState(0);  // จำนวนในสต๊อก
     const [stockid,setStockId] =useState(0);
@@ -22,6 +23,7 @@ export default function Transfer(){
     const [checkoriginbranch,setCheckOriginBranch] =useState(0);
     const [mname , setMname] =useState(0);
     const [allstock,setAllStock] =useState([]);
+
     useEffect(()=>{
 
         fetchAllstock();
@@ -53,6 +55,11 @@ export default function Transfer(){
         checkStockAmount();
     },[stock_amount])
 
+    useEffect(()=>{
+
+    },[destination_branch]);
+
+
     const fetchDataBranch = async ()=>{
         let json = await API_GET("branch");
         setBranch(json.data);
@@ -63,7 +70,6 @@ export default function Transfer(){
 
             let json = await API_GET("stock");
             setAllStock(json.data);
-        
     }
     const checkAmount = async ()=>{
         setAmount(0);
@@ -145,8 +151,6 @@ export default function Transfer(){
             if(item.stock_id != stockid){
                 destinationstockid = item.stock_id;
                 stockamount = parseInt(item.stock_amount) + parseInt(stock_amount);  
-                console.log(item.stock_amount +" + "+ stock_amount +" = " + stockamount);
-                console.log("dsid in if:"+destinationstockid);
             }
          })
 
@@ -158,6 +162,26 @@ export default function Transfer(){
             console.log("อัปเดทสำเร็จ");
            clearForm();
         }
+    }
+
+    const showDestinationamount = () =>{
+        return(
+            <Form.Group as={Col}  className="form-group" >
+                <Form.Label >จำนวนในสต๊อก</Form.Label>
+                <Form.Control
+                    value={destination_branch_stock_amount}
+                    onChange={(e) => setDestinationBranchstockamount(e.target.value)}
+                    required
+                    disable
+                
+                    >
+
+                </Form.Control>
+                    <Form.Control.Feedback type="invalid">
+                        กรุณาเลือกสาขาปลายทาง
+                    </Form.Control.Feedback>                                               
+            </Form.Group>
+        )
     }
     return(
         <>
@@ -222,7 +246,7 @@ export default function Transfer(){
                                                     disabled
                                                 />
                                                 <Form.Control.Feedback type="invalid">
-                                                    กรุณากรอกจำนวน
+                                                    จำนวนในสต๊อก
                                                 </Form.Control.Feedback>
                                             </Form.Group>
                                         </div>
@@ -270,8 +294,10 @@ export default function Transfer(){
                                                     กรุณาเลือกสาขาปลายทาง
                                                 </Form.Control.Feedback>                                               
                                     </Form.Group>
+
+
                                         <Row className="mb-3 " style={{width:"10%",margin:"auto",paddingTop:"20px"}}>
-                                            <Button variant="primary" as="input" type="submit" value="ตกลง" disabled={checkbtn}/>
+                                            <Button variant="primary" as="input" type="submit" value="โอนย้าย" disabled={checkbtn}/>
                                         </Row>
                                 </Form>
                                 </div>

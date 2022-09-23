@@ -19,6 +19,7 @@ const { response, query } = require("express");
 const employee = require("./libs/employee");
 const branch = require("./libs/branch");
 const stock = require("./libs/stock");
+const requeststock = require("./libs/requeststock");
 const { request } = require("http");
 
 var pool = mysql.createPool({
@@ -723,11 +724,11 @@ app.get('/api/request',async(req,res)=>{
     });
 });
 
-app.post('/api/request/delete',checkAuth,async(req,res)=>{
+app.post('/api/request/delete',async(req,res)=>{
     const input = req.body;
 
     try{
-        var result = await request.deleteRequest(pool,input.request_id);
+        var result = await requeststock.deleteRequest(pool,input.request_id);
         res.json({
             result: true,
             data: result
@@ -762,6 +763,25 @@ app.post('/api/getbranchId',async (req,res)=>{
 
     try{
         var result = await branch.getbranchIdbyuserId(pool,input.user_id);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+});
+
+
+app.post('/api/stock/request',async (req,res)=>{
+    const input = req.body;
+    
+    try{
+        var result = await requeststock.createstockrequest(pool,input.stock_amount,input.description,input.request_status,input.stock_id,input.emp_id,input.branch_id);
+        console.log(result);    
         res.json({
             result: true,
             data: result

@@ -19,7 +19,7 @@ module.exports={
     },
    
     getbranchIdbyuserId: async (pool,user_id) => {
-        var sql = "SELECT branch_id FROM employee e JOIN user u ON e.user_id = u.user_id WHERE u.user_id = ?";
+        var sql = "SELECT branch_id,emp_id FROM employee e JOIN user u ON e.user_id = u.user_id WHERE u.user_id = ?";
         sql = mysql.format(sql,[user_id]);
         return await pool.query(sql);
     },

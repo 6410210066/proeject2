@@ -19,7 +19,7 @@ export default function ManagerEmployee(){
     useEffect(()=>{
         let user_id = localStorage.getItem("user_id");
         setUserid(user_id);
-        console.log(user_id);
+    
         setBranchid(getBranchId(user_id));
         
     },[])
