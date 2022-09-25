@@ -174,7 +174,7 @@ export default function EmployeeForm(){
                     </Form.Control.Feedback>
                 </Form.Group>
 
-                <Form.Group controlId='validateaddress'>
+                <Form.Group controlId='validatephone'>
                     <Form.Label>เบอร์โทรศัพท์</Form.Label>
                     <Form.Control
                         type='text'

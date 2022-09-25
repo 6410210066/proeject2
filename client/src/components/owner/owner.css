@@ -87,6 +87,17 @@
     margin-top:2em;
 }
 
+.tablecontent{
+    width: 80%;
+    margin: auto;
+    margin-top:2em;
+}
+
 .form-group{
     padding-top:0.7em;
+}
+.unit{
+    padding-top: 35px;
+    text-align: left;
+    margin: 0px;
 }

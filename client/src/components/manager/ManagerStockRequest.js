@@ -74,7 +74,6 @@ export default function ManagerstockRequest(){
         });
         if(json.result){
             setStock(json.data);
-            
         } 
     };
     return(
@@ -137,7 +136,7 @@ export default function ManagerstockRequest(){
                                         </Form.Control.Feedback>
                                 </Form.Group>
 
-                                <Row className="mb-3 " style={{width:"10%",margin:"auto",paddingTop:"20px"}}>
+                                <Row className="mb-3 " style={{width:"120px",margin:"auto",paddingTop:"20px"}}>
                                     <Button variant="primary" as="input" type="submit" value="ส่งคำขอ" />
                                 </Row>
                             </Form>
