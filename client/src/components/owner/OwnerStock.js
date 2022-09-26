@@ -15,22 +15,71 @@ export default function OwnerStock(){
     const [stock,setStock] =useState([]);
     const [stockname,setStockname] =useState("");
     const [validated,setValidated] = useState(false);
+    const [material,setMaterial] =useState([]);
+    const [branch,setBranch] =useState([]);
+    const [branch_id,setBranchid] =useState(0);
+    const [materialid,setMaterialid] =useState(0);
 
     useEffect(()=>{
-        async function fetchData(){
-            let json = await API_GET("stock");
-            setData(json.data);
-            setStock(json.data);
-        }
-        fetchData();
+        fetchBranch();
+        fetchStock();
+        fetchMaterial();
     },[])
 
+    useEffect(()=>{
+        checkbranch();
+    },[branch_id])
+
+    useEffect(()=>{
+        checkmaterail();
+    },[materialid])
     const ondelete = async (data)=>{
 
     }
 
     const onSearch = async()=>{
 
+    }
+
+    const fetchBranch= async()=>{
+        let json = await API_GET("branch");
+        setBranch(json.data);
+    }
+
+    const fetchMaterial = async()=>{
+        let json = await API_GET("material");
+        setMaterial(json.data);
+    }
+    const fetchStock = async()=>{
+        let json = await API_GET("stock");
+        setData(json.data);
+        setStock(json.data);
+    }
+
+    const checkbranch = async()=>{
+        let newstock=[];
+        if(branch_id == 0){
+            newstock.push(...stock);
+        }else(          
+            stock.filter(stock => stock.branch_id == branch_id).map(item =>{
+                newstock.push(item)
+            })
+        )
+        setData(newstock);
+    }
+
+    const checkmaterail = async()=>{
+        let newstock= [];
+        console.log(materialid);
+        console.log(stock);
+        if(materialid == 0){
+            newstock.push(...stock);
+        }else(          
+            stock.filter(stock => stock.m_id == materialid).map(item =>{
+                newstock.push(item);
+            })
+        )
+        setData(newstock);
     }
     return(
         <>
@@ -51,11 +100,11 @@ export default function OwnerStock(){
                                                     required
                                                     type="text"
                                                     value={stockname}
-                                                    placeholder="ค้นหาชื่อผู้ใช้"
+                                                    placeholder="ค้นหารายการสต๊อก"
                                                     onChange={(e) => setStockname(e.target.value)}  
                                                 />
                                                 <Form.Control.Feedback type="invalid">
-                                                    กรุณากรอกชื่อสินค้า
+                                                    กรุณากรอกรายการสต๊อก
                                                 </Form.Control.Feedback>
                                             </Form.Group>
                                         </div>
@@ -79,8 +128,19 @@ export default function OwnerStock(){
                                         </div>
                                         <div className="col-lg-3 col-sm-10 ">
                                             <Form.Group controlId="validataSelectBranch" >
-                                                <Form.Select size="sm">
-                                                    <option value={0} >------ เลือกสาขา -------</option>
+                                                <Form.Select 
+                                                size="sm"
+                                                value={branch_id}
+                                                onChange={(e) => setBranchid(e.target.value)}
+                                                >
+                                                <option value={0}>เลือกสาขา</option>
+                                                {
+                                                branch != null &&
+                                                branch.map(item => (
+                                                    <option key={item.branch_id} value={item.branch_id}> 
+                                                    {item.branch_name}</option>
+                                                ))
+                                                }
                                                 </Form.Select>
                                             </Form.Group>
                                         </div>
@@ -91,8 +151,16 @@ export default function OwnerStock(){
                                         </div>
                                         <div className="col-lg-3 col-sm-10 ">
                                         <Form.Group controlId="validataSelectBranch" >
-                                                <Form.Select size="sm">
-                                                    <option value={0} >------ เลือกประเภท ------</option>
+                                                <Form.Select 
+                                                size="sm"
+                                                value={materialid}
+                                                onChange={(e) => setMaterialid(e.target.value)}>
+                                                    <option value={0} >เลือกประเภท</option>
+                                                {
+                                                    material.map(item =>(
+                                                        <option key={item.m_id} value={item.m_id}>{item.m_name}</option>
+                                                    ))
+                                                }
                                                 </Form.Select>
                                             </Form.Group>
                                         </div>
