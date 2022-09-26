@@ -7,6 +7,7 @@ module.exports={
         sql = mysql.format(sql,[firstname,lastname,address,salary,phone_number,branch_id,user_id]);
         return await pool.query(sql);
     },
+
     updateEmp: async (pool,emp_id,firstname,lastname,address,
                     salary,phone_number,branch_id)=>{
         var sql = "UPDATE employee SET firstname = ?,lastname = ?,address = ?,salary = ?,phone_number = ?,branch_id = ? WHERE emp_id = ?";
@@ -21,7 +22,6 @@ module.exports={
     },
 
     ManagerEmployee: async (pool,branch_id) => {
-        console.log(branch_id);
         var sql = "SELECT b.branch_name,e.* FROM employee e JOIN branch b ON b.branch_id = e.branch_id WHERE e.branch_id = ?";
         sql = mysql.format(sql,[branch_id]);
         return await pool.query(sql);

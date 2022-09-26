@@ -31,6 +31,7 @@ export default function OwnerEmloyee(){
         setData(json.data);
         setemployee(json.data);
     }
+    
     const ondelete = async(data) =>{
         let json = await API_POST("employee/delete",{
             emp_id : data.emp_id

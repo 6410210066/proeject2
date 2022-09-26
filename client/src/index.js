@@ -15,6 +15,7 @@ import Product from './components/owner/Product';
 import OwnerEmloyee from './components/owner/OwnerEmployee';
 import ProductForm from './components/owner/ProductForm';
 import EmployeeForm from './components/owner/EmployeeForm';
+import ManagerEmployeeForm from './components/manager/ManagerEmployeeForm';
 import OwnerStock from './components/owner/OwnerStock';
 import Transfer from './components/owner/Transfer';
 import Ownerbranch from './components/owner/Ownerbranch';
@@ -40,7 +41,7 @@ root.render(
       <Route path="owner/branch" element={<Ownerbranch />} />
       <Route path="branch/:branch_id" element={<BranchForm />} />
       <Route path="product/:product_id" element={<ProductForm />} />
-      <Route path="employee/:emp_id" element={<EmployeeForm />} /> 
+      <Route path="employee/:emp_id" element={<EmployeeForm />} />  
       <Route path="owner/stock" element={<OwnerStock />} />
       <Route path="product/detail/:product_id" element={<ProductDetail />} />
       <Route path="transfer" element={<Transfer /> } />
@@ -49,6 +50,7 @@ root.render(
       <Route path="manager/stock" element={<Managerstock />} />
       <Route path="manager/employee" element={<ManagerEmployeee/> } />
       <Route path="manager/stockrequest" element={<ManagerstockRequest />} />
+      <Route path="manager/employee/:emp_id" element={<ManagerEmployeeForm />} />
 
     </Routes>
   </BrowserRouter>,
