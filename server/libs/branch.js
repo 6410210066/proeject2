@@ -1,3 +1,4 @@
+const { memoryStorage } = require('multer');
 const mysql = require('mysql');
 
 module.exports={
@@ -29,4 +30,9 @@ module.exports={
         sql = mysql.format(sql,[branch_id]);
         return await pool.query(sql);
     },
+    getBranchIdBymaterial: async(pool,m_id) =>{
+        var sql ="SELECT * FROM `branch` WHERE branch_id NOT IN (SELECT a.branch_id FROM branch a JOIN stock b ON a.branch_id = b.branch_id JOIN material c ON b.m_id = c.m_id WHERE c.m_id = ?);";
+        sql = mysql.format(sql,[m_id]);
+        return await pool.query(sql);
+    }
 };

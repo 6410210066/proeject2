@@ -112,7 +112,7 @@ export default function OwnerStock(){
                                             <Button className="button btn-edit" as="input" type="submit" value="ค้นหา"/>
                                         </div>
                                         <div className="col-1">                             
-                                            <Link to={`/product/add`} className="button btn-add">เพิ่ม</Link>
+                                            <Link to={`/owner/stock/add`} className="button btn-add">เพิ่ม</Link>
                                         </div>
                                         <div className="col-1"></div>
                                     </div>

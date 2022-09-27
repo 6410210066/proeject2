@@ -522,6 +522,59 @@ app.get('/api/stock', (req,res)=>{
     });
 });
 
+app.post('/api/stock/add',async(req,res)=>{
+    const input = req.body;
+    try{
+        var result = await stock.createStock(pool,input.m_id,input.stock_amount,input.branch_id);
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
+app.post('/api/stock/delete',async(req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await stock.deleteStock(pool,input.stock_id);
+        res.json({
+            result: true
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+
+});
+
+
+app.get('/api/stock/:stock_id',async(req,res)=>{
+    const stock_id = req.params.stock_id;
+
+    try{
+        var result = await stock.getByStockId(pool,stock_id);
+        res.json({
+            result: true,
+            data: result
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
 app.get('/api/branch', (req,res)=>{
     pool.query("SELECT a.branch_id,a.branch_name,a.branch_address,b.firstname,b.lastname  FROM branch a JOIN employee b ON a.emp_id = b.emp_id",function(error,results,fields){
         if(error){
@@ -549,7 +602,7 @@ app.post('/api/branch/add',checkAuth,async(req,res)=>{
     const input = req.body;
     console.log(input);
     try{
-        var result = await branch.createBranch(pool,input.branch_name,input.branch_address);
+        var result = await branch.createBranch(pool,input.branch_name,input.branch_addres);
         res.json({
             result: true
         });
@@ -814,6 +867,23 @@ app.get('/api/material', async(req,res)=>{
             });
         }
     });
+});
+
+app.post('/api/checkmaterialbybranch', async (req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await branch.getBranchIdBymaterial(pool,input.m_id);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
 });
 
 app.listen(port, () => {

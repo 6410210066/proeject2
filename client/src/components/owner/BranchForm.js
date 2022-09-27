@@ -49,7 +49,7 @@ export default function BranchForm(){
         const json = await API_POST("branch/add",{
             branch_id : branch_id,
             branch_name : branch_name,
-            branch_address : branch_address,
+            branch_addres : branch_address,
             emp_id : emp_id
         });
         if(json.result){

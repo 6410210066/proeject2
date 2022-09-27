@@ -232,7 +232,7 @@ export default function Transfer(){
                                                     required
                                                     type="number"
                                                     value={stock_amount}
-                                                    placeholder="ชื่อผู้ใช้งาน"
+                                                    placeholder="จำนวน"
                                                     onChange={(e) => setStockAmount(e.target.value)}
                                                 />
                                                 <Form.Control.Feedback type="invalid">

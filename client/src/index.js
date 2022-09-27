@@ -26,7 +26,7 @@ import Employeehistory from './components/employee/Employeehistory';
 import Managerstock from './components/manager/Managerstock';
 import ManagerEmployeee from './components/manager/ManagerEmployee';
 import ManagerstockRequest from './components/manager/ManagerStockRequest';
-
+import OwnerStockForm from './components/owner/OwnerStockForm';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -51,6 +51,7 @@ root.render(
       <Route path="manager/employee" element={<ManagerEmployeee/> } />
       <Route path="manager/stockrequest" element={<ManagerstockRequest />} />
       <Route path="manager/employee/:emp_id" element={<ManagerEmployeeForm />} />
+      <Route path="owner/stock/:stock_id" element={<OwnerStockForm/>} />
 
     </Routes>
   </BrowserRouter>,
