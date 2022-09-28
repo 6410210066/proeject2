@@ -903,9 +903,26 @@ app.post('/api/rejectrequest', async(req,res) =>{
         res.json({
             result:false,
             message:ex.message
-        })
+        });
     }
 });
+
+app.get("/api/report", checkAuth, async (req, res) => {
+    try {
+        var result = await stock.getSumStock(pool);
+
+        res.json({
+            result: true,
+            data: result
+        });
+    } catch (ex) {
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
 app.listen(port, () => {
     console.log("Running");
 });

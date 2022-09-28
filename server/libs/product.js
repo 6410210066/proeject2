@@ -21,6 +21,7 @@ module.exports={
         sql =mysql.format(sql,[product_id]);
         return await pool.query(sql);
     },
+
     getByproductId: async(pool,product_id)=>{
         var sql = "SELECT * FROM product WHERE product_id = ?";
         sql = mysql.format(sql,[product_id]);
