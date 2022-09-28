@@ -24,11 +24,11 @@ import Managerquest from './components/owner/Managerequest';
 import ProductDetail from './components/owner/ProductDetail';
 import Employeehistory from './components/employee/Employeehistory';
 import Managerstock from './components/manager/Managerstock';
-import ManagerEmployeee from './components/manager/ManagerEmployee';
+import ManagerEmployee from './components/manager/ManagerEmployee';
 import ManagerstockRequest from './components/manager/ManagerStockRequest';
 import OwnerStockForm from './components/owner/OwnerStockForm';
 import MaterailForm from './components/owner/MaterialForm';
-import Report from './components/owner/Report';
+import Reportstockbybranch from './components/owner/report/Reportstockbybranch';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -52,12 +52,12 @@ root.render(
       <Route path="request" element={<Managerquest />} />
       <Route path="employee/salehistory" element={<Employeehistory />} />
       <Route path="manager/stock" element={<Managerstock />} />
-      <Route path="manager/employee" element={<ManagerEmployeee/> } />
+      <Route path="manager/employee" element={<ManagerEmployee/> } />
       <Route path="manager/stockrequest" element={<ManagerstockRequest />} />
       <Route path="manager/employee/:emp_id" element={<ManagerEmployeeForm />} />
       <Route path="owner/stock/:stock_id" element={<OwnerStockForm/>} />
       <Route path="owner/material/:material_id" element={<MaterailForm />} />
-      <Route path="owner/Report" element={<Report />} />
+      <Route path="owner/Reportstockbybranch" element={<Reportstockbybranch />} />
     </Routes>
   </BrowserRouter>,
   // document.getElementById('root')

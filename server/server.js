@@ -907,7 +907,7 @@ app.post('/api/rejectrequest', async(req,res) =>{
     }
 });
 
-app.get("/api/report", checkAuth, async (req, res) => {
+app.get("/api/reportstockbybranch", checkAuth, async (req, res) => {
     try {
         var result = await stock.getSumStock(pool);
 
