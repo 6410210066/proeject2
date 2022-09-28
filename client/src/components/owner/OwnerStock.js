@@ -6,6 +6,7 @@ import { API_GET,API_POST } from "../../api";
 import Stockitem from "./Stockitem";
 import {Form,Row,Col,Button} from 'react-bootstrap';
 import { Link } from "react-router-dom";
+import { DeleteModal, EditStockModal } from "../../modals";
 
 
 export default function OwnerStock(){
@@ -19,7 +20,13 @@ export default function OwnerStock(){
     const [branch,setBranch] =useState([]);
     const [branch_id,setBranchid] =useState(0);
     const [materialid,setMaterialid] =useState(0);
-
+    const [show,setShow]=useState(false);
+    const [showedit,setShowedit] =useState(false);
+    const [title,setTitle]=useState("");
+    const [message,setMessage]= useState("");
+    const [stockid,setStockid]=useState(0);
+    const [stock_amount,setStockamount] =useState(0);
+    const [modalEditinfo,setModalEditinfo]= useState([]);
     useEffect(()=>{
         fetchBranch();
         fetchStock();
@@ -27,16 +34,53 @@ export default function OwnerStock(){
     },[])
 
     useEffect(()=>{
+        
         checkbranch();
     },[branch_id])
 
     useEffect(()=>{
         checkmaterail();
     },[materialid])
-    const ondelete = async (data)=>{
 
+    const ondelete = async (data)=>{
+        setShow(true);
+        setTitle("ยืนยันการลบข้อมูล");
+        setMessage("คุณต้องการลบข้อมูลสต๊อกสินค้าหรือไม่");
+        setStockid(data.stock_id);
     }
 
+    const onConfirm = async()=>{
+        let json = await API_POST("stock/delete",{
+            stock_id : stockid
+        });
+        if(json.result){
+            setShow(false);
+            fetchStock();
+        }
+    }
+    const onConfirmedit = async()=>{
+        let json = await API_POST("stock/update",{
+            stock_amount : stock_amount,
+            stock_id: stockid
+        });
+        if(json.result){
+            setShow(false);
+            fetchStock();
+        }
+        setShowedit(false);
+    }
+    const onCancel= async()=>{
+        setShow(false);
+        setShowedit(false);
+       
+    }
+
+    const onEdit = async(data)=>{
+        setShowedit(true);
+        setTitle("แก้ไขจำนวนสต๊อกสินค้า");
+        setStockid(data.stock_id);
+        setStockamount(data.stock_amount);
+    }
     const onSearch = async()=>{
 
     }
@@ -65,7 +109,9 @@ export default function OwnerStock(){
                 newstock.push(item)
             })
         )
+      
         setData(newstock);
+        
     }
 
     const checkmaterail = async()=>{
@@ -81,6 +127,9 @@ export default function OwnerStock(){
         )
         setData(newstock);
     }
+
+
+    
     return(
         <>
             <div  className="container-fluid " >
@@ -117,7 +166,6 @@ export default function OwnerStock(){
                                         <div className="col-1"></div>
                                     </div>
                                 </Form>
-                                
                                 {/* ส่วน filter ข้อมูล */}
                                 <Form>
                                     <div className='row ms-5 mb-3'>
@@ -182,14 +230,31 @@ export default function OwnerStock(){
                                     </thead>
                                     <tbody>
                                         {
+                                        data != null &&
                                         data.map( item => (
-                                                <Stockitem key={item.stock_id} data={item} ondelete={ondelete} />
+                                                <Stockitem key={item.stock_id} data={item} onEdit={onEdit} ondelete={ondelete}/>
                                         ))
                                         }
                                     </tbody>
                                 </Table>
-                            </div>
-                            
+                            </div> 
+                            <DeleteModal
+                            show={show}
+                            title={title}
+                            message={message}
+                            onConfirm={onConfirm}
+                            onCancel={onCancel}
+                            />
+
+                            <EditStockModal 
+                            show ={showedit}
+                            title={title}
+                            onConfirm={onConfirmedit}
+                            onCancel={onCancel}
+                            stockamount={stock_amount}
+                            setStockamount={setStockamount}
+                            />
+
                         </div>
 
                 </div>

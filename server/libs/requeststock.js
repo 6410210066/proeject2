@@ -16,9 +16,13 @@ module.exports={
         return await pool.query(sql);
     },
     createstockrequest: async(pool,stock_amount,description,request_statues,stock_id,emp_id,branch_id) =>{
-        var sql = "INSERT INTO stockrequest(request_amount,request_description,request_status,stock_id,emp_id,branch_id) VALUES(?,?,?,?,?,?)";
-        sql = mysql.format(sql,[stock_amount,description,request_statues,stock_id,emp_id,branch_id]);
-        console.log(sql);
+        var sql = "INSERT INTO stockrequest(request_amount,request_description,status,stock_id,emp_id,branch_id) VALUES(?,?,?,?,?,?)";
+        sql = mysql.format(sql,[stock_amount,description,statues,stock_id,emp_id,branch_id]);
+        return await pool.query(sql);
+    },
+    rejectrequest: async(pool,request_id,status_id) =>{
+        var sql  = "UPDATE stockrequest SET status_id = ? WHERE request_id = ?";
+        sql = mysql.format(sql,[status_id,request_id]);
         return await pool.query(sql);
     }
 };

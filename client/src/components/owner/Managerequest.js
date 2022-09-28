@@ -43,7 +43,9 @@ export default function Managerquest(){
                     <div className="col-lg-10 content" style={{padding:"0"}}>
                         <h1 className="header">จัดการคำขอสต๊อกสินค้า</h1>
                             <div className="p-4 m-4">
-                                {data.filter(data => data.request_status == 1).map(item => (
+                                {console.log(data)}
+                                {
+                                    data.filter(data => data.status_id == 1).map(item => (
                                 
                                     <div key={item.request_id}>
                                         <Table borderless>
@@ -68,7 +70,7 @@ export default function Managerquest(){
                                             <td colSpan={4}>
                                             
 
-                                            <ManagerRequestItem key={item.request_id} data={item} onShowDetail={onShowDetail} ModelRequestInfo={setModelRequestInfo}/>
+                                            <ManagerRequestItem key={item.request_id} data={item} onShowDetail={onShowDetail} ModelRequestInfo={setModelRequestInfo} fetchStockrequest={fetchStockrequest}/>
                                             
                                            </td>
                                             </tr>

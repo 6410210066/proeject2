@@ -1,4 +1,5 @@
 import {Modal,Button,} from "react-bootstrap";
+import { Form,Col } from "react-bootstrap";
 
 export  function Detailproductmodal(props) {
 
@@ -7,7 +8,7 @@ export  function Detailproductmodal(props) {
            <Modal show={props.show} onHide={props.onHide} centered >
                 <Modal.Header>
                     <Modal.Title>
-                            <h1 style={{textAlign:"center"}}>รายละเอียดสินค้า</h1>
+                            <h3 style={{textAlign:"center"}}>รายละเอียดสินค้า</h3>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -40,14 +41,71 @@ export  function Detailproductmodal(props) {
     );
 }
 
-export function Detailmanagerrequest(props){
-    console.log(props);
+export function DeleteModal(props){
     return(
     <>
+        <Modal show={props.show} centered >
+            <Modal.Header>
+                <Modal.Title>
+                    <h3 style={{textAlign:"center"}}>{props.title}</h3>
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                    <p>{props.message}</p>                
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="danger" onClick={props.onConfirm}>ลบ</Button>
+                <Button variant="primary" onClick={props.onCancel}>ยกเลิก</Button>
+            </Modal.Footer>
+        </Modal>
+    </>
+    );
+}
+
+
+export function EditStockModal(props){
+
+    return(
+        <>
+            <Modal show={props.show}  centered >
+                <Modal.Header>
+                    <Modal.Title>
+                        <h3 style={{textAlign:"center"}}>{props.title}</h3>
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                        <Form>
+                        <Form.Group as={Col} controlId="validatestockamount">
+                                <Form.Label>กรอกจำนวน</Form.Label>
+                                <Form.Control
+                                    required
+                                    type="number"
+                                    value={props.stockamount}
+                                    placeholder="จำนวน"
+                                    step="0.001"
+                                    min ="1"
+                                    onChange={(e) => props.setStockamount(e.target.value)}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    กรุณากรอกจำนวน
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Form>             
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="success" onClick={props.onConfirm}>บันทึก</Button>
+                    <Button variant="primary" onClick={props.onCancel}>ยกเลิก</Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    );
+}
+export function Detailmanagerrequest(props){
+    return (
         <Modal show={props.show} onHide={props.onHide} centered >
             <Modal.Header>
                 <Modal.Title>
-                    <h1 style={{textAlign:"center"}}>รายละเอียดสต๊อกสินค้า</h1>
+                    <h3 style={{textAlign:"center"}}>รายละเอียดสต๊อกสินค้า</h3>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -57,13 +115,34 @@ export function Detailmanagerrequest(props){
                 <p><b>ชื่อสินค้า :</b> {props.info.m_name}</p>
                 <p><b>จำนวน :</b> {props.info.request_amount}</p>
                 <p><b>รายละเอียด :</b> {props.info.request_description}</p>
-                <p><b>สถานะ :</b> {props.info.request_status}</p>
+                <p><b>สถานะ :</b> {props.info.status_name}</p>
                 
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="danger" onClick={props.onComfirm}>ปิด</Button>
             </Modal.Footer>
-             </Modal>
-    </>
-    );
+        </Modal>
+    )
+}
+
+export function ConfirmModal(props){
+
+    return(
+        <>
+            <Modal show={props.show} centered >
+                <Modal.Header>
+                    <Modal.Title>
+                        <h3 style={{textAlign:"center"}}>{props.title}</h3>
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                        <p>{props.message}</p>                
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={props.onConfirm}>ยืนยัน</Button>
+                    <Button variant="danger" onClick={props.onCancel}>ยกเลิก</Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+        );
 }

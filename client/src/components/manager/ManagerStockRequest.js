@@ -44,7 +44,7 @@ export default function ManagerstockRequest(){
         let json = await API_POST("stock/request",{
             stock_amount: stock_amount,
             description:description,
-            request_status:request_status,
+            status:request_status,
             stock_id:stock_id,
             emp_id:emp_id,
             branch_id:branch_id

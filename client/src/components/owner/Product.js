@@ -116,10 +116,7 @@ export default function Product(){
                             </div>
                             <div className="col-1"></div>
                         </div>
-                    </Form>
-                        
-
-                        
+                    </Form>     
                         <Detailproductmodal 
                             show={showModal}
                             info={modelProductInfo}

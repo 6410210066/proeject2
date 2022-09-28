@@ -526,8 +526,10 @@ app.post('/api/stock/add',async(req,res)=>{
     const input = req.body;
     try{
         var result = await stock.createStock(pool,input.m_id,input.stock_amount,input.branch_id);
+        console.log(result);
         res.json({
             result: true
+            
         });
 
     }catch(ex){
@@ -752,11 +754,13 @@ app.get('/api/request',async(req,res)=>{
             b.branch_name,
             e.firstname,
             e.lastname,
-            m.m_name
+            m.m_name,
+            st.status_name
             FROM stockrequest a JOIN branch b ON a.branch_id = b.branch_id
             JOIN employee e ON a.emp_id = e.emp_id
             JOIN stock s ON a.stock_id = s.stock_id
-            JOIN material m ON s.m_id = m.m_id`,function(error,results,fields){
+            JOIN material m ON s.m_id = m.m_id
+            JOIN status st ON a.status_id = st.status_id`,function(error,results,fields){
         if(error){
             res.json({
                 result: false,
@@ -811,7 +815,7 @@ app.post('/api/manager/employee',async (req,res)=>{
     }
 });
 
-app.post('/api/getbranchId',async (req,res)=>{
+app.post('/api/getbranchId',checkAuth, async (req,res)=>{
     const input = req.body;
 
     try{
@@ -829,11 +833,11 @@ app.post('/api/getbranchId',async (req,res)=>{
 });
 
 
-app.post('/api/stock/request',async (req,res)=>{
+app.post('/api/stock/request',checkAuth, async (req,res)=>{
     const input = req.body;
     
     try{
-        var result = await requeststock.createstockrequest(pool,input.stock_amount,input.description,input.request_status,input.stock_id,input.emp_id,input.branch_id);
+        var result = await requeststock.createstockrequest(pool,input.stock_amount,input.description,input.status,input.stock_id,input.emp_id,input.branch_id);
         console.log(result);    
         res.json({
             result: true,
@@ -847,7 +851,7 @@ app.post('/api/stock/request',async (req,res)=>{
     }
 });
 
-app.get('/api/material', async(req,res)=>{
+app.get('/api/material',checkAuth, async(req,res)=>{
     pool.query("SELECT * FROM material",function(error,results,fields){
         if(error){
             res.json({
@@ -869,7 +873,7 @@ app.get('/api/material', async(req,res)=>{
     });
 });
 
-app.post('/api/checkmaterialbybranch', async (req,res)=>{
+app.post('/api/checkmaterialbybranch',checkAuth, async (req,res)=>{
     const input = req.body;
 
     try{
@@ -886,6 +890,22 @@ app.post('/api/checkmaterialbybranch', async (req,res)=>{
     }
 });
 
+app.post('/api/rejectrequest', async(req,res) =>{
+    const input = req.body;
+
+    try {
+        var result = await requeststock.rejectrequest(pool,input.request_id,input.status_id);
+        res.json({
+            result: true,
+            data:result
+        });
+    }catch(ex){
+        res.json({
+            result:false,
+            message:ex.message
+        })
+    }
+});
 app.listen(port, () => {
     console.log("Running");
 });
