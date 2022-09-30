@@ -130,3 +130,7 @@ table{
     text-align: center;
 }
 
+.overfloww{
+    overflow-y: scroll;
+    height: 80%;
+}

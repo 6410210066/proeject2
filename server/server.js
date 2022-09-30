@@ -21,6 +21,7 @@ const branch = require("./libs/branch");
 const stock = require("./libs/stock");
 const requeststock = require("./libs/requeststock");
 const { request } = require("http");
+const material = require("./libs/material");
 
 var pool = mysql.createPool({
     connectionLimit: 10,
@@ -890,6 +891,24 @@ app.post('/api/checkmaterialbybranch',checkAuth, async (req,res)=>{
     }
 });
 
+app.get('/api/material/:m_id',checkAuth, async(req,res) =>{
+    const m_id = req.params.m_id;
+
+    try{
+        var result = await material.getMaterialById(pool,m_id);
+        res.json({
+            result: true,
+            data: result
+        });
+
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        });
+    }
+});
+
 app.post('/api/rejectrequest', async(req,res) =>{
     const input = req.body;
 
@@ -922,6 +941,22 @@ app.get("/api/reportstockbybranch", checkAuth, async (req, res) => {
         });
     }
 });
+
+app.get("/api/reportallstock",checkAuth, async(req,res)=>{
+    try{
+        var result = await stock.getReportStock(pool);
+        res.json({
+            result:true,
+            data:result
+        })
+    }catch(ex){
+        res.json({
+            result:false,
+            message:ex.message
+        })
+    }
+});
+
 
 app.listen(port, () => {
     console.log("Running");

@@ -35,6 +35,10 @@ module.exports={
         var sql = "SELECT * FROM stock";
         sql =mysql.format(sql,[stock_id]);
         return await pool.query(sql);
-    }
+    },
+    getReportStock: async (pool) =>{
+        var sql ="SELECT s.m_id, SUM(s.stock_amount) as stock_count, m.m_name FROM stock s JOIN material m ON s.m_id = m.m_id GROUP BY m.m_id";
+        return await pool.query(sql);
+    },
 
 }

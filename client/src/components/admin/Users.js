@@ -111,16 +111,17 @@ export default function Users(){
                             <div className="col-1"></div>
                         </div>
                     </Form>
-
-            <Table striped responsive className="">
+                  
+            <Table striped responsive className="overflow-scroll">
+            
                 <Userheader />
-                <tbody>
-                    {
-                        data.map(item => (
-                            <Useritem key={item.user_id} data={item} ondelete={ondelete} num={num}/>
-                        ))
-                    }
-                </tbody>
+                    <tbody >
+                        {
+                            data.map(item => (
+                                <Useritem key={item.user_id} data={item} ondelete={ondelete} num={num}/>
+                            ))
+                        }
+                    </tbody>
             </Table>
         </>
     )

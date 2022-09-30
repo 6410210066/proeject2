@@ -29,7 +29,7 @@ import ManagerstockRequest from './components/manager/ManagerStockRequest';
 import OwnerStockForm from './components/owner/OwnerStockForm';
 import MaterailForm from './components/owner/MaterialForm';
 import Reportstockbybranch from './components/owner/report/Reportstockbybranch';
-
+import ReportAllstock from './components/owner/report/ReportAllstock';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -58,6 +58,7 @@ root.render(
       <Route path="owner/stock/:stock_id" element={<OwnerStockForm/>} />
       <Route path="owner/material/:material_id" element={<MaterailForm />} />
       <Route path="owner/Reportstockbybranch" element={<Reportstockbybranch />} />
+      <Route path="owner/reportallstock" element={<ReportAllstock />} />
     </Routes>
   </BrowserRouter>,
   // document.getElementById('root')
