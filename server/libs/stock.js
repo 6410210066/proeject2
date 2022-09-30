@@ -27,13 +27,16 @@ module.exports={
     },
 
     getSumStock : async (pool) => {
-        var sql = "SELECT s.branch_id, s.m_id, b.branch_id, b.branch_name, m.m_id, m.m_name FROM stock s JOIN branch b ON s.branch_id = b.branch_id JOIN material m ON s.m_id = m.m_id;"
+        var sql = `SELECT s.m_id, b.branch_id, b.branch_name, m.m_name, s.stock_amount
+                    FROM stock s JOIN branch b ON s.branch_id = b.branch_id 
+                    JOIN material m ON s.m_id = m.m_id;`;
+        // sql = mysql.format(sql,[stock_amount]);
         return await pool.query(sql);
     },
 
     getByStockId: async(pool,stock_id) =>{
         var sql = "SELECT * FROM stock";
-        sql =mysql.format(sql,[stock_id]);
+        sql = mysql.format(sql,[stock_id]);
         return await pool.query(sql);
     },
     getReportStock: async (pool) =>{

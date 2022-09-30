@@ -1,6 +1,7 @@
 import { useEffect ,useState} from "react";
 import ReportAllstock from "./report/ReportAllstock";
 import Reportallstockitem from "./report/Reportallstockitem";
+import Reportstockbybranch from "./report/Reportstockbybranch";
 
 export default function Dashboard(props){
     const [data,setData] = useState([]);
