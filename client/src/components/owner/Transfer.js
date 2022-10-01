@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import {API_GET,API_POST} from '../../api';
 import { useNavigate } from 'react-router-dom';
 import Ownernav from "./Ownernav";
-
+import './owner.css';
 export default function Transfer(){
     let page =3;
    
@@ -184,7 +184,7 @@ export default function Transfer(){
                     </div>
                         <div className="col-lg-10 content" style={{padding:"0"}}>
                             <h1 className="header">ย้ายสต๊อกสินค้า</h1>
-                                <div className="formcontent">
+                                <div className="formtranfer Regular shadow">
                                 <Form noValidate validated={validated} onSubmit={onsave} >
                                     <Form.Group as={Col} className="form-group">
                                             <Form.Label>สาขาต้นทาง</Form.Label>

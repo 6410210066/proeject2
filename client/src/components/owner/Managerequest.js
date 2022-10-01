@@ -14,6 +14,7 @@ export default function Managerquest(){
         const [validated,setValidated] = useState(false);
 
     useEffect(()=>{
+        
         fetchStockrequest();
     },[])
 
@@ -31,20 +32,30 @@ export default function Managerquest(){
         console.log(json.data);
     }
 
-    
+
+    const checkstatus = (status)=>{
+        if(status==1){
+            return "pandding row request-item  my-2"
+        }else if(status==5){
+            return "approve row request-item  my-2"
+        }else if(status==6){
+            return "reject row request-item  my-2"
+        }
+    }
     return(
         <>
             <div className="container-fluid" >
                 <div className="row">
-                    <div className="col-lg-2 nav" style={{padding:"0"}}>
+                    <div className="col-lg-2 nav " style={{padding:"0"}}>
                          <Ownernav page={page} />
 
                     </div>
-                    <div className="col-lg-10 content" style={{padding:"0"}}>
+                    <div className="col-lg-10 content overfloww" style={{padding:"0"}}>
                         <h1 className="header">จัดการคำขอสต๊อกสินค้า</h1>
-                            <div className="p-4 m-4">
+                            <div className="p-4 requestcontent ">
                                 {console.log(data)}
                                 {
+                                    data != null &&
                                     data.filter(data => data.status_id == 1).map(item => (
                                 
                                     <div key={item.request_id}>
@@ -79,6 +90,58 @@ export default function Managerquest(){
                                     </div>
                                     )
                                 )}
+                            </div>
+
+
+                            <div className="request-hetory Regular shadow ">
+                                <h3 className="header pb-4">ประวัติคำขอ</h3>
+                                <div className="row request-item my-2">
+                                    <div className="col-2 pb-0">
+                                        รหัส
+                                    </div>  
+                                    <div className="col-3 ">
+                                    รายการ
+                                    </div> 
+                                    <div className="col-2 ">
+                                        จำนวน
+                                    </div> 
+                                    <div className="col-3 ">
+                                        สาขา
+                                    </div> 
+                                    <div className="col-2 ">
+                                        สถานะ
+                                    </div> 
+                                </div>
+                           
+                                {
+                                    data != null &&
+                                    data.map(item =>(
+                                        <>  
+                                            
+                                            {/* {item.status_id ==1 && <div className= "pandding row request-item  my-2" >}
+                                            {item.status_id == 5 && <div className= "approve row request-item  my-2" >}
+                                            {item.status_id == 6 && <div className= "reject row request-item  my-2" >} */}
+                                            <div className={checkstatus(item.status_id)}>
+                                                <div className="col-2">
+                                                    {item.request_id}
+                                                </div>  
+                                                <div className="col-3">
+                                                    {item.m_name}
+                                                </div> 
+                                                <div className="col-2">
+                                                    {item.request_amount}
+                                                </div> 
+                                                <div className="col-3">
+                                                    {item.branch_name}
+                                                </div> 
+                                                <div className="col-2">
+                                                    {item.status_name}
+                                                </div> 
+                                            </div>
+                                        </>
+                                    ))
+                                }           
+
                             </div>
                     </div>
                 </div>

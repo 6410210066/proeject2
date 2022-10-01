@@ -836,7 +836,7 @@ app.post('/api/getbranchId',checkAuth, async (req,res)=>{
 
 app.post('/api/stock/request',checkAuth, async (req,res)=>{
     const input = req.body;
-    
+    console.log(input)
     try{
         var result = await requeststock.createstockrequest(pool,input.stock_amount,input.description,input.status,input.stock_id,input.emp_id,input.branch_id);
         console.log(result);    

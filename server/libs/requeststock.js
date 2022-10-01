@@ -15,9 +15,9 @@ module.exports={
         sql = mysql.format(sql,[request_id]);
         return await pool.query(sql);
     },
-    createstockrequest: async(pool,stock_amount,description,request_statues,stock_id,emp_id,branch_id) =>{
-        var sql = "INSERT INTO stockrequest(request_amount,request_description,status,stock_id,emp_id,branch_id) VALUES(?,?,?,?,?,?)";
-        sql = mysql.format(sql,[stock_amount,description,statues,stock_id,emp_id,branch_id]);
+    createstockrequest: async(pool,stock_amount,description,status,stock_id,emp_id,branch_id) =>{
+        var sql = "INSERT INTO stockrequest(request_amount,request_description,status_id,stock_id,emp_id,branch_id) VALUES(?,?,?,?,?,?)";
+        sql = mysql.format(sql,[stock_amount,description,status,stock_id,emp_id,branch_id]);
         return await pool.query(sql);
     },
     rejectrequest: async(pool,request_id,status_id) =>{

@@ -1,3 +1,8 @@
+body{
+    font-family: 'Kanit', sans-serif;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
 
 .content{
     height: 100vh;
@@ -97,4 +102,48 @@
     background-color: rgb(23, 119, 228);
     color: rgb(255, 255, 255); 
     border-radius: 10px;
+}
+
+.formcontent{
+    width: 70%;
+    margin: auto;
+    margin-top:2em;
+    margin-bottom:3em;
+    padding: 1.2em 2em 1.5em 2em;
+    background-color: rgba(240, 238, 238, 0.947);
+    border-radius: 8px;
+}
+
+.request-hetory{
+    width: 70%;
+    margin: auto;
+    margin-top:10px;
+    background-color: rgba(240, 238, 238, 0.947);
+    border-radius: 8px;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+.request-item{
+    background-color: rgba(181, 182, 179, 0.892);
+    width: 85%;
+    margin: auto; 
+    border-radius: 8px;
+    padding: 9px;
+    text-align: center;
+}
+
+
+
+.reject{
+    
+    background-color: rgba(235, 81, 81, 0.864);
+}
+
+.approve{
+    background-color: rgba(91, 230, 89, 0.793);
+}
+
+.pandding{
+    background-color: rgba(234, 237, 72, 0.885);
 }
