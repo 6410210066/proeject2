@@ -761,7 +761,7 @@ app.get('/api/request',async(req,res)=>{
             JOIN employee e ON a.emp_id = e.emp_id
             JOIN stock s ON a.stock_id = s.stock_id
             JOIN material m ON s.m_id = m.m_id
-            JOIN status st ON a.status_id = st.status_id`,function(error,results,fields){
+            JOIN status st ON a.status_id = st.status_id ORDER BY request_id DESC`,function(error,results,fields){
         if(error){
             res.json({
                 result: false,

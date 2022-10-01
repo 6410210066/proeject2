@@ -7,11 +7,12 @@ import Stockitem from "./Stockitem";
 import {Form,Row,Col,Button} from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import { DeleteModal, EditStockModal } from "../../modals";
-
+import Fuse from 'fuse.js'
 
 export default function OwnerStock(){
 
     let page=2;
+    
     const [data,setData] =useState([]);
     const [stock,setStock] =useState([]);
     const [stockname,setStockname] =useState("");
@@ -27,6 +28,8 @@ export default function OwnerStock(){
     const [stockid,setStockid]=useState(0);
     const [stock_amount,setStockamount] =useState(0);
     const [modalEditinfo,setModalEditinfo]= useState([]);
+
+
     useEffect(()=>{
         fetchBranch();
         fetchStock();
@@ -37,6 +40,12 @@ export default function OwnerStock(){
         
         checkbranch();
     },[branch_id])
+
+    useEffect(()=>{
+        if(stockname== ""){
+            setData(stock);
+        }
+    },[stockname]);
 
     useEffect(()=>{
         checkmaterail();
@@ -81,7 +90,25 @@ export default function OwnerStock(){
         setStockid(data.stock_id);
         setStockamount(data.stock_amount);
     }
-    const onSearch = async()=>{
+    const onSearch = async(event)=>{
+        console.log(event.currentTarget);
+        const form = event.currentTarget;
+        event.preventDefault(); //ไม่ให้รีเฟรชหน้า
+
+        if (form.checkValidity() === false) {
+            event.stopPropagation();
+        } else {
+            const fuse = new Fuse(stock, {
+                keys: ['stock_id', 'm_name']
+            });
+            let searchdata =  fuse.search(stockname);
+            let data1 =[]
+            searchdata.map(item =>{
+                data1.push(item.item);
+            });
+            setData(data1);
+        }
+        
 
     }
 

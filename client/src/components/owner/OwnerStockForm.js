@@ -73,11 +73,11 @@ export default function OwnerStockForm(){
     const onsave = async(event)=>{
         const form = event.currentTarget;
         event.preventDefault();
+        
         if(form.checkValidity()===false){
             event.stopPropagation();
         }else{
             doCreaterStock();
-
         }
         setValidate(true);
     }

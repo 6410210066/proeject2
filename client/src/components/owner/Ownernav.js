@@ -20,7 +20,7 @@ export default function Ownernav(props){
             <div className="container-fluid  content  sidebar navadmin" style={{padding:"0"}}>
                 <div className="row a-style" style={{margin:"0"}}>
                             <h2>{localStorage.getItem("username")}</h2>                              
-                            <Link className={props.page===1 && "active"} to="/home">Dashboard</Link> 
+                            <Link className={props.page===1 && "active"} to="/home"><i class="fa-solid fa-house"></i>Dashboard</Link> 
                             <Link className={props.page===2 && "active"} to="/owner/stock">จัดการสต๊อกสินค้า</Link>
                             <Link className={props.page===3 && "active"} to="/transfer">ย้ายสต๊อกสินค้า</Link>
                             <Link className={props.page===4 && "active"} to="/owner/employee">พนักงาน</Link>
