@@ -5,20 +5,28 @@ import Reportstockbybranch from "./report/Reportstockbybranch";
 import { Form, } from "react-bootstrap";
 import { API_GET, API_POST } from "../../api";
 
-export default function Dashboard(props) {
-    const [data, setData] = useState([]);
-    const [checkChart, setCheckChart] = useState(0);
-    const [checkComponanat, setCheckcomponant] = useState(false);
-    const [mname, setMname] = useState("");
-    const [mid, setMid] = useState(0);
-    const [checkMid, setCheckMid] = useState(false);
-   
-    useEffect(() => {
-        data.map(item => {
-            setMname(data[0].m_name);
-            setMid(data[0].m_id);
+export default function Dashboard(props){
+    const [data,setData] = useState([]);
+    const [checkChart,setCheckChart] =useState(0);
+    const [mname,setMname] =useState("");
+    const [mid,setMid] =useState(0);
+    const [total,setTotal] = useState(0);
+    const [munit,setMunit ] =useState("");
+    const [checkMid,setCheckMid] =useState(false);
+
+    useEffect(()=>{
+        let total =0 ;
+        data.map(item =>{
+           setMname(item.m_name);
+           setMid(item.m_id);
+           setMunit(item.m_unit);
+           setTotal(item.stock_count);
+           total = total + item.stock_amount
         })
-    }, [data]);
+        
+        setTotal(total);
+
+    },[data]);
 
     useEffect(() => {
         if (mid == 0) {
@@ -34,18 +42,19 @@ export default function Dashboard(props) {
             <div className="container-fluid">
                 <h1 className="header">DashBoard</h1>
                 <div className="row dashboard-content Regular shadow" >
-                    <div className="col-lg-8 col-sm-12">
+                   <div className="col-lg-8">
                         <ReportAllstock data={setData} checkChart={setCheckChart} />
-                    </div>
-                    <div className="col-lg-4 ">
-                        <div className="Regular shadow summarize">
-                            <div className="summarize sumarize-title">
-                                <span> รหัส : </span><span hidden={checkMid}>{mid}</span>
-                                <p> รายการ : {mname} </p>
+                   </div>
+                   <div className="col-lg-4 ">
+                        <div className="Regular shadow summarize" hidden={checkMid}>
+                            <div className="sumarize-title pt-3 ps-5">
+                            <span> รหัส : </span><span >{mid}</span>
+                                <p className="pt-2"> รายการ : {mname} </p>
                             </div>
-                            <div className="summarize sumarize-total">
-
+                            <div className="Regular shadow summarize-total mt-2 my-2 pt-2">
+                                <span > {total}</span><p style={{fontSize:"15px"}}>{munit}</p>
                             </div>
+                            <div className="mt-3"><p></p></div>
                         </div>
                     </div>
 

@@ -145,19 +145,34 @@
 }
 
 .summarize{
-    width: 70%;
-    background-color: beige;
+    width: 80%;
+    background-color: rgba(54, 109, 240, 0.751);
     margin: auto;
-    height: auto;
     margin-top: 20%;
-    padding: 5px;
+    height: 70%;
+    border-radius: 6px;
+    
 }
 
 .summarize .sumarize-title{
-    font-size: 1.1em;
+    font-size: 1.0em;
     font-weight: 600;
-    
 }
+
+ .summarize-total{
+    font-size: 3em;
+    text-align: center;
+    width: 60%;
+    background-color: rgba(16, 69, 153, 0.967);
+    margin-bottom: 4px;
+    margin: auto;
+    color:rgb(255, 255, 255);
+    height: 50%;
+    border-radius: 8px;
+
+}
+
+
 @media only screen and (max-width: 576px) {
     .FormGroup{
         background-color: white;
