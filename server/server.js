@@ -926,10 +926,10 @@ app.post('/api/rejectrequest', async(req,res) =>{
     }
 });
 
-app.get("/api/report/Reportstockbybranch", checkAuth, async (req, res) => {
-    // let input = req.body
+app.post("/api/report/Reportstockbybranch", async (req, res) => {
+    let input = req.body;
     try {
-        var result = await stock.getSumStock(pool);
+        var result = await stock.getSumStock(pool,input.branch_id);
 
         res.json({
             result: true,
