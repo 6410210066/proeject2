@@ -3,6 +3,7 @@ import { useEffect,useState } from "react";
 import { useNavigate, useParams,Link } from "react-router-dom";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import { API_GET, API_POST } from '../../api';
+import { ConfirmModal } from "../../modals";
 
 export default function OwnerStockForm(){
     let navigate =useNavigate();
@@ -17,6 +18,10 @@ export default function OwnerStockForm(){
     const [validated,setValidate] = useState(false);
     const [title,setTitle] =useState("");
     const [checkbtn,setCheckbtn] =useState(true);
+    const [show,setShow] =useState(false);
+    const [message,setMessage] =useState("");
+    const [titlemodal,setTitlemodal] =useState("");
+
     useEffect(()=>{
         fetchMaterial();
         
@@ -77,11 +82,26 @@ export default function OwnerStockForm(){
         if(form.checkValidity()===false){
             event.stopPropagation();
         }else{
-            doCreaterStock();
+            confirmModal();
         }
         setValidate(true);
     }
 
+    const confirmModal = ()=>{
+        setShow(true);
+        setTitlemodal("ยืนยันการเพิ่มข้อมูล");
+        setMessage("คุณต้องการเพิ่มข้อมูลหรือไม่");
+
+    }
+
+    const onConfirm =  ()=>{
+        doCreaterStock();
+        setShow(false);
+    }
+
+    const onCancel = ()=>{
+        setShow(false);
+    }
     const doCreaterStock = async ()=>{
         let json = await API_POST("stock/add",{
             m_id:mid,
@@ -191,6 +211,13 @@ export default function OwnerStockForm(){
                     </div>
                 </div>
             </div>
+            <ConfirmModal 
+                show={show}
+                title={titlemodal}
+                message={message}
+                onConfirm={onConfirm}
+                onCancel={onCancel}
+            />
         </>
     )
 }

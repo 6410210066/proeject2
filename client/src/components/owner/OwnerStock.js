@@ -161,16 +161,16 @@ export default function OwnerStock(){
         <>
             <div  className="container-fluid " >
                 <div className="row ">
-                    <div className="col-lg-2 nav" style={{padding:"0"}}>
+                    <div className="col-lg-2 navadmin" style={{padding:"0"}}>
                          <Ownernav page={page} />
                     </div>
-                        <div className="col-lg-10 content " style={{padding:"0"}}>
+                        <div className="col-lg-10 content overfloww" style={{padding:"0"}}>
                             <h1 className="header">จัดการสต๊อกสินค้า</h1>
                             <div className="tablecontent">    
                                 {/* ส่วนค้นหาและเพิ่ม */}
                                 <Form noValidate validated={validated}  onClick={onSearch}>
                                     <div className="row ms-5 mb-3">
-                                        <div className="col-lg-8 col-md-7 col-sm-6 mt-1 ">
+                                        <div className="col-lg-7 col-md-7 col-sm-6 mt-1 ">
                                             <Form.Group as={Col} controlId="validatesearch" >
                                                 <Form.Control
                                                     required
@@ -184,11 +184,11 @@ export default function OwnerStock(){
                                                 </Form.Control.Feedback>
                                             </Form.Group>
                                         </div>
-                                        <div className="col-1 me-4 ms-3"> 
-                                            <Button className="button btn-edit" as="input" type="submit" value="ค้นหา"/>
+                                        <div className="col-2 me-4 ms-3"> 
+                                            <button className="button btn-search" as="input" type="submit" ><i class="fa-solid fa-magnifying-glass me-2"></i>ค้นหา</button>
                                         </div>
-                                        <div className="col-1">                             
-                                            <Link to={`/owner/stock/add`} className="button btn-add">เพิ่ม</Link>
+                                        <div className="col-2 ">                             
+                                            <Link to={`/owner/stock/add`} className="button btn-add setbtn">เพิ่ม</Link>
                                         </div>
                                         <div className="col-1"></div>
                                     </div>
@@ -243,7 +243,7 @@ export default function OwnerStock(){
                                 </Form>
 
                                 {/* ส่วนตาราง */}
-                                <Table striped className="mx-5 grid">
+                                <Table striped className="mx-5 grid mb-4">
                                     <thead>
                                         <tr>
                                             <th>รหัสสต๊อก     </th>
