@@ -5,7 +5,7 @@ import { Table, Form, Col, Button} from "react-bootstrap";
 import { API_GET , API_POST } from "../../api";
 import BranchItem from "./BranchItem";
 import { Link } from "react-router-dom";
-
+import Fuse from 'fuse.js'
 
 export default function Ownerbranch(){
     let page=7;
@@ -45,22 +45,22 @@ export default function Ownerbranch(){
         const onSearch = async(event)=>{
 
             const form = event.currentTarget;
-            event.preventDefault();
+            event.preventDefault(); //ไม่ให้รีเฟรชหน้า
     
             if (form.checkValidity() === false) {
                 event.stopPropagation();
             } else {
-                if(branch_name !=""){
-                    let searchdata = [];
-                    branch.filter(branch =>branch.branch_name.includes(branch_name)).map(item => {
-                        searchdata.push(item);
-                        console.log()
-                    }) 
-                    fetchSearch(searchdata);
-                }else{
-                    setData(branch);
-                }
+                const fuse = new Fuse(branch, {
+                    keys: ['branch_id', 'branch_name']
+                });
+                let searchdata =  fuse.search(branch_name);
+                let data1 =[]
+                searchdata.map(item =>{
+                    data1.push(item.item);
+                });
+                setData(data1);
             }
+            
         }
     
         const  fetchData = async()=>{

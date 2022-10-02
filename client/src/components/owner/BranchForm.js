@@ -84,6 +84,10 @@ export default function BranchForm(){
         let json = await API_GET("employee");
         setEmployee(json.data);
     }
+
+    const close = () =>{
+        navigate('/owner/branch', {replace:true});
+    }
     return(
         <>
             <Form className='container' noValidate validated={validated} onSubmit={onsave}>
@@ -137,6 +141,7 @@ export default function BranchForm(){
                 </Form.Group>
 
                 <Button variant="success" as="input" type="submit" value="บันทึก" className="mt-3"/>
+                <Button className="btn btn-danger mt-3 ms-4" onClick={close}>ยกเลิก</Button>
             </Form>
         </>
     )

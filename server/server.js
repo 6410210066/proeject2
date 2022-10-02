@@ -502,7 +502,7 @@ app.get('/api/employee/:emp_id',async(req,res)=>{
     }
 });
 app.get('/api/stock', (req,res)=>{
-    pool.query("SELECT a.stock_id,b.m_name, a.stock_amount, b.m_unit,c.branch_name,a.branch_id ,b.m_id FROM stock a join material b join branch c WHERE a.m_id = b.m_id AND a.branch_id =c.branch_id",function(error,results,fields){
+    pool.query("SELECT a.stock_id,b.m_name, a.stock_amount, b.m_unit,c.branch_name,a.branch_id ,b.m_id FROM stock a join material b join branch c WHERE a.m_id = b.m_id AND a.branch_id =c.branch_id ORDER BY stock_id ASC",function(error,results,fields){
         if(error){
             res.json({
                 result: false,

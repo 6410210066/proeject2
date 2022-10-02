@@ -111,7 +111,6 @@ export default function OwnerStock(){
     }
 
     const onSearch = async(event)=>{
-        console.log(event.currentTarget);
         const form = event.currentTarget;
         event.preventDefault(); //ไม่ให้รีเฟรชหน้า
 
@@ -150,16 +149,19 @@ export default function OwnerStock(){
 
     const getPagination = ()=>{
         let items = [];
-        pageCount = Math.ceil(data.length/5);
+        if(data != null){
+            pageCount = Math.ceil(data.length/5);
 
-        for (let i =0;i<pageCount;i++){
-            items.push(
-                <Pagination.Item key={i}
-                    active={currentPage ==i}
-                    onClick={onPageSelect}>{i+1}</Pagination.Item>
-            );
+            for (let i =0;i<pageCount;i++){
+                items.push(
+                    <Pagination.Item key={i}
+                        active={currentPage ==i}
+                        onClick={onPageSelect}>{i+1}</Pagination.Item>
+                );
+            }
+            return items;
         }
-        return items;
+
     }
 
     const onPageSelect = (d) =>{
@@ -309,6 +311,7 @@ export default function OwnerStock(){
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        
                                         {
                                         data != null &&
                                         data.slice(currentPage * numPerPage ,( currentPage * numPerPage) + numPerPage).map( item => (
