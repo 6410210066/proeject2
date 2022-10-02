@@ -85,7 +85,7 @@ export default function Ownerbranch(){
                         <h1 className="header">จัดการข้อมูลสาขา</h1>
                         <Form noValidate validated={validated}  onClick={onSearch}>
                         <div className="row ms-5 mb-3 grid">
-                            <div className="col-9 mt-2 ">
+                            <div className="col-lg-8 mt-2 ">
                                 <Form.Group as={Col} controlId="validatebranch_name" >
                                     <Form.Control
                                         required
@@ -99,13 +99,13 @@ export default function Ownerbranch(){
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </div>
-                            <div className="col-1 me-4 ms-3"> 
-                                <Button className="button btn-edit" as="input" type="submit" value="ค้นหา"/>
+                            <div className="col-lg-2 me-4 ms-3"> 
+                                <button className="button btn-search" as="input" type="submit" ><i class="fa-solid fa-magnifying-glass me-2"></i>ค้นหา</button>
                             </div>
-                            <div className="col-1">                             
-                                <Link to={`/branch/add`} className="button btn-add">เพิ่ม</Link>
+                            <div className="col-lg-1">                             
+                                <Link to={`/branch/add`} className="button btn-add setbtn">เพิ่ม</Link>
                             </div>
-                            <div className="col-1"></div>
+                            {/* <div className="col-1"></div> */}
                         </div>
                     </Form>
                         <Table striped className="mx-5 grid">

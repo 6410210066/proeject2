@@ -42,7 +42,6 @@ export default function OwnerStock(){
 
     useEffect(()=>{
         checkbranch();
-        getPagination();
     },[branch_id])
 
     useEffect(()=>{
@@ -53,7 +52,6 @@ export default function OwnerStock(){
 
     useEffect(()=>{
         checkmaterail();
-        getPagination();
     },[materialid])
 
     const ondelete = async (data)=>{
@@ -195,6 +193,7 @@ export default function OwnerStock(){
         )
       
         setData(newstock);
+       setCurrentPage(0);
         
     }
 
@@ -208,6 +207,7 @@ export default function OwnerStock(){
             })
         )
         setData(newstock);
+        setCurrentPage(0);
     }
 
 
