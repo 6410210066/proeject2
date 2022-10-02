@@ -69,7 +69,7 @@ export default function Dashboard(props){
             </div>
 
                 <h3 className="header my-4">กราฟแสดงข้อมูลสต๊อกแต่ละสาขา</h3>
-                    <div className="row dashboard-content Regular shadow mb-5" >
+                    <div className="row dashboard-content Regular shadow" >
                         <div className="col-lg-12 col-sm-12">
                             <Reportstockbybranch data={setData} checkChart={setCheckChart} />
                         </div>

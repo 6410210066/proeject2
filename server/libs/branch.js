@@ -2,9 +2,10 @@ const { memoryStorage } = require('multer');
 const mysql = require('mysql');
 
 module.exports={
-    createBranch: async (pool,branch_name,branch_address)=>{
-        var sql = "INSERT INTO branch(branch_name,branch_address) VALUES (?,?)";
-        sql = mysql.format(sql,[branch_name,branch_address]);
+    createBranch: async (pool,branch_name,branch_address,emp_id)=>{
+        var sql = "INSERT INTO branch(branch_name,branch_address,emp_id) VALUES (?,?,?)";
+        sql = mysql.format(sql,[branch_name,branch_address,emp_id]);
+        console.log(sql);
         return await pool.query(sql);
     },
     updateBranch: async (pool,branch_id,branch_name,branch_address)=>{

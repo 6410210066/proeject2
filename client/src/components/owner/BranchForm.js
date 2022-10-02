@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import { API_GET, API_POST } from '../../api';
 
+
 export default function BranchForm(){
     
     let params = useParams();
@@ -12,8 +13,14 @@ export default function BranchForm(){
     const [branch_name,setBranch_name] = useState("");
     const [branch_address,setBranch_address] = useState("");
     const [emp_id,setEmp_id] = useState("");
+    const [employee,setEmployee] = useState([]);
+    const [validated,setValidated] = useState(false);
 
-    const [validated,setValidate] = useState(false);
+    useEffect(() => {
+        fetchEmployee();
+
+    }, []);
+
 
     useEffect(()=>{
         async function fetchData(branch_id){
@@ -22,7 +29,8 @@ export default function BranchForm(){
             setBranch_id(data.branch_id);
             setBranch_name(data.branch_name);
             setBranch_address(data.branch_address);
-          
+            console.log(data.branch_id);
+            
         } 
         if(params.branch_id !="add"){
             fetchData([params.branch_id]);
@@ -42,14 +50,14 @@ export default function BranchForm(){
                 doUpdatebranch();
             }
         }
+        setValidated(true);
     }
 
-    const doCreatebranch = async(branch_id) => {
-        console.log(branch_id);
+    const doCreatebranch = async() => {
+
         const json = await API_POST("branch/add",{
-            branch_id : branch_id,
             branch_name : branch_name,
-            branch_addres : branch_address,
+            branch_address : branch_address,
             emp_id : emp_id
         });
         if(json.result){
@@ -70,6 +78,11 @@ export default function BranchForm(){
             console.log("อัปเดทสำเร็จ");
             navigate("/owner/branch",{replace:true});
         }
+    }
+
+    const fetchEmployee = async () => {
+        let json = await API_GET("employee");
+        setEmployee(json.data);
     }
     return(
         <>
@@ -102,6 +115,25 @@ export default function BranchForm(){
                         กรุณากรอกที่อยู่
 
                     </Form.Control.Feedback>
+                </Form.Group>
+
+                <Form.Group controlId='validateSelectEmp_id'>
+                    <Form.Label>ชื่อ-นามสกุลผู้จัดการ</Form.Label>
+                    <Form.Select
+                        size="sm"
+                        value={emp_id}
+                        onChange={(e)=>setEmp_id(e.target.value)}
+                    >
+                        <option value={0}>เลือกชื่อ-นามสกุล</option>
+                        {
+                            employee != null &&
+                            employee.map(item => (
+                                <option key={item.emp_id} value={item.emp_id}>
+                                    {item.firstname} {item.lastname}
+                                </option>
+                            ))
+                        }
+                    </Form.Select>   
                 </Form.Group>
 
                 <Button variant="success" as="input" type="submit" value="บันทึก" className="mt-3"/>

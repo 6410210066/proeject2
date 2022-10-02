@@ -605,7 +605,7 @@ app.post('/api/branch/add',checkAuth,async(req,res)=>{
     const input = req.body;
     console.log(input);
     try{
-        var result = await branch.createBranch(pool,input.branch_name,input.branch_addres);
+        var result = await branch.createBranch(pool,input.branch_name,input.branch_address,input.emp_id);
         res.json({
             result: true
         });
