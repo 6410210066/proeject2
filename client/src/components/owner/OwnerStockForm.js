@@ -151,7 +151,7 @@ export default function OwnerStockForm(){
                                     </Form.Group>
                                 </div>
                                 <div className="col-3">
-                                    <Link to={`/owner/material/add`} className='btn btn-success mt-2 ms-1'>เพิ่มรายการวัตถุดิบ</Link>
+                                    {/* <Link to={`/owner/material/add`} className='btn btn-success mt-2 ms-1'>เพิ่มรายการวัตถุดิบ</Link> */}
                                 </div>
                             </div>
                            

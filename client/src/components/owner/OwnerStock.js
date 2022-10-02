@@ -1,18 +1,20 @@
 import Ownernav from "./Ownernav";
-import { Table } from "react-bootstrap";
+import { Pagination, Table } from "react-bootstrap";
 import '../owner/owner.css'
 import { useState,useEffect  } from "react";
 import { API_GET,API_POST } from "../../api";
 import Stockitem from "./Stockitem";
 import {Form,Row,Col,Button} from 'react-bootstrap';
 import { Link } from "react-router-dom";
-import { DeleteModal, EditStockModal } from "../../modals";
+import { ConfirmModal, DeleteModal, EditStockModal } from "../../modals";
 import Fuse from 'fuse.js'
 
 export default function OwnerStock(){
 
     let page=2;
-    
+    var pageCount =0;
+    const [currentPage,setCurrentPage] =useState(0);
+    const [numPerPage,setNumPerPage]=useState(5);
     const [data,setData] =useState([]);
     const [stock,setStock] =useState([]);
     const [stockname,setStockname] =useState("");
@@ -23,22 +25,24 @@ export default function OwnerStock(){
     const [materialid,setMaterialid] =useState(0);
     const [show,setShow]=useState(false);
     const [showedit,setShowedit] =useState(false);
+    const [showconfirmedit,setShowconfirmedit] =useState(false);
     const [title,setTitle]=useState("");
     const [message,setMessage]= useState("");
     const [stockid,setStockid]=useState(0);
     const [stock_amount,setStockamount] =useState(0);
-    const [modalEditinfo,setModalEditinfo]= useState([]);
+    
 
 
     useEffect(()=>{
         fetchBranch();
         fetchStock();
         fetchMaterial();
+        setCurrentPage(0);
     },[])
 
     useEffect(()=>{
-        
         checkbranch();
+        getPagination();
     },[branch_id])
 
     useEffect(()=>{
@@ -49,6 +53,7 @@ export default function OwnerStock(){
 
     useEffect(()=>{
         checkmaterail();
+        getPagination();
     },[materialid])
 
     const ondelete = async (data)=>{
@@ -68,6 +73,18 @@ export default function OwnerStock(){
         }
     }
     const onConfirmedit = async()=>{
+        setShowedit(false);
+        setShowconfirmedit(true);
+        setTitle("ยืนยันการแก้ไข");
+        setMessage("คุณต้องการยืนยันการแก้ไขหรือไม่");
+    }
+
+    const onCanceledit = async()=>{
+        setShowconfirmedit(false);
+        onEdit();
+    }
+
+    const editstock = async()=>{
         let json = await API_POST("stock/update",{
             stock_amount : stock_amount,
             stock_id: stockid
@@ -77,7 +94,9 @@ export default function OwnerStock(){
             fetchStock();
         }
         setShowedit(false);
+        setShowconfirmedit(false);
     }
+
     const onCancel= async()=>{
         setShow(false);
         setShowedit(false);
@@ -90,6 +109,7 @@ export default function OwnerStock(){
         setStockid(data.stock_id);
         setStockamount(data.stock_amount);
     }
+
     const onSearch = async(event)=>{
         console.log(event.currentTarget);
         const form = event.currentTarget;
@@ -125,8 +145,43 @@ export default function OwnerStock(){
         let json = await API_GET("stock");
         setData(json.data);
         setStock(json.data);
+        setCurrentPage(0);
     }
 
+    const getPagination = ()=>{
+        let items = [];
+        pageCount = Math.ceil(data.length/5);
+
+        for (let i =0;i<pageCount;i++){
+            items.push(
+                <Pagination.Item key={i}
+                    active={currentPage ==i}
+                    onClick={onPageSelect}>{i+1}</Pagination.Item>
+            );
+        }
+        return items;
+    }
+
+    const onPageSelect = (d) =>{
+        var selectedPageNo = parseInt(d.target.innerHTML) -1;
+        setCurrentPage(selectedPageNo);
+    }
+
+    const nextPage = ()=>{
+        setCurrentPage(currentPage +1);
+    }
+
+    const prevPage = ()=>{
+        setCurrentPage(currentPage -1);
+    }
+
+    const firstPage = ()=>{
+        setCurrentPage(0);
+    }
+
+    const lastPage = () =>{
+        setCurrentPage(pageCount - 1);
+    }
     const checkbranch = async()=>{
         let newstock=[];
         if(branch_id == 0){
@@ -143,8 +198,6 @@ export default function OwnerStock(){
 
     const checkmaterail = async()=>{
         let newstock= [];
-        console.log(materialid);
-        console.log(stock);
         if(materialid == 0){
             newstock.push(...stock);
         }else(          
@@ -258,12 +311,21 @@ export default function OwnerStock(){
                                     <tbody>
                                         {
                                         data != null &&
-                                        data.map( item => (
+                                        data.slice(currentPage * numPerPage ,( currentPage * numPerPage) + numPerPage).map( item => (
                                                 <Stockitem key={item.stock_id} data={item} onEdit={onEdit} ondelete={ondelete}/>
                                         ))
                                         }
                                     </tbody>
                                 </Table>
+                                <div className="contanier mt-5 border-bottom ms-5">
+                                    <Pagination onSelect ={onPageSelect}>
+                                        <Pagination.First onClick={firstPage} />
+                                        <Pagination.Prev disabled={currentPage == 0} onClick={prevPage} />
+                                        {getPagination()}
+                                        <Pagination.Next disabled={currentPage == pageCount -1} onClick={nextPage} />
+                                        <Pagination.Last onClick={lastPage} />
+                                    </Pagination>
+                                </div>         
                             </div> 
                             <DeleteModal
                             show={show}
@@ -282,6 +344,13 @@ export default function OwnerStock(){
                             setStockamount={setStockamount}
                             />
 
+                            <ConfirmModal
+                                show={showconfirmedit}
+                                title={title}
+                                message={message}
+                                onConfirm={editstock}
+                                onCancel={onCanceledit}
+                            />
                         </div>
 
                 </div>

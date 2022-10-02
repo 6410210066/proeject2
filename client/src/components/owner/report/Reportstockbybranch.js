@@ -12,9 +12,6 @@ import {
     Legend
 } from 'chart.js';
 
-
-
-
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -154,23 +151,12 @@ export default function Reportstockbybranch() {
                             </div>
                         </div>
                     </Form>
-              
 
             <div className="container-fluid mt-3">
                 {
                     getChart()
                 }
             </div>
-
-            {/* <div className="container-fluid mt-3">
-                {
-                    productStore.map(item => (
-                        <Stockitem
-                            key={item.stock_id}
-                            data={item} />
-                    ))
-                }
-            </div> */}
         </>
     );
 }
