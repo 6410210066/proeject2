@@ -139,9 +139,8 @@ export default function BranchForm(){
                         }
                     </Form.Select>   
                 </Form.Group>
-
-                <Button variant="success" as="input" type="submit" value="บันทึก" className="mt-3"/>
-                <Button className="btn btn-danger mt-3 ms-4" onClick={close}>ยกเลิก</Button>
+                    <Button variant="success" as="input" type="submit" value="บันทึก" className="mt-3"/>
+                    <Button className="btn btn-danger mt-3 ms-4" onClick={close}>ยกเลิก</Button>
             </Form>
         </>
     )

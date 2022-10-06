@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState} from 'react';
 import {Form,Row,Col,Button, ModalDialog} from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import {API_GET,API_POST} from '../../api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import Ownernav from "./Ownernav";
 import './owner.css';
 export default function Transfer(){
+    const {state} = useLocation();
+    let navigate =useNavigate();
     let page =3;
-   
     const [branch,setBranch] = useState([]);
     const [stock,setStock] =useState([]);
     const [branch_id,setBranchId] = useState(0);
@@ -20,49 +21,77 @@ export default function Transfer(){
     const [validated,setValidated] =useState(false);
     const [unit,setUnit] =useState("");
     const [checkbtn,setCheckbtn] = useState(false);
-    const [checkoriginbranch,setCheckOriginBranch] =useState(0);
+    const [checkoriginbranchID,setCheckOriginBranchID] =useState(0);
     const [mname , setMname] =useState(0);
     const [allstock,setAllStock] =useState([]);
+    const [request,setRequest] =useState([]);
+    const [requestid,setRequestid] =useState(0);
+    const [formdisabled,setFormdisabled] =useState(false);
 
 
     useEffect(()=>{
 
         fetchAllstock();
         fetchDataBranch();
+        if(state != null){
+            requestInfo(state);
+            setFormdisabled(true);
+        }
     },[]);
 
+    useEffect(()=>{
+        checkDestinationAmount();
+    },[allstock]);
 
     useEffect(()=>{
-        
-        if(origin_branch==0){
-            clearForm();
+
+        if(state == null){
+            if(origin_branch == 0){
+                
+                clearForm();
+            }else{
+                checkOriginBranch();
+            }
         }else{
-            
-            checkOriginBranch();
+            checkStockAmount();
         }
-        
+
     },[origin_branch]);
 
     useEffect(()=>{
-        if(stockid==0){
+
+        if(state == null){
+            if(stockid==0){
+                checkOriginBranch();
+                setUnit("");
+                setStockAmount(0);
+            }
             checkOriginBranch();
-            setUnit("");
-            setStockAmount(0);
+            checkAmount();
+            setDestinationBranch(0);
+            setDestinationBranchstockamount(0);
+        }else{
+            checkAmount();
         }
-        checkOriginBranch();
-        checkAmount();
-        setDestinationBranch(0);
-        setDestinationBranchstockamount(0);
+
     },[stockid]);
 
     useEffect(()=>{
+
         checkStockAmount();
     },[stock_amount])
 
     useEffect(()=>{
         checkDestinationAmount();
-    },[destination_branch])
+    },[destination_branch]);
 
+    const fetchRequest = async(data)=>{
+        console.log(data);
+        setStockAmount(data.request_amount);
+        setMname(data.m_name);
+        setDestinationBranch(data.branch_id);
+        setRequestid(data.request_id);
+    }
 
     const fetchDataBranch = async ()=>{
         let json = await API_GET("branch");
@@ -71,10 +100,12 @@ export default function Transfer(){
     };
    
     const fetchAllstock = async ()=>{
-
             let json = await API_GET("stock");
-            setAllStock(json.data);
+            let data =json.data;
+            setAllStock(data);
+            
     }
+
     const checkAmount = async ()=>{
         setAmount(0);
         let num = parseInt(stockid);
@@ -92,16 +123,18 @@ export default function Transfer(){
         });
         if(json.result){
             setStock(json.data);
-            setCheckOriginBranch(num);
+            setCheckOriginBranchID(num);
         } 
     };
 
     const checkStockAmount = async()=>{
         setCheckbtn(false);
-       if(stock_amount > amount || stock_amount <1){
+       if(stock_amount > amount || stock_amount < 1){
             setCheckbtn(true);
        }
     }
+
+
     const onsave = async (event)=>{
         const form = event.currentTarget;
         event.preventDefault();
@@ -112,6 +145,7 @@ export default function Transfer(){
             getStocktransfer();
             fetchAllstock();
         }
+        setValidated(true);
     }
 
     const clearForm =async ()=>{
@@ -127,6 +161,23 @@ export default function Transfer(){
         setDestinationBranchstockamount(0);
 
     }
+
+    const requestInfo = async(data)=>{
+        let stockrequest = [];
+        data.map((item,index)=>{
+            if(index==0){
+                setRequest(item);
+                fetchRequest(item);
+            }else{
+                stockrequest.push(item);
+            }
+        });
+        
+        setStock(stockrequest); 
+        setStockId(stockrequest[0].stock_id);
+      
+    }
+
     const transferstock = async ()=>{
        
         let stockamount;
@@ -143,8 +194,11 @@ export default function Transfer(){
         });
         if(json.result){
             console.log("อัปเดทสำเร็จ");
-            
-            // navigate("/owner/employee",{replace:true});
+            clearForm();
+            setRequestid(0);
+            setFormdisabled(false);
+            setValidated(false);
+            // navigate("/request",{replace:true});
         }
     }
 
@@ -186,31 +240,44 @@ export default function Transfer(){
                             <h1 className="header">ย้ายสต๊อกสินค้า</h1>
                                 <div className="formtranfer Regular shadow">
                                 <Form noValidate validated={validated} onSubmit={onsave} >
-                                    <Form.Group as={Col} className="form-group">
+                                    <Form.Group as={Col} className="form-group" controlId='validateOriginBranch'>
                                             <Form.Label>สาขาต้นทาง</Form.Label>
                                             <Form.Select
                                                 value={origin_branch}
                                                 onChange={(e) => setOriginBranch(e.target.value)}
                                                 required>
-                                                <option label="กรุณาเลือกสาขาต้นทาง" value={0}></option> 
+                                                <option label="กรุณาเลือกสาขาต้นทาง"></option> 
                                                 {
+                                                requestid == 0 &&
                                                 branch.map(item => (
                                                     <option key={item.branch_id} value={item.branch_id}> 
                                                     {item.branch_name} </option>
                                                 ))
+                                                }
+
+                                                { 
+                                                requestid > 0 &&
+                                                stock.map(item1 =>(
+                                                    branch.filter(branch => branch.branch_id == item1.branch_id ).map(item => (
+                                                        <option key={item.branch_id} value={item.branch_id}> 
+                                                        {item.branch_name} </option>
+                                                    ))
+                                                )) 
+
                                                 }
                                             </Form.Select>
                                                 <Form.Control.Feedback type="invalid">
                                                     กรุณาเลือกสาขาต้นทาง
                                                 </Form.Control.Feedback>
                                     </Form.Group>
-                                    <Form.Group as={Col}  className="form-group">
+                                    <Form.Group as={Col}  className="form-group" controlId='validateStockid'>
                                             <Form.Label >รายการสต๊อก</Form.Label>
                                             <Form.Select
                                                 value={stockid}
+                                                disabled={formdisabled}
                                                 onChange={(e) => setStockId(e.target.value)}
                                                 required>
-                                                <option label="กรุณาเลือกรายการสต๊อก" value={0}></option>    
+                                                <option label="กรุณาเลือกรายการสต๊อก" ></option>    
                                                           
                                                 {
                                                 stock.map(item => (
@@ -226,13 +293,14 @@ export default function Transfer(){
                                     </Form.Group>
                                     <div className='row form-group'>
                                     <div className='col-lg-4 col-sm-10'>
-                                            <Form.Group as={Col} controlId="validateUserName">
+                                            <Form.Group as={Col} controlId="validateStockAmount">
                                                 <Form.Label>กรอกจำนวน</Form.Label>
                                                 <Form.Control
                                                     required
                                                     type="number"
                                                     value={stock_amount}
                                                     placeholder="จำนวน"
+                                                    disabled={formdisabled}
                                                     onChange={(e) => setStockAmount(e.target.value)}
                                                 />
                                                 <Form.Control.Feedback type="invalid">
@@ -274,12 +342,13 @@ export default function Transfer(){
                                                 <Form.Label>สาขาปลายทาง</Form.Label>
                                                 <Form.Select
                                                     value={destination_branch}
+                                                    disabled={formdisabled}
                                                     onChange={(e) => setDestinationBranch(e.target.value)}
                                                     required>
                                                     <option label="กรุณาเลือกสาขาปลายทาง"></option> 
 
                                                     {                                          
-                                                    branch.filter(branch => branch.branch_id !== checkoriginbranch).map(item => (
+                                                    branch.filter(branch => branch.branch_id !== checkoriginbranchID).map(item => (
                                                         <option key={item.branch_id} value={item.branch_id}> 
                                                             {item.branch_name} 
                                                         </option>
@@ -293,7 +362,7 @@ export default function Transfer(){
                                         </div>
 
                                         <div className='col-lg-4 col-sm-10'>
-                                        <Form.Group as={Col}  className="form-group" >
+                                        <Form.Group as={Col}  className="form-group" controlId='validateDestinationStockAmount'>
                                             <Form.Label >จำนวนในสต๊อกปลายทาง</Form.Label>
                                             <Form.Control
                                                 value={destination_branch_stock_amount}

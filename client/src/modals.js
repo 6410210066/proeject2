@@ -129,7 +129,7 @@ export function ConfirmModal(props){
 
     return(
         <>
-            <Modal show={props.show} centered >
+            <Modal show={props.show} onHide={props.onCancel} centered >
                 <Modal.Header>
                     <Modal.Title>
                         <h3 style={{textAlign:"center"}}>{props.title}</h3>
@@ -145,4 +145,114 @@ export function ConfirmModal(props){
             </Modal>
         </>
         );
+}
+
+export function PlusoreditstockModal(props){
+    const onAdd = async()=>{
+       props.onConfirm(1);
+    }
+
+    const onEdit = async()=>{
+        props.onConfirm(2);
+    }
+    return(
+        <>
+            <Modal show={props.show} centered >
+                <Modal.Header>
+                    <Modal.Title>
+                        <p  style={{textAlign:"center"}}>{props.title} </p> 
+                    </Modal.Title>
+                    <button className="btn" onClick={props.onCancel} ><i className="fa-sharp fa-solid fa-xmark"></i></button>
+                </Modal.Header>
+                <Modal.Body>
+                        <p>{props.message}</p>                
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={onAdd}>เพิ่ม</Button>
+                    <Button variant="danger" onClick={onEdit}>แก้ไข</Button>
+                </Modal.Footer>
+            </Modal>            
+        </>
+    )
+}
+
+export function PlusstockModal(props){
+    let plusstockamount;
+    return(
+        <>
+            <Modal show={props.show}  centered >
+                <Modal.Header>
+                    <Modal.Title>
+                        <h3 style={{textAlign:"center"}}>{props.title}</h3>
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group as={Col} controlId="validatestockamount">
+                            <Form.Label>จำนวนในสต๊อก</Form.Label>
+                            <Form.Control
+                                required
+                                type="number"
+                                value={props.stockAmount}
+                                disabled
+                                onChange={(e) => props.setStockamount(e.target.value)}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                จำนวนในสต๊อก
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group as={Col} controlId="validatestockamount">
+                            <Form.Label>จำนวนที่ต้องการเพิ่ม</Form.Label>
+                            <Form.Control
+                                required
+                                type="number"
+                                value={plusstockamount}
+                                placeholder="จำนวน"
+                                step="0.001"
+                                min ="1"
+                                onChange={(e) => props.setPlusStockAmount(e.target.value)}
+                            />
+                            <Form.Control.Feedback type="invalid">
+                                กรุณากรอกจำนวน
+                            </Form.Control.Feedback>
+                        </Form.Group>
+                    </Form>                                                    
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={props.onConfirm}>เพิ่ม</Button>
+                    <Button variant="danger" onClick={props.onCancel}>ยกเลิก</Button>
+                </Modal.Footer>
+            </Modal>            
+        </>
+    )
+}
+
+export function PlusoOrTranferStockModal(props){
+    const onAddstock = ()=>{
+        props.onConfirm(1);
+    }
+
+    const onTranfer =()=>{
+        props.onConfirm(2);
+    }
+
+    return(
+        <>
+            <Modal show={props.show} onHide={props.onHide} centered>
+                <Modal.Header>
+                    <Modal.Title>
+                        <p>{props.title}</p>
+                    </Modal.Title>
+                    <button className="btn" onClick={props.onCancel} ><i className="fa-sharp fa-solid fa-xmark"></i></button>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>{props.message}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={onAddstock}>เพิ่มสต๊อก</Button>
+                    <Button variant="success" onClick={onTranfer}>ย้ายสต๊อกสินค้า</Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
 }

@@ -47,8 +47,6 @@ export default function Reportstockbybranch() {
     
     useEffect(() => {
         fetchBranch();
-        
-       
         fetchData();
     }, []);
 
@@ -60,10 +58,10 @@ export default function Reportstockbybranch() {
         let json = await API_POST("report/Reportstockbybranch", {
             branch_id: branch_id
         });
-
+        console.log(json.data);
 
         setStore(json.data);
-        console.log(json.data);
+ 
 
         var labels = [];
         var data = [];
@@ -92,6 +90,7 @@ export default function Reportstockbybranch() {
     
  
     const getChart = () => {
+        
         if (isLoading) {
 
             return <Bar options={options} data={chartData}
@@ -109,17 +108,6 @@ export default function Reportstockbybranch() {
         setBranch(json.data);
     }
 
-    // const onClick = async (event) => {
-    //     var element = getElementAtEvent(chartRef.current, event);
-    //     var index = element[0].index;
-
-    //     await getSumStock(store[index].stock_id);
-    // }
-
-    // const getSumStock = async (stock_id) => {
-    //     let json = await API_GET("stock"+ stock_id);
-    //     setProductStore(json.data);
-    // }
 
     return (
         <>

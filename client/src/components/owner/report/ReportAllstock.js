@@ -93,9 +93,7 @@ export default function ReportAllstock(props){
     }
 
     const getStock = async(m_id) =>{
-        
         let json = await API_GET("material/"+m_id);
-        
         setStock(json.data);
     }
 

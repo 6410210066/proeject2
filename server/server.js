@@ -530,7 +530,6 @@ app.post('/api/stock/add',async(req,res)=>{
         console.log(result);
         res.json({
             result: true
-            
         });
 
     }catch(ex){
@@ -756,6 +755,7 @@ app.get('/api/request',async(req,res)=>{
             e.firstname,
             e.lastname,
             m.m_name,
+            m.m_id,
             st.status_name
             FROM stockrequest a JOIN branch b ON a.branch_id = b.branch_id
             JOIN employee e ON a.emp_id = e.emp_id
@@ -958,6 +958,23 @@ app.get("/api/reportallstock",checkAuth, async(req,res)=>{
     }
 });
 
+app.post("/api/checkstock", async(req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await stock.checkStock(pool,input.m_id,input.stock_amount,input.branch_id);
+        res.json({
+            result: true,
+            data: result
+        })
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        })
+
+    }
+});
 
 app.listen(port, () => {
     console.log("Running");

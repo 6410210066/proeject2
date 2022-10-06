@@ -29,7 +29,6 @@ export default function Managerquest(){
     const fetchStockrequest = async()=> {
         let json = await API_GET("request");
         setData(json.data);
-        console.log(json.data);
     }
 
 
@@ -53,12 +52,11 @@ export default function Managerquest(){
                     <div className="col-lg-10 content overfloww" style={{padding:"0"}}>
                         <h1 className="header">จัดการคำขอสต๊อกสินค้า</h1>
                             <div className="p-4 requestcontent ">
-                                {console.log(data)}
                                 {
                                     data != null &&
-                                    data.filter(data => data.status_id == 1).map(item => (
+                                    data.filter(data => data.status_id == 1).map((item,key) => (
                                 
-                                    <div key={item.request_id}>
+                                    <div key={key}>
                                         <Table borderless>
                                             <thead style={{backgroundColor:"#FFC700"}}>
                                             <tr>
@@ -79,7 +77,6 @@ export default function Managerquest(){
                                         <tfoot className="border-top border-dark" style={{backgroundColor:"#FEFFD6"}}>
                                             <tr>
                                             <td colSpan={4}>
-                                            
 
                                             <ManagerRequestItem key={item.request_id} data={item} onShowDetail={onShowDetail} ModelRequestInfo={setModelRequestInfo} fetchStockrequest={fetchStockrequest}/>
                                             

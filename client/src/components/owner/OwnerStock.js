@@ -6,7 +6,7 @@ import { API_GET,API_POST } from "../../api";
 import Stockitem from "./Stockitem";
 import {Form,Row,Col,Button} from 'react-bootstrap';
 import { Link } from "react-router-dom";
-import { ConfirmModal, DeleteModal, EditStockModal } from "../../modals";
+import { ConfirmModal, DeleteModal, EditStockModal, PlusoreditstockModal, PlusstockModal } from "../../modals";
 import Fuse from 'fuse.js'
 
 export default function OwnerStock(){
@@ -26,14 +26,17 @@ export default function OwnerStock(){
     const [show,setShow]=useState(false);
     const [showedit,setShowedit] =useState(false);
     const [showconfirmedit,setShowconfirmedit] =useState(false);
+    const [showplusoredit,setShowplusoredit] =useState(false);
+    const [showplus,setShowplus] =useState(false);
     const [title,setTitle]=useState("");
     const [message,setMessage]= useState("");
     const [stockid,setStockid]=useState(0);
     const [stock_amount,setStockamount] =useState(0);
-    
+    const [plusstockamount,setPlusStockAmount] =useState(0);
 
 
     useEffect(()=>{
+
         fetchBranch();
         fetchStock();
         fetchMaterial();
@@ -54,6 +57,8 @@ export default function OwnerStock(){
         checkmaterail();
     },[materialid])
 
+
+    //modal 
     const ondelete = async (data)=>{
         setShow(true);
         setTitle("ยืนยันการลบข้อมูล");
@@ -68,6 +73,8 @@ export default function OwnerStock(){
         if(json.result){
             setShow(false);
             fetchStock();
+            setBranchid(0);
+            setMaterialid(0);
         }
     }
     const onConfirmedit = async()=>{
@@ -77,11 +84,14 @@ export default function OwnerStock(){
         setMessage("คุณต้องการยืนยันการแก้ไขหรือไม่");
     }
 
-    const onCanceledit = async()=>{
+    const onCancel= async()=>{
+        setShow(false);
+        setShowedit(false);
+        setShowplus(false);
+        setShowplusoredit(false);
         setShowconfirmedit(false);
-        onEdit();
     }
-
+    
     const editstock = async()=>{
         let json = await API_POST("stock/update",{
             stock_amount : stock_amount,
@@ -93,21 +103,51 @@ export default function OwnerStock(){
         }
         setShowedit(false);
         setShowconfirmedit(false);
+        setBranchid(0);
+        setMaterialid(0);
     }
 
-    const onCancel= async()=>{
-        setShow(false);
-        setShowedit(false);
-       
-    }
 
     const onEdit = async(data)=>{
-        setShowedit(true);
-        setTitle("แก้ไขจำนวนสต๊อกสินค้า");
+        setShowplusoredit(true);
+        setTitle("เพิ่มหรือแก้ไขสต๊อกสินค้า");
+        setMessage("คุณต้องการเพิ่มหรือแก้ไขสต๊อกสินค้า");
         setStockid(data.stock_id);
         setStockamount(data.stock_amount);
     }
 
+    const onPlus =async()=>{
+        var result = stock_amount + parseInt(plusstockamount);
+        setStockamount(result);
+
+        setShowplus(false);
+        setShowconfirmedit(true);
+        setTitle("ยืนยันการเพิ่มสต๊อก");
+        setMessage("คุณต้องการยืนยันการเพิ่มสต๊อกหรือไม่");
+    }
+
+    const onPlusoredit = (id)=>{
+        if(id==1){
+            setShowplusoredit(false);
+            plusStock();
+            
+        }else if(id==2){
+            setShowplusoredit(false);
+            editStcok();
+            
+        }
+    }
+
+    const editStcok = ()=>{
+        setShowedit(true);
+        setTitle("แก้ไขจำนวนสต๊อกสินค้า");
+
+    }
+
+    const plusStock = () =>{
+        setShowplus(true);
+        setTitle("เพิ่มจำนวนสต๊อก");
+    }
     const onSearch = async(event)=>{
         const form = event.currentTarget;
         event.preventDefault(); //ไม่ให้รีเฟรชหน้า
@@ -128,6 +168,7 @@ export default function OwnerStock(){
         
 
     }
+
 
     const fetchBranch= async()=>{
         let json = await API_GET("branch");
@@ -201,6 +242,7 @@ export default function OwnerStock(){
         let newstock= [];
         if(materialid == 0){
             newstock.push(...stock);
+
         }else(          
             stock.filter(stock => stock.m_id == materialid).map(item =>{
                 newstock.push(item);
@@ -315,7 +357,7 @@ export default function OwnerStock(){
                                         {
                                         data != null &&
                                         data.slice(currentPage * numPerPage ,( currentPage * numPerPage) + numPerPage).map( item => (
-                                                <Stockitem key={item.stock_id} data={item} onEdit={onEdit} ondelete={ondelete}/>
+                                                <Stockitem key={item.stock_id} data={item} onEdit={onEdit} ondelete={ondelete} />
                                         ))
                                         }
                                     </tbody>
@@ -352,7 +394,24 @@ export default function OwnerStock(){
                                 title={title}
                                 message={message}
                                 onConfirm={editstock}
-                                onCancel={onCanceledit}
+                                onCancel={onCancel}
+                            />
+
+                            <PlusoreditstockModal
+                                show={showplusoredit}
+                                title={title}
+                                message={message}
+                                onConfirm={onPlusoredit}
+                                onCancel={onCancel}
+                            />
+
+                            <PlusstockModal
+                                show={showplus}
+                                title={title}
+                                onConfirm={onPlus}
+                                onCancel={onCancel}
+                                stockAmount={stock_amount}
+                                setPlusStockAmount={setPlusStockAmount}
                             />
                         </div>
 
