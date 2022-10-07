@@ -27,7 +27,9 @@ export default function Transfer(){
     const [request,setRequest] =useState([]);
     const [requestid,setRequestid] =useState(0);
     const [formdisabled,setFormdisabled] =useState(false);
-
+    const [minimum,setMinimum] =useState(0);
+    const [checkminimum,setCheckminimum] = useState(false);
+    const [transfer,setTransfer] =useState([]);
 
     useEffect(()=>{
 
@@ -38,6 +40,14 @@ export default function Transfer(){
             setFormdisabled(true);
         }
     },[]);
+
+    useEffect(()=>{
+        if(minimum==0){
+            setCheckminimum(true);
+        }else{
+            setCheckminimum(false);
+        }
+    },[minimum]);
 
     useEffect(()=>{
         checkDestinationAmount();
@@ -65,6 +75,7 @@ export default function Transfer(){
                 checkOriginBranch();
                 setUnit("");
                 setStockAmount(0);
+                setMinimum(0);
             }
             checkOriginBranch();
             checkAmount();
@@ -113,6 +124,8 @@ export default function Transfer(){
                 setAmount(item.stock_amount);
                 setUnit(item.m_unit);
                 setMname(item.m_name);
+                setMinimum(item.Minimum);
+                
         });
 
     }
@@ -129,7 +142,7 @@ export default function Transfer(){
 
     const checkStockAmount = async()=>{
         setCheckbtn(false);
-       if(stock_amount > amount || stock_amount < 1){
+       if(stock_amount > (amount-minimum) || stock_amount < 1){
             setCheckbtn(true);
        }
     }
@@ -142,7 +155,7 @@ export default function Transfer(){
             event.stopPropagation();
         }else{
             transferstock();
-            getStocktransfer();
+            // getStocktransfer();
             fetchAllstock();
         }
         setValidated(true);
@@ -159,6 +172,7 @@ export default function Transfer(){
         setOriginBranch(0);
         setDestinationBranch(0);
         setDestinationBranchstockamount(0);
+        setMinimum(0);
 
     }
 
@@ -178,27 +192,48 @@ export default function Transfer(){
       
     }
 
+    const fetchTransferHistory = async ()=>{
+        let json = await API_GET("transferhitory");
+
+        if(json.result){
+            setTransfer(json.data);
+        }
+    }
+
     const transferstock = async ()=>{
        
         let stockamount;
-        
+        let mid; 
         let num = parseInt(stockid);
-        console.log("stid :" +stockid);
         stock.filter(stock => stock.stock_id === num).map(item =>{
             stockamount = parseInt(item.stock_amount) - parseInt(stock_amount);
+            mid = item.m_id;
             
         })
         const json = await API_POST("stock/update",{
             stock_id : stockid,
             stock_amount: stockamount
         });
+
+        const json1 = await API_POST("transferhistory/add",{
+            status_id : 3,
+            origin_branch: origin_branch,
+            destination_branch:destination_branch,
+            request_id: requestid,
+            m_id: mid,
+            stock_amount: stock_amount
+        });
+
+        if(json1.result){
+            fetchTransferHistory();
+        }
+
         if(json.result){
             console.log("อัปเดทสำเร็จ");
             clearForm();
             setRequestid(0);
             setFormdisabled(false);
             setValidated(false);
-            // navigate("/request",{replace:true});
         }
     }
 
@@ -236,156 +271,164 @@ export default function Transfer(){
                     <div className="col-lg-2 nav" style={{padding:"0"}}>
                          <Ownernav page={page} />
                     </div>
-                        <div className="col-lg-10 content" style={{padding:"0"}}>
+                        <div className="col-lg-10 content overfloww" style={{padding:"0"}}>
                             <h1 className="header">ย้ายสต๊อกสินค้า</h1>
                                 <div className="formtranfer Regular shadow">
-                                <Form noValidate validated={validated} onSubmit={onsave} >
-                                    <Form.Group as={Col} className="form-group" controlId='validateOriginBranch'>
-                                            <Form.Label>สาขาต้นทาง</Form.Label>
-                                            <Form.Select
-                                                value={origin_branch}
-                                                onChange={(e) => setOriginBranch(e.target.value)}
-                                                required>
-                                                <option label="กรุณาเลือกสาขาต้นทาง"></option> 
-                                                {
-                                                requestid == 0 &&
-                                                branch.map(item => (
-                                                    <option key={item.branch_id} value={item.branch_id}> 
-                                                    {item.branch_name} </option>
-                                                ))
-                                                }
-
-                                                { 
-                                                requestid > 0 &&
-                                                stock.map(item1 =>(
-                                                    branch.filter(branch => branch.branch_id == item1.branch_id ).map(item => (
+                                    <Form noValidate validated={validated} onSubmit={onsave} >
+                                        <Form.Group as={Col} className="form-group" controlId='validateOriginBranch'>
+                                                <Form.Label>สาขาต้นทาง</Form.Label>
+                                                <Form.Select
+                                                    value={origin_branch}
+                                                    onChange={(e) => setOriginBranch(e.target.value)}
+                                                    required>
+                                                    <option label="กรุณาเลือกสาขาต้นทาง"></option> 
+                                                    {
+                                                    requestid == 0 &&
+                                                    branch.map(item => (
                                                         <option key={item.branch_id} value={item.branch_id}> 
                                                         {item.branch_name} </option>
                                                     ))
-                                                )) 
+                                                    }
 
-                                                }
-                                            </Form.Select>
-                                                <Form.Control.Feedback type="invalid">
-                                                    กรุณาเลือกสาขาต้นทาง
-                                                </Form.Control.Feedback>
-                                    </Form.Group>
-                                    <Form.Group as={Col}  className="form-group" controlId='validateStockid'>
-                                            <Form.Label >รายการสต๊อก</Form.Label>
-                                            <Form.Select
-                                                value={stockid}
-                                                disabled={formdisabled}
-                                                onChange={(e) => setStockId(e.target.value)}
-                                                required>
-                                                <option label="กรุณาเลือกรายการสต๊อก" ></option>    
-                                                          
-                                                {
-                                                stock.map(item => (
-                                                    <option key={item.stock_id} value={item.stock_id}> 
-                                                    {item.m_name} </option>
-                                                )) 
-                                                }
+                                                    { 
+                                                    requestid > 0 &&
+                                                    stock.map(item1 =>(
+                                                        branch.filter(branch => branch.branch_id == item1.branch_id ).map(item => (
+                                                            <option key={item.branch_id} value={item.branch_id}> 
+                                                            {item.branch_name} </option>
+                                                        ))
+                                                    )) 
 
-                                            </Form.Select>
-                                                <Form.Control.Feedback type="invalid">
-                                                    กรุณาเลือกรายการสต๊อก
-                                                </Form.Control.Feedback>
-                                    </Form.Group>
-                                    <div className='row form-group'>
-                                    <div className='col-lg-4 col-sm-10'>
-                                            <Form.Group as={Col} controlId="validateStockAmount">
-                                                <Form.Label>กรอกจำนวน</Form.Label>
-                                                <Form.Control
-                                                    required
-                                                    type="number"
-                                                    value={stock_amount}
-                                                    placeholder="จำนวน"
-                                                    disabled={formdisabled}
-                                                    onChange={(e) => setStockAmount(e.target.value)}
-                                                />
-                                                <Form.Control.Feedback type="invalid">
-                                                    กรุณากรอกจำนวน
-                                                </Form.Control.Feedback>
-                                            </Form.Group>
-                                        </div>
-
-
-
-                                        <div className='col-lg-2 col-sm-2 px-2 pt-5' >
-                                           {unit}
-                                        </div>
-                                        <div className='col-lg-4 col-sm-10'>
-                                            <Form.Group as={Col} controlId="validateamount">
-                                                <Form.Label>จำนวนในสต๊อก</Form.Label>
-                                                <Form.Control
-
-                                                    type="number"
-                                                    value={amount}
-                                                    placeholder="จำนวน"
-                                                    onChange={(e) => setAmount(e.target.value)}
-                                                    disabled
-                                                />
-                                                <Form.Control.Feedback type="invalid">
-                                                    จำนวนในสต๊อก
-                                                </Form.Control.Feedback>
-                                            </Form.Group>
-                                        </div>
-
-                                        <div className='col-lg-2 col-sm-2  px-2 pt-5'>
-                                           {unit}
-                                        </div>
-                                    </div>
-                                    
-                                    <div className='row'>
-                                        <div className='col-lg-6 col-sm-12'>
-                                            <Form.Group as={Col}  controlId="validatedestinationbranch" className="form-group">
-                                                <Form.Label>สาขาปลายทาง</Form.Label>
-                                                <Form.Select
-                                                    value={destination_branch}
-                                                    disabled={formdisabled}
-                                                    onChange={(e) => setDestinationBranch(e.target.value)}
-                                                    required>
-                                                    <option label="กรุณาเลือกสาขาปลายทาง"></option> 
-
-                                                    {                                          
-                                                    branch.filter(branch => branch.branch_id !== checkoriginbranchID).map(item => (
-                                                        <option key={item.branch_id} value={item.branch_id}> 
-                                                            {item.branch_name} 
-                                                        </option>
-                                                    ))
-                                                    }                                             
+                                                    }
                                                 </Form.Select>
                                                     <Form.Control.Feedback type="invalid">
-                                                        กรุณาเลือกสาขาปลายทาง
+                                                        กรุณาเลือกสาขาต้นทาง
+                                                    </Form.Control.Feedback>
+                                        </Form.Group>
+                                        <Form.Group as={Col}  className="form-group" controlId='validateStockid'>
+                                                <Form.Label >รายการสต๊อก</Form.Label>
+                                                <Form.Select
+                                                    value={stockid}
+                                                    disabled={formdisabled}
+                                                    onChange={(e) => setStockId(e.target.value)}
+                                                    required>
+                                                    <option label="กรุณาเลือกรายการสต๊อก" ></option>    
+                                                            
+                                                    {
+                                                    stock.map(item => (
+                                                        <option key={item.stock_id} value={item.stock_id}> 
+                                                        {item.m_name} </option>
+                                                    )) 
+                                                    }
+
+                                                </Form.Select>
+                                                    <Form.Control.Feedback type="invalid">
+                                                        กรุณาเลือกรายการสต๊อก
+                                                    </Form.Control.Feedback>
+                                        </Form.Group>
+                                        <div className='row form-group'>
+                                        <div className='col-lg-4 col-sm-10'>
+                                                <Form.Group as={Col} controlId="validateStockAmount">
+                                                    <Form.Label>กรอกจำนวน</Form.Label>
+                                                    <Form.Control
+                                                        required
+                                                        type="number"
+                                                        value={stock_amount}
+                                                        placeholder="จำนวน"
+                                                        disabled={formdisabled}
+                                                        onChange={(e) => setStockAmount(e.target.value)}
+                                                    />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        กรุณากรอกจำนวน
+                                                    </Form.Control.Feedback>
+                                                </Form.Group>
+                                            <div className='mt-2'>
+                                                <p hidden={checkminimum} className='text1 '>* ต้องมีจำนวนคงเหลือในสต๊อกอย่างน้อยจำนวน {minimum}  {unit}</p>   
+                                            </div>
+
+                                            </div>
+                                            <div className='col-lg-2 col-sm-2 px-2 pt-5 ' >
+                                            {unit}
+                                            </div>
+                                            <div className='col-lg-4 col-sm-10'>
+                                                <Form.Group as={Col} controlId="validateamount">
+                                                    <Form.Label>จำนวนในสต๊อก</Form.Label>
+                                                    <Form.Control
+
+                                                        type="number"
+                                                        value={amount}
+                                                        placeholder="จำนวน"
+                                                        onChange={(e) => setAmount(e.target.value)}
+                                                        disabled
+                                                    />
+                                                    <Form.Control.Feedback type="invalid">
+                                                        จำนวนในสต๊อก
+                                                    </Form.Control.Feedback>
+                                                </Form.Group>
+                                            </div>
+
+                                            <div className='col-lg-2 col-sm-2  px-2 pt-5'>
+                                            {unit}
+                                            </div>
+                                        </div>
+                                        <div >
+                                            
+                                        </div>
+                                        <div className='row mt-3'>
+                                            <div className='col-lg-6 col-sm-12 '>
+                                                <Form.Group as={Col}  controlId="validatedestinationbranch" className="form-group">
+                                                    <Form.Label>สาขาปลายทาง</Form.Label>
+                                                    <Form.Select
+                                                        value={destination_branch}
+                                                        disabled={formdisabled}
+                                                        onChange={(e) => setDestinationBranch(e.target.value)}
+                                                        required>
+                                                        <option label="กรุณาเลือกสาขาปลายทาง"></option> 
+
+                                                        {                                          
+                                                        branch.filter(branch => branch.branch_id !== checkoriginbranchID).map(item => (
+                                                            <option key={item.branch_id} value={item.branch_id}> 
+                                                                {item.branch_name} 
+                                                            </option>
+                                                        ))
+                                                        }                                             
+                                                    </Form.Select>
+                                                        <Form.Control.Feedback type="invalid">
+                                                            กรุณาเลือกสาขาปลายทาง
+                                                        </Form.Control.Feedback>                                               
+                                                </Form.Group>
+                                            </div>
+
+                                            <div className='col-lg-4 col-sm-10'>
+                                            <Form.Group as={Col}  className="form-group" controlId='validateDestinationStockAmount'>
+                                                <Form.Label >จำนวนในสต๊อกปลายทาง</Form.Label>
+                                                <Form.Control
+                                                    value={destination_branch_stock_amount}
+                                                    onChange={(e) => setDestinationBranchstockamount(e.target.value)}
+                                                    disabled
+                                                    >
+
+                                                </Form.Control>
+                                                    <Form.Control.Feedback type="invalid">
+                                                        จำนวนสต๊อกปลายทาง
                                                     </Form.Control.Feedback>                                               
                                             </Form.Group>
+                                            </div>
+
+                                            <div className='col-lg-2 col-sm-2  px-2 pt-5 '>
+                                                {unit} 
+                                            </div>
                                         </div>
 
-                                        <div className='col-lg-4 col-sm-10'>
-                                        <Form.Group as={Col}  className="form-group" controlId='validateDestinationStockAmount'>
-                                            <Form.Label >จำนวนในสต๊อกปลายทาง</Form.Label>
-                                            <Form.Control
-                                                value={destination_branch_stock_amount}
-                                                onChange={(e) => setDestinationBranchstockamount(e.target.value)}
-                                                disabled
-                                                >
-
-                                            </Form.Control>
-                                                <Form.Control.Feedback type="invalid">
-                                                    จำนวนสต๊อกปลายทาง
-                                                </Form.Control.Feedback>                                               
-                                        </Form.Group>
-                                        </div>
-
-                                        <div className='col-lg-2 col-sm-2  px-2 pt-5 '>
-                                            {unit} 
-                                        </div>
-                                    </div>
-
-                                        <Row className="mb-3 " style={{width:"150px",margin:"auto",paddingTop:"20px"}}>
-                                            <Button as="input" type="submit" value="โอนย้าย" disabled={checkbtn} className="btn btn-primary" />
-                                        </Row>
-                                </Form>
+                                            <Row className="mb-3 " style={{width:"150px",margin:"auto",paddingTop:"20px"}}>
+                                                <Button as="input" type="submit" value="โอนย้าย" disabled={checkbtn} className="btn btn-primary" />
+                                            </Row>
+                                    </Form>
+                                </div>
+                                {/* transfer history */}
+                                <div className='formtranfer Regular shadow mb-3'>
+                                    <h3 className='header'>ประวัติการย้ายสต๊อก</h3> 
+                                                          
                                 </div>
                         </div>
 

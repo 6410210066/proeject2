@@ -8,7 +8,7 @@ export default function Owner (){
         <>
             <div  className="container-fluid" >
                 <div className="row">
-                    <div className="col-lg-2 nav" style={{padding:"0"}}>
+                    <div className="col-lg-2 navadmin content " style={{padding:"0"}}>
                          <Ownernav page={page} />
                     </div>
                     <div className="col-lg-10 content overfloww" style={{padding:"0"}}>

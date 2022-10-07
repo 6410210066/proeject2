@@ -5,18 +5,23 @@ body{
 }
 .navadmin{
     background-color: #FFC700;
-    height: 100% ;
+    height: 100vh;
 }
+
 .content{
     height: 100vh;
     background-color:rgb(241, 244, 176);
 }
 
-.navadmin a{
+.nav{
+    background-color: #FFC700;
+    height: 100vh;
+}
+.nav a{
     /* background-color: #FFC700; */
     display: block;
-    padding: 1.0em 0em 1em 0.2em;
-    padding-top: 1.3em;
+    padding: 0.9em 0em 0.9em 0.2em;
+    padding-top: 1.1em;
     width: 100%;
     font-size: 1.0em;
     color: black;
@@ -155,6 +160,7 @@ body{
 .overfloww{
     overflow-y: scroll;
     height: 80%;
+    
 }
 
 .summarize{
@@ -200,6 +206,15 @@ body{
 .setbtn{
     float: left;
 }
+
+.text1{
+    color: rgb(219, 14, 14);
+    font-size: 0.8em;
+    padding-left: 4px;
+    margin: 4px;
+    position:absolute;
+}
+
 
 @media only screen and (max-width: 992px) {
     .navadmin{

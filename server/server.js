@@ -22,6 +22,7 @@ const stock = require("./libs/stock");
 const requeststock = require("./libs/requeststock");
 const { request } = require("http");
 const material = require("./libs/material");
+const transfer = require("./libs/transfer");
 
 var pool = mysql.createPool({
     connectionLimit: 10,
@@ -975,6 +976,43 @@ app.post("/api/checkstock", async(req,res)=>{
 
     }
 });
+
+app.post("/api/transferhistory/add", async(req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await transfer.createTransfer(pool,input.status_id,input.origin_branch,
+                                                   input.destination_branch,input.request_id,
+                                                   input.m_id,input.stock_amount);
+        res.json({
+            result: true,
+            data: result
+        })
+    }catch(ex){
+        res.json({
+            result: false,
+            message: ex.message
+        })
+
+    }
+});
+
+
+app.get("/api/transferhitory", async(req,res)=>{
+
+    try{
+        result = await transfer.getTransfer(pool);
+        res.json({
+            result:true,
+            data: result
+        })
+    }catch(ex){
+        res.json({
+            result:true,
+            message: ex.message
+        })
+    }
+})
 
 app.listen(port, () => {
     console.log("Running");

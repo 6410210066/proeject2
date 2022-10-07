@@ -6,7 +6,6 @@ module.exports={
     deleteRequest: async (pool,request_id) => {
         var sql = "DELETE FROM stockrequest WHERE request_id = ?";
         sql = mysql.format(sql,[request_id]);
-        console.log(sql);
         return await pool.query(sql);
     },
 

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { API_GET, API_POST } from "../../api";
 import { Detailmanagerrequest } from "../../modals";
 import ManagerRequestItem from "./ManagerRequestItem";
+import "../owner/owner.css";
 
 export default function Managerquest(){
 
