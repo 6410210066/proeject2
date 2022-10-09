@@ -182,6 +182,7 @@ export default function ManagerTransfer(){
                                 </Tab>
                                 <Tab eventKey="get" title="รับสต๊อก" className="transfer-tab pt-3 pb-3 Regular shadow">
                                     {transferItem()}
+                                    
                                     {transfer != null &&
                                         transfer.filter(transfer => transfer.destination_branch == branch_id && transfer.status_id==3).map(item=>(
                                             <div className="transfer-item my-3 row Regular shadow">
@@ -201,8 +202,8 @@ export default function ManagerTransfer(){
                                                     {checkbranchname(item.destination_branch)}
                                                 </div> 
                                                 <div className="col-lg-2 col-sm-12 " >
-                                                    <button className="btn btn-success mb-1 px-4 mx-2" onClick={event => approveTransfer(item.m_id,item.t_id,item.stock_amount)} >อนุมัติ</button>
-                                                    <button className="btn btn-danger mb-1 px-4 mx-2" onClick={rejectTransfer(item.t_id)} >ปฏิเสธ</button>
+                                                    <button className="btn btn-success mb-1 px-4 mx-2" onClick={event=> approveTransfer(item.m_id,item.t_id,item.stock_amount)} >อนุมัติ</button>
+                                                    <button className="btn btn-danger mb-1 px-4 mx-2" onClick={event=>rejectTransfer(item.t_id)} >ปฏิเสธ</button>
                                                 </div>
                                             </div>
                                         ))                   
