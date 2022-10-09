@@ -77,7 +77,7 @@ export default function ManagerRequestItem(props){
         
     }
     const onConfirmreject = async()=>{
-        let json = await API_POST("rejectrequest",{
+        let json = await API_POST("request/updatestatus",{
             request_id : requestid,
             status_id : statusreject
         });

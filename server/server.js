@@ -697,7 +697,7 @@ app.get('/api/roles',async(req,res)=>{
 
 app.post('/api/stock/update',async(req,res)=>{
     const input = req.body;
-
+    
     try{
         var result = await stock.updataStock(pool,input.stock_id,input.stock_amount);
         res.json({
@@ -910,11 +910,11 @@ app.get('/api/material/:m_id',checkAuth, async(req,res) =>{
     }
 });
 
-app.post('/api/rejectrequest', async(req,res) =>{
+app.post('/api/request/updatestatus', async(req,res) =>{
     const input = req.body;
 
     try {
-        var result = await requeststock.rejectrequest(pool,input.request_id,input.status_id);
+        var result = await requeststock.updateStatusRequest(pool,input.request_id,input.status_id);
         res.json({
             result: true,
             data:result
@@ -1014,6 +1014,39 @@ app.get("/api/transferhitory", async(req,res)=>{
     }
 })
 
+app.post("/api/manager/transferhitory", async(req,res)=>{
+        const input = req.body;
+    try{
+        result = await transfer.getTransferByBranch(pool,input.branch_id);
+        res.json({
+            result:true,
+            data: result
+        })
+    }catch(ex){
+        res.json({
+            result:true,
+            message: ex.message
+        })
+    }
+})
+
+app.post("/api/transfer/stautsupdate", async(req,res)=>{
+    const input = req.body;
+
+    try{
+        result = await transfer.updateStatus(pool,input.t_id,input.status_id);
+        res.json({
+            result:true,
+            data: result
+        })
+    }catch(ex){
+        res.json({
+            result:true,
+            message: ex.message
+        })
+    }
+
+})
 app.listen(port, () => {
     console.log("Running");
 });

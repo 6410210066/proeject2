@@ -19,7 +19,7 @@ module.exports={
         sql = mysql.format(sql,[stock_amount,description,status,stock_id,emp_id,branch_id]);
         return await pool.query(sql);
     },
-    rejectrequest: async(pool,request_id,status_id) =>{
+    updateStatusRequest: async(pool,request_id,status_id) =>{
         var sql  = "UPDATE stockrequest SET status_id = ? WHERE request_id = ?";
         sql = mysql.format(sql,[status_id,request_id]);
         return await pool.query(sql);

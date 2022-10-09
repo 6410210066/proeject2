@@ -9,6 +9,7 @@ export default function Transfer(){
     const {state} = useLocation();
     let navigate =useNavigate();
     let page =3;
+    let statusapprove = 5;
     const [branch,setBranch] = useState([]);
     const [stock,setStock] =useState([]);
     const [branch_id,setBranchId] = useState(0);
@@ -32,9 +33,10 @@ export default function Transfer(){
     const [transfer,setTransfer] =useState([]);
 
     useEffect(()=>{
-
+        
         fetchAllstock();
         fetchDataBranch();
+        fetchTransferHistory();
         if(state != null){
             requestInfo(state);
             setFormdisabled(true);
@@ -117,6 +119,30 @@ export default function Transfer(){
             
     }
 
+    const requestInfo = async(data)=>{
+        let stockrequest = [];
+        data.map((item,index)=>{
+            if(index==0){
+                setRequest(item);
+                fetchRequest(item);
+            }else{
+                stockrequest.push(item);
+            }
+        });
+        
+        setStock(stockrequest); 
+        setStockId(stockrequest[0].stock_id);
+      
+    }
+
+    const fetchTransferHistory = async ()=>{
+        let json = await API_GET("transferhitory");
+
+        if(json.result){
+            setTransfer(json.data);
+        }
+    }
+
     const checkAmount = async ()=>{
         setAmount(0);
         let num = parseInt(stockid);
@@ -176,29 +202,7 @@ export default function Transfer(){
 
     }
 
-    const requestInfo = async(data)=>{
-        let stockrequest = [];
-        data.map((item,index)=>{
-            if(index==0){
-                setRequest(item);
-                fetchRequest(item);
-            }else{
-                stockrequest.push(item);
-            }
-        });
-        
-        setStock(stockrequest); 
-        setStockId(stockrequest[0].stock_id);
-      
-    }
 
-    const fetchTransferHistory = async ()=>{
-        let json = await API_GET("transferhitory");
-
-        if(json.result){
-            setTransfer(json.data);
-        }
-    }
 
     const transferstock = async ()=>{
        
@@ -215,6 +219,13 @@ export default function Transfer(){
             stock_amount: stockamount
         });
 
+        if(json.result){
+            clearForm();
+            setRequestid(0);
+            setFormdisabled(false);
+            setValidated(false);
+        }
+
         const json1 = await API_POST("transferhistory/add",{
             status_id : 3,
             origin_branch: origin_branch,
@@ -223,46 +234,52 @@ export default function Transfer(){
             m_id: mid,
             stock_amount: stock_amount
         });
-
+        
         if(json1.result){
+            requeststatusupdate();
             fetchTransferHistory();
         }
 
-        if(json.result){
-            console.log("อัปเดทสำเร็จ");
-            clearForm();
-            setRequestid(0);
-            setFormdisabled(false);
-            setValidated(false);
-        }
+
     }
 
-    const getStocktransfer = async ()=>{
-        let destinationstockid ;
-        let stockamount;
-       
-        allstock.filter(allstock => allstock.m_name.includes(mname) ).map(item =>{
-           
-            if(item.stock_id != stockid){
-                destinationstockid = item.stock_id;
-                stockamount = parseInt(item.stock_amount) + parseInt(stock_amount);  
+    const requeststatusupdate = async()=>{
+      
+        if(requestid>0){
+            let json2 = await API_POST("request/updatestatus",{
+                request_id : requestid,
+                status_id : statusapprove
+            });
+
+            if(json2.result){
+               navigate('request', {replace:true});
             }
-         })
-
-        const json = await API_POST("stock/update",{
-            stock_id : destinationstockid,
-            stock_amount: stockamount
-        });
-        if(json.result){
-            console.log("อัปเดทสำเร็จ");
-           clearForm();
         }
     }
+
 
     const checkDestinationAmount = async ()=>{
         allstock.filter(allstock => allstock.branch_id == destination_branch && allstock.m_name.includes(mname)).map(item =>{
             setDestinationBranchstockamount(item.stock_amount);
         })
+    }
+
+    const checkbranchname = (branchID)=>{
+        let branchname = "";
+        branch.filter(branch => branch.branch_id == branchID ).map(item =>{
+            branchname = item.branch_name;
+        });
+        return branchname
+    }
+
+    const checkstatus = (status)=>{
+        if(status==3){
+            return "pandding row transfer-item my-2"
+        }else if(status==4){
+            return "approve row transfer-item my-2"
+        }else if(status==6){
+            return "reject row transfer-item my-2"
+        }
     }
     return(
         <>
@@ -425,10 +442,68 @@ export default function Transfer(){
                                             </Row>
                                     </Form>
                                 </div>
+
+
                                 {/* transfer history */}
+
                                 <div className='formtranfer Regular shadow mb-3'>
+
                                     <h3 className='header'>ประวัติการย้ายสต๊อก</h3> 
-                                                          
+
+                                    <div className="row transfer-item my-2">
+                                        <div className="col-1 pb-0">
+                                            รหัส
+                                        </div>  
+                                        <div className="col-2 ">
+                                            รายการ
+                                        </div> 
+                                        <div className="col-2 ">
+                                            จำนวน
+                                        </div> 
+                                        <div className="col-2 ">
+                                            ต้นทาง
+                                        </div> 
+                                        <div className="col-2 ">
+                                            ปลายทาง
+                                        </div> 
+                                        <div className="col-2">
+                                            สถานะ
+                                        </div> 
+                                        {/* <div className="col-1 ">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                        </div>  */}
+                                    </div> 
+                                    
+                                    {
+                                        transfer != null &&
+                                        transfer.map(item =>(
+                                            <>
+                                                <div className={checkstatus(item.status_id)}>
+                                                    <div className="col-1 pb-0">
+                                                        {item.t_id}
+                                                    </div>  
+                                                    <div className="col-2 ">
+                                                        {item.m_name}
+                                                    </div> 
+                                                    <div className="col-2 ">
+                                                        {item.stock_amount} {item.m_unit}
+                                                    </div> 
+                                                    <div className="col-2 ">
+                                                        {checkbranchname(item.origin_branch)}
+                                                    </div> 
+                                                    <div className="col-2 ">
+                                                        {checkbranchname(item.destination_branch)}
+                                                    </div> 
+                                                    <div className="col-2 ">
+                                                        {item.status_name}
+                                                    </div> 
+                                                  <div className="col-1 ">
+                                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                                    </div> 
+                                                </div> 
+                                            </>
+                                        ))
+                                    }                    
                                 </div>
                         </div>
 

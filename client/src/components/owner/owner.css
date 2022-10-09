@@ -212,9 +212,18 @@ body{
     font-size: 0.8em;
     padding-left: 4px;
     margin: 4px;
-    position:absolute;
+    /* position:absolute; */
 }
 
+.transfer-item{
+    background-color: rgba(181, 182, 179, 0.892);
+    width: 90%;
+    margin: auto; 
+    border-radius: 8px;
+    padding: 9px;
+    text-align: center;
+    font-size: 15px;
+}
 
 @media only screen and (max-width: 992px) {
     .navadmin{

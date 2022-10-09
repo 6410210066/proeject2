@@ -141,8 +141,41 @@ body{
     text-align: center;
 }
 
+.transfer-select{
+    width: 70%;
+    height: 0%;
+    margin: auto;
+    margin-bottom: 0;
+    background-color: rgba(132, 177, 41, 0);
+    
+}
+
+.transfer-select button{
+    color:#000000;
+
+}
 
 
+.transfer-tab{
+    background-color: #ffffff;
+    height: auto;
+    width: 70%;
+    margin: auto;
+    color: #000000;
+   
+}
+
+.transfer-item{
+    width: 85%;
+    height: auto;
+    /* padding-top: 30px; */
+    background-color: #ffffff;
+    border: solid 2px #ababab;
+}
+
+.transfer-item-text{
+     padding-top: 30px;
+}
 .reject{
     
     background-color: rgba(235, 81, 81, 0.864);

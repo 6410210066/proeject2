@@ -28,9 +28,8 @@ export default function Ownernav(props){
                             <Link className={props.page===5 && "active"} to="/request"><i class="fa-solid fa-clipboard mx-3"></i>จัดการคำขอ</Link>
                             <Link className={props.page===6 && "active"} to="/owner/product"><i class="fa-solid fa-box-archive mx-3"></i>จัดการสินค้า</Link>
                             <Link className={props.page===7 && "active"} to="/owner/branch"><i class="fa-solid fa-code-branch mx-3"></i>จัดการสาขา</Link>
-                        <div className="logout ">
-                            <Link onClick={clear} to="/"><i class="fa-solid fa-arrow-right-from-bracket me-3"></i>ออกจากระบบ</Link>  
-                        </div>                         
+                            <Link className='logout' onClick={clear} to="/"><i class=" logout fa-solid fa-arrow-right-from-bracket me-3"></i>ออกจากระบบ</Link>  
+                                       
                 </div>        
 
             </div>  
