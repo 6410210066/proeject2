@@ -50,7 +50,7 @@ module.exports={
         return await pool.query(sql);
     },
     checkStock : async(pool,m_id,stock_amount,branch_id) =>{
-        var sql = "SELECT s.*,m.m_name,m.m_unit,m.Minimum FROM stock s JOIN material m ON s.m_id = m.m_id WHERE m.m_id = ? AND s.stock_amount > m.Minimum + ? AND s.branch_id <> ?;";
+        var sql = "SELECT s.*,m.m_name,m.m_unit,m.Minimum FROM stock s JOIN material m ON s.m_id = m.m_id WHERE m.m_id = ? AND s.stock_amount >= m.Minimum + ? AND s.branch_id <> ?;";
         sql =mysql.format(sql,[m_id,stock_amount,branch_id]);
         return await pool.query(sql);
     }

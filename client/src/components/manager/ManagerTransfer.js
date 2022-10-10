@@ -7,7 +7,7 @@ import Tabs from 'react-bootstrap/Tabs';
 
 export default function ManagerTransfer(){
     let page=5;
-
+    let count =0;
         const [branch_id,setBranchid] = useState(0);
         const [validated,setValidated] = useState(false);
         const [transfer,setTransfer] =useState([]);
@@ -22,6 +22,7 @@ export default function ManagerTransfer(){
         fetchDataBranch();
         fetchstock();
         fetchTransfer();
+        
     },[]);
 
 
@@ -88,21 +89,19 @@ export default function ManagerTransfer(){
         )
     }
 
-    const updatestock = async(m_id,stock_amount)=>{
+    const updatestock = async(m_id,branchID,stock_amount)=>{
         
         let stockID;
         let stockAmount;
 
         if(stock != null){
-            stock.filter(stock => stock.m_id == m_id && stock.branch_id == branch_id).map(item =>{
+            stock.filter(stock => stock.m_id == m_id && stock.branch_id == branchID).map(item =>{
                 stockID = item.stock_id;
                 stockAmount = stock_amount + item.stock_amount;
             });
             
         }
-
-        
-            
+ 
         let json = await API_POST("stock/update",{
             stock_id: stockID,
             stock_amount: stockAmount
@@ -114,25 +113,26 @@ export default function ManagerTransfer(){
         }
     }
 
-    const updateTransferstatus = async(t_id)=>{
+    const updateTransferstatus = async(t_id,status)=>{
         let json = await API_POST("transfer/stautsupdate",{
             t_id: t_id,
-            status_id: 5
+            status_id: status
         })
 
         if(json.result){
             fetchTransfer(branch_id);
-            setKey('home');
         }
     }
 
-    const approveTransfer = async(m_id,t_id,stock_amount)=>{
-        updatestock(m_id,stock_amount)
-        updateTransferstatus(t_id);
+    const approveTransfer = async(m_id,destination_branch,t_id,stock_amount)=>{
+        updatestock(m_id,destination_branch,stock_amount)
+        updateTransferstatus(t_id,5);
     }
 
-    const rejectTransfer = async(t_id)=>{
-
+  
+    const rejectTransfer = async(m_id,origin_branch,t_id,stock_amount)=>{
+        updatestock(m_id,origin_branch,stock_amount)
+        updateTransferstatus(t_id,6);
     }
     return(
         <>
@@ -154,8 +154,9 @@ export default function ManagerTransfer(){
                                 <Tab  eventKey="home" title="ส่งสต๊อก" className="transfer-tab pt-3 pb-3 Regular shadow">
                                     {transferItem()}
                                     {transfer != null && 
-                                        transfer.filter(transfer => transfer.origin_branch == branch_id && transfer.status_id==3).map(item=>(
-                                            <div className="transfer-item my-3 row Regular shadow">
+                                        transfer.filter(transfer => transfer.origin_branch == branch_id && transfer.status_id==4).map(item=>(
+                                            
+                                            <div key={item.t_id} className="transfer-item my-3 row Regular shadow">
                                                 <div className="col-2 transfer-item-text">
                                                     {item.t_id}
                                                 </div>  
@@ -172,8 +173,8 @@ export default function ManagerTransfer(){
                                                     {checkbranchname(item.destination_branch)}
                                                 </div> 
                                                 <div className="col-lg-2 col-sm-12 " >
-                                                    <button className="btn btn-success mb-1 px-4 mx-2">อนุมัติ</button>
-                                                    <button className="btn btn-danger mb-1 px-4 mx-2">ปฏิเสธ</button>
+                                                    <button className="btn btn-success mb-1 px-4 mx-2" onClick={event=> updateTransferstatus(item.t_id,3)}>ยืนยัน</button>
+                                                    <button className="btn btn-danger mb-1 px-4 mx-2" onClick={event=>rejectTransfer(item.m_id,item.origin_branch,item.t_id,item.stock_amount)}>ปฏิเสธ</button>
                                                 </div>
                                             </div>
                                         ))
@@ -185,7 +186,8 @@ export default function ManagerTransfer(){
                                     
                                     {transfer != null &&
                                         transfer.filter(transfer => transfer.destination_branch == branch_id && transfer.status_id==3).map(item=>(
-                                            <div className="transfer-item my-3 row Regular shadow">
+                                            <div key={item.t_id}  className="transfer-item my-3 row Regular shadow">
+                                                {}
                                                 <div className="col-2 transfer-item-text">
                                                     {item.t_id}
                                                 </div>  
@@ -202,8 +204,8 @@ export default function ManagerTransfer(){
                                                     {checkbranchname(item.destination_branch)}
                                                 </div> 
                                                 <div className="col-lg-2 col-sm-12 " >
-                                                    <button className="btn btn-success mb-1 px-4 mx-2" onClick={event=> approveTransfer(item.m_id,item.t_id,item.stock_amount)} >อนุมัติ</button>
-                                                    <button className="btn btn-danger mb-1 px-4 mx-2" onClick={event=>rejectTransfer(item.t_id)} >ปฏิเสธ</button>
+                                                    <button className="btn btn-success mb-1 px-4 mx-2" onClick={event=> approveTransfer(item.m_id,item.destination_branch,item.t_id,item.stock_amount)} >ยืนยัน</button>
+                                                    <button className="btn btn-danger mb-1 px-4 mx-2" onClick={event=>rejectTransfer(item.m_id,item.origin_branch,item.t_id,item.stock_amount)} >ปฏิเสธ</button>
                                                 </div>
                                             </div>
                                         ))                   

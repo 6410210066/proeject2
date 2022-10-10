@@ -116,9 +116,6 @@ export default function Managerquest(){
                                     data.map(item =>(
                                         <>  
                                             
-                                            {/* {item.status_id ==1 && <div className= "pandding row request-item  my-2" >}
-                                            {item.status_id == 5 && <div className= "approve row request-item  my-2" >}
-                                            {item.status_id == 6 && <div className= "reject row request-item  my-2" >} */}
                                             <div className={checkstatus(item.status_id)}>
                                                 <div className="col-2">
                                                     {item.request_id}

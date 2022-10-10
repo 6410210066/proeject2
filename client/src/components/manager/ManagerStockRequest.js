@@ -180,7 +180,7 @@ export default function ManagerstockRequest(){
                            
                             {
                                 stockrequest != null &&
-                                stockrequest.map(item =>(
+                                stockrequest.filter(stockrequest => stockrequest.branch_id == branch_id).map(item =>(
                                     <>  
                                         
                                         {/* {item.status_id ==1 && <div className= "pandding row request-item  my-2" >}

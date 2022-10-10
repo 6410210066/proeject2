@@ -31,6 +31,7 @@ export default function Transfer(){
     const [minimum,setMinimum] =useState(0);
     const [checkminimum,setCheckminimum] = useState(false);
     const [transfer,setTransfer] =useState([]);
+    const [mid,setMid] =useState();
 
     useEffect(()=>{
         
@@ -78,6 +79,7 @@ export default function Transfer(){
                 setUnit("");
                 setStockAmount(0);
                 setMinimum(0);
+                setMid(0);
             }
             checkOriginBranch();
             checkAmount();
@@ -151,6 +153,7 @@ export default function Transfer(){
                 setUnit(item.m_unit);
                 setMname(item.m_name);
                 setMinimum(item.Minimum);
+                setMid(item.m_id);
                 
         });
 
@@ -227,7 +230,7 @@ export default function Transfer(){
         }
 
         const json1 = await API_POST("transferhistory/add",{
-            status_id : 3,
+            status_id : 4,
             origin_branch: origin_branch,
             destination_branch:destination_branch,
             request_id: requestid,
@@ -252,7 +255,7 @@ export default function Transfer(){
             });
 
             if(json2.result){
-               navigate('request', {replace:true});
+               navigate('/request', {replace:true});
             }
         }
     }
@@ -275,10 +278,12 @@ export default function Transfer(){
     const checkstatus = (status)=>{
         if(status==3){
             return "pandding row transfer-item my-2"
-        }else if(status==4){
+        }else if(status==5){
             return "approve row transfer-item my-2"
         }else if(status==6){
             return "reject row transfer-item my-2"
+        }else if(status==4){
+            return "sending row transfer-item my-2"
         }
     }
     return(
@@ -334,7 +339,8 @@ export default function Transfer(){
                                                     {
                                                     stock.map(item => (
                                                         <option key={item.stock_id} value={item.stock_id}> 
-                                                        {item.m_name} </option>
+                                                            {item.m_name} 
+                                                        </option>
                                                     )) 
                                                     }
 
@@ -401,13 +407,15 @@ export default function Transfer(){
                                                         onChange={(e) => setDestinationBranch(e.target.value)}
                                                         required>
                                                         <option label="กรุณาเลือกสาขาปลายทาง"></option> 
-
-                                                        {                                          
-                                                        branch.filter(branch => branch.branch_id !== checkoriginbranchID).map(item => (
-                                                            <option key={item.branch_id} value={item.branch_id}> 
-                                                                {item.branch_name} 
-                                                            </option>
-                                                        ))
+                                                    
+                                                        { 
+                                                            branch != null &&                                         
+                                                                branch.filter(branch => branch.branch_id !== checkoriginbranchID).map(item => (
+                                                                    <option key={item.branch_id} value={item.branch_id}> 
+                                                                        {item.branch_name} 
+                                                                    </option>
+                                                                ))
+                                                    
                                                         }                                             
                                                     </Form.Select>
                                                         <Form.Control.Feedback type="invalid">

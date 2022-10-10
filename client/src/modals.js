@@ -177,7 +177,7 @@ export function PlusoreditstockModal(props){
 }
 
 export function PlusstockModal(props){
-    let plusstockamount;
+    // let plusstockamount;
     return(
         <>
             <Modal show={props.show}  centered >
@@ -206,7 +206,7 @@ export function PlusstockModal(props){
                             <Form.Control
                                 required
                                 type="number"
-                                value={plusstockamount}
+                                value={props.plusstockamount}
                                 placeholder="จำนวน"
                                 step="0.001"
                                 min ="1"
@@ -251,6 +251,28 @@ export function PlusoOrTranferStockModal(props){
                 <Modal.Footer>
                     <Button variant="primary" onClick={onAddstock}>เพิ่มสต๊อก</Button>
                     <Button variant="success" onClick={onTranfer}>ย้ายสต๊อกสินค้า</Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}
+
+export function AlertkModal(props){
+
+    return(
+        <>
+            <Modal show={props.show} onHide={props.onCancel} centered>
+                <Modal.Header>
+                    <Modal.Title>
+                        <p>{props.title}</p>
+                    </Modal.Title>
+                    <button className="btn" onClick={props.onCancel} ><i className="fa-sharp fa-solid fa-xmark"></i></button>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>{props.message}</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={props.onCancel} centered>ตกลง</Button>
                 </Modal.Footer>
             </Modal>
         </>
