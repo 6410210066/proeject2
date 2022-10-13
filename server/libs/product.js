@@ -37,10 +37,10 @@ module.exports={
         return await pool.query(sql);
     },
 
-    updateImage: async (pool,product_img) => {
-        var sql = "UPDATE product SET image_url = ? "
-                    + "WHERE product_img = ?";
-        sql = mysql.format(sql, [product_img]);
+    updateImage: async (pool,fileName,productid) => {
+        var sql = "UPDATE product SET product_img = ? "
+                    + "WHERE product_id = ?";
+        sql = mysql.format(sql, [fileName,productid]);
         return await pool.query(sql);
     },
 }

@@ -12,7 +12,7 @@ const product = require('../server/libs/product');
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false}));
 app.use(bodyParser.json());
-// app.use('/images', express.static('images'));
+app.use('/images', express.static('images'));
 
 var mysql = require('mysql');
 const { response, query } = require("express");
@@ -1100,8 +1100,8 @@ app.get('/api/Employeeproduct',checkAuth, (req,res)=>{
     });
 });
 
-app.post("/api/product/upload/:productImg",checkAuth, (req,res) => {
-    var product_img = req.params.productImg;
+app.post("/api/product/upload/:productid", (req,res) => {
+    var productid = req.params.productid;
     var fileName;
 
     var storage = multer.diskStorage({
@@ -1109,7 +1109,7 @@ app.post("/api/product/upload/:productImg",checkAuth, (req,res) => {
             cp(null, "images");        
         },
         filename: (req, file, cp) => {
-            fileName = product_img + "-" + file.originalname;
+            fileName = productid + "-" + file.originalname;
             cp(null, fileName);
         }
     })
@@ -1123,7 +1123,7 @@ app.post("/api/product/upload/:productImg",checkAuth, (req,res) => {
                 message: err.message
             });
         } else {
-            var result = product.updateImage(pool, product_img);
+            var result = product.updateImage(pool,fileName,productid);
 
             res.json({
                 result: true,

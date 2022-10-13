@@ -35,7 +35,7 @@ export default function ProductForm(){
             setProductweight(data.product_weight);
             setProductimg(data.product_img);
             setProducttypeid(data.product_type_id);
-            // setImageUrl(data.imageUrl);
+            setImageUrl(data.product_img);
         }
         if(params.product_id!="add"){
             fetchData([params.product_id]);
@@ -106,7 +106,7 @@ export default function ProductForm(){
         formData.append('file',selectedFile);
 
         let response = await fetch(
-            SERVER_URL + "api/product/upload/" + product_img,
+            SERVER_URL + "api/product/upload/" + product_id,
             {
                 method: 'POST',
                 headers: {
