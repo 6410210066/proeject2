@@ -1,14 +1,19 @@
-import { Link,useNavigate} from "react-router-dom"
+import { Link,useNavigate,useParams} from "react-router-dom"
 import { useEffect, useState} from "react";
 import { AlertkModal, ConfirmModal, Detailmanagerrequest, PlusoOrTranferStockModal, PlusstockModal } from "../../modals";
 import { Button } from "react-bootstrap";
 import { API_POST,API_GAT, API_GET } from "../../api";
+import Ownernav from "./Ownernav";
+import SimpleDateTime  from 'react-simple-timestamp-to-date';
+
+
 export default function ManagerRequestItem(props){
 
     let statusreject =6;
     let statusapprove=5;
     let navigate = useNavigate();
-    const [showModal,setShowModal] = useState(false);
+    let params = useParams();
+    let page =5;
     const [showrejectmodal,setShowrejectmodal] =useState(false);
     const [title,setTitle] =useState("");
     const [message,setMessage] =useState("");
@@ -19,39 +24,60 @@ export default function ManagerRequestItem(props){
     const [stock_amount,setStockAmount] = useState(0);
     const [plusstockamount,setPlusStockAmount]=useState(0);
     const [stock,setStock] =useState([]);
+    const [request,setRequest] =useState({});
+    const [branchname,setBranchname] =useState("");
 
     useEffect(()=>{
-        fetchStock();
+        fetchRequest();
+        setRequestid(params.request_id);
+        
     },[]);
 
     useEffect(()=>{
-        stock.filter(stock => stock.stock_id == props.data.stock_id).map(item=>{
+        fetchStock();
+    },[request]);
+
+    useEffect(()=>{
+        console.log(request);
+        stock.filter(stock => stock.stock_id == request.stock_id).map(item=>{
             setStockAmount(item.stock_amount);
+            setBranchname(item.branch_name);
+            console.log(item);
         })
-        setPlusStockAmount(props.data.request_amount);
-    },[stock])
-    const onShowDetail = async() => {
-        setShowModal(true);
-    }
+        setPlusStockAmount(request.request_amount);
+    },[stock]);
+
     
     const fetchStock = async()=>{
         let json = await API_GET("stock");
         if(json.result){
             setStock(json.data);
         }
+       
     }
+
+    const fetchRequest = async()=>{
+       
+        let json = await API_POST("requestbyrequestid",{
+            request_id: params.request_id
+        });
+
+        if(json.result){
+            setRequest(json.data[0]);
+        }
+    }
+
     const reject = async() =>{
         setShowrejectmodal(true);
         setTitle("ยืนยันการยกเลิกคำขอ");
         setMessage("คุณต้องการยกเลิกคำขอนี้หรือไม่");
-        setRequestid(props.data.request_id);
+       
     }
 
     const approve = () =>{
         setShowaddortranfer(true);
         setTitle("ยืนยันคำขอ");
         setMessage("กรุณาเลือกเพิ่มสต๊อกสินค้าหรือย้ายสต๊อกสินค้า ");
-        setRequestid(props.data.request_id);
     }
 
     const onAddortranfer = (num)=>{
@@ -72,17 +98,31 @@ export default function ManagerRequestItem(props){
     }
 
     const onPlus =  async()=>{
-        let sum = stock_amount + plusstockamount;
-        console.log(sum);
-        
+        let sum = stock_amount + parseInt(plusstockamount);
+        let json = await API_POST("stock/update",{
+            stock_id:request.stock_id,
+            stock_amount:sum
+        });
+        if(json.result){
+            onCancel();
+            let json1 = await API_POST("request/updatestatus",{
+                request_id : requestid,
+                status_id : statusapprove
+            });
+            if(json1.result){
+                
+                props.fetchStockrequest();
+            }
+        }
+
     }
 
     const checkStock = async ()=>{
 
         let json = await API_POST("checkstock",{
-            m_id : props.data.m_id,
-            stock_amount : props.data.request_amount,
-            branch_id : props.data.branch_id
+            m_id : request.m_id,
+            stock_amount : request.request_amount,
+            branch_id : request.branch_id
         });
         if(json.result){
             addstockinfo(json.data);
@@ -113,14 +153,14 @@ export default function ManagerRequestItem(props){
         });
         if(json.result){
             setShowrejectmodal(false);
-            props.fetchStockrequest();
+         
         }
 
     }
 
     const onCancel = async()=>{
         setShowrejectmodal(false);
-        setShowModal(false);
+       
         setShowaddortranfer(false);
         setShowAlert(false);
         setShowplus(false);
@@ -135,50 +175,68 @@ export default function ManagerRequestItem(props){
     return(
         <>
         
-            <Button className="me-4" variant="success" onClick={approve}>อนุมัติ</Button>
-            <Button className="me-4" variant="danger" onClick={reject}>ไม่อนุมัติ</Button>
-            <button className="button btn-detail" onClick={onShowDetail}>รายละเอียด</button>
+        <div className="container-fluid">
+            <div className="row">
+                <div className="col-lg-2 nav " style={{padding:"0"}}>
+                        <Ownernav page={page} />
+                </div>
+                <div className="col-lg-10 content overfloww" style={{padding:"0"}}>
+                    <div className="request-item-content">
+                        <div className="row mb-5">
+                            <h3 className="header">รายละเอียดคำขอ</h3>
+                            <span className="col-5">รหัสคำขอที่ : {request.request_id}</span><span className="col-3">วันที่ : <SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":" showTime="0">{request.request_date}</SimpleDateTime></span>
+                                                                                           <span className="col-3 ps-1">เวลา : <SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":" showDate="0">{request.request_date}</SimpleDateTime></span>
+                            <span>สาขาที่ขอ : {branchname}</span>
+                            <span></span>
+                        </div>
+                        
+                        <div className="">
+                            <Button className="me-4" variant="success" onClick={approve}>อนุมัติ</Button>
+                            <Button className="me-4" variant="danger" onClick={reject}>ไม่อนุมัติ</Button>
+                            <Button className="me-4" variant="danger" href={`/request`} >ย้อนกลับ</Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+           
+            
             
 
-        <Detailmanagerrequest
-            show = {showModal}
-            info = {props.data}
-            onComfirm={onCancel}
+
+
+            <ConfirmModal
+            show={showrejectmodal}
+            title={title}
+            message={message}
+            onConfirm={onConfirmreject}
+            onCancel={onCancel}
             />
 
+            <PlusoOrTranferStockModal
+                show={showaddortranfer}
+                title={title}
+                message={message}
+                onConfirm={onAddortranfer}
+                onCancel={onCancel}
+            />
 
-        <ConfirmModal
-        show={showrejectmodal}
-        title={title}
-        message={message}
-        onConfirm={onConfirmreject}
-        onCancel={onCancel}
-        />
+            <AlertkModal
+                show={showalert}
+                title={title}
+                message={message}
+                onCancel={onCancel}
+            />
 
-        <PlusoOrTranferStockModal
-            show={showaddortranfer}
-            title={title}
-            message={message}
-            onConfirm={onAddortranfer}
-            onCancel={onCancel}
-        />
-
-        <AlertkModal
-            show={showalert}
-            title={title}
-            message={message}
-            onCancel={onCancel}
-        />
-
-        <PlusstockModal
-            show={showplus}
-            title={title}
-            onConfirm={onPlus}
-            onCancel={onCancel}
-            stockAmount={stock_amount}
-            plusstockamount={plusstockamount}
-            setPlusStockAmount={setPlusStockAmount}
-        />
-        </>
+            <PlusstockModal
+                show={showplus}
+                title={title}
+                onConfirm={onPlus}
+                onCancel={onCancel}
+                stockAmount={stock_amount}
+                plusstockamount={plusstockamount}
+                setPlusStockAmount={setPlusStockAmount}
+            />
+            </>
     )
 }

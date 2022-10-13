@@ -10,7 +10,7 @@ module.exports={
     },
 
     getByrequestId: async(pool,request_id) => {
-        var sql = "SELECT * FORM request WHERE request_id =?";
+        var sql = "SELECT * FROM `stockrequest` WHERE request_id =? ";
         sql = mysql.format(sql,[request_id]);
         return await pool.query(sql);
     },

@@ -786,6 +786,25 @@ app.get('/api/request',async(req,res)=>{
     });
 });
 
+app.post('/api/requestbyrequestid', async(req,res)=>{
+    const input =req.body;
+    
+    try{
+        var result = await requeststock.getByrequestId(pool,input.request_id);
+        console.log(result);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+});
+
+
 app.post('/api/request/delete',async(req,res)=>{
     const input = req.body;
 
@@ -855,6 +874,8 @@ app.post('/api/stock/request',checkAuth, async (req,res)=>{
         });
     }
 });
+
+
 
 app.get('/api/material',checkAuth, async(req,res)=>{
     pool.query("SELECT * FROM material",function(error,results,fields){

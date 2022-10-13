@@ -5,6 +5,7 @@ import { API_GET, API_POST } from "../../api";
 import { Detailmanagerrequest } from "../../modals";
 import ManagerRequestItem from "./ManagerRequestItem";
 import "../owner/owner.css";
+import { Link } from "react-router-dom";
 
 export default function Managerquest(){
 
@@ -53,41 +54,41 @@ export default function Managerquest(){
                     <div className="col-lg-10 content overfloww" style={{padding:"0"}}>
                         <h1 className="header">จัดการคำขอสต๊อกสินค้า</h1>
                             <div className="p-4 requestcontent ">
+                                <div >
+                                    <Table borderless>
+                                        <thead style={{backgroundColor:"#FFC700"}}>
+                                        <tr>
+                                            <th>รหัส</th>
+                                            <th>ชื่อสาขา</th>
+                                            <th>ชื่อผู้ขอ</th>
+                                            <th>ชื่อสินค้า</th>
+                                            <th>จำนวน</th>
+                                            <th>สถานะ</th>
+                                            <th>ทำรายการ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style={{backgroundColor:"#FEFFD6"}}> 
                                 {
                                     data != null &&
                                     data.filter(data => data.status_id == 1).map((item,key) => (
                                 
-                                    <div key={key}>
-                                        <Table borderless>
-                                            <thead style={{backgroundColor:"#FFC700"}}>
+                                  
                                             <tr>
-                                            <th>ชื่อสาขา</th>
-                                            <th>ชื่อ-นามสกุล</th>
-                                            <th>ชื่อสินค้า</th>
-                                            <th>จำนวน</th>
+                                                <td>{item.request_id}</td>
+                                                <td>{item.branch_name}</td>
+                                                <td>{item.firstname}   {item.lastname}</td>
+                                                <td>{item.m_name}</td>
+                                                <td>{item.request_amount}</td>
+                                                <td>{item.status_name}</td>
+                                                <td><Link to={`/owner/maangerequest/${item.request_id}`} className="btn btn-primary">ทำรายการ</Link></td>
                                             </tr>
-                                        </thead>
-                                        <tbody style={{backgroundColor:"#FEFFD6"}}> 
-                                            <tr>
-                                            <td>{item.branch_name}</td>
-                                            <td>{item.firstname}   {item.lastname}</td>
-                                            <td>{item.m_name}</td>
-                                            <td>{item.request_amount}</td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot className="border-top border-dark" style={{backgroundColor:"#FEFFD6"}}>
-                                            <tr>
-                                            <td colSpan={4}>
 
-                                            <ManagerRequestItem key={item.request_id} data={item} onShowDetail={onShowDetail} ModelRequestInfo={setModelRequestInfo} fetchStockrequest={fetchStockrequest}/>
-                                            
-                                           </td>
-                                            </tr>
-                                        </tfoot>
-                                        </Table>
-                                    </div>
                                     )
                                 )}
+
+                                        </tbody>
+                                    </Table>
+                                </div>
                             </div>
 
 
