@@ -6,7 +6,7 @@ const port = 8080;
 const bodyParser = require('body-parser');
 const cors = require("cors");
 const util = require('util');
-// const multer = require("multer");
+const multer = require("multer");
 const users = require('../server/libs/users');
 const product = require('../server/libs/product');
 app.use(cors());
@@ -23,6 +23,7 @@ const requeststock = require("./libs/requeststock");
 const { request } = require("http");
 const material = require("./libs/material");
 const transfer = require("./libs/transfer");
+const { cp } = require("fs");
 
 var pool = mysql.createPool({
     connectionLimit: 10,
@@ -32,6 +33,8 @@ var pool = mysql.createPool({
     database: "db_chawhor"
 })
 pool.query = util.promisify(pool.query);
+
+
 
 
 // function
@@ -338,7 +341,7 @@ app.get('/api/product', (req,res)=>{
 
 app.post('/api/product/add',checkAuth, async(req,res)=>{
     const input = req.body;
-
+    console.log(input.product_img);
     try{
         var result = await product.createProduct(pool,input.product_name,input.product_price,input.product_size,
                                                 input.product_weight,input.product_img,input.product_type_id);
@@ -1047,6 +1050,68 @@ app.post("/api/transfer/stautsupdate", async(req,res)=>{
     }
 
 })
+app.get('/api/Employeeproduct',checkAuth, (req,res)=>{
+    pool.query(`SELECT 
+                a.*,
+                b.product_type_name
+                FROM product a 
+                JOIN product_type b 
+                ON a.product_type_id = b.product_type_id`,function(error,results,fields){
+        if(error){
+            res.json({
+                result: false,
+                message: error.message
+            });
+        }
+
+        if(results.length){
+            res.json({
+                result:true,
+                data: results
+            });
+            
+        }else{
+            res.json({
+                result: false,
+                message: "ไม่พบสินค้า"
+            });
+        }
+    });
+});
+
+app.post("/api/product/upload/:productImg",checkAuth, (req,res) => {
+    var product_img = req.params.productImg;
+    var fileName;
+
+    var storage = multer.diskStorage({
+        destination: (req, file, cp) => {
+            cp(null, "images");        
+        },
+        filename: (req, file, cp) => {
+            fileName = product_img + "-" + file.originalname;
+            cp(null, fileName);
+        }
+    })
+    var upload = multer({ storage: storage}).single('file');
+    
+
+    upload(req, res, async (err) => {
+        if (err) {
+            res.json({
+                result: false,
+                message: err.message
+            });
+        } else {
+            var result = product.updateImage(pool, product_img);
+
+            res.json({
+                result: true,
+                data: fileName
+            });
+        }
+    });
+});
+
 app.listen(port, () => {
     console.log("Running");
 });

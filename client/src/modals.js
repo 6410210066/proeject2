@@ -278,3 +278,20 @@ export function AlertkModal(props){
         </>
     )
 }
+
+export function SelectempProduct(props){
+    return (
+        <Modal show={props.show} onHide={props.onHide} centered >
+            <Modal.Body>
+                <h3 style={{textAlign:"center"}}>สินค้า</h3>
+                <p><b>ชื่อสินค้า :</b> {props.data.product_name}</p>
+                <p><b>ราคา :</b> {props.data.product_price}</p>
+                <p><b>ขนาด :</b> {props.data.product_size}</p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="success" onClick={props.onHide}>เพิ่ม</Button>
+                <Button variant="danger" onClick={props.onHide}>ยกเลิก</Button>
+            </Modal.Footer>
+        </Modal>
+    )
+}

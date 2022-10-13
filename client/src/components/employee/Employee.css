@@ -27,3 +27,48 @@
     font-size: 1.0em;
     color: black;
 }
+
+.box{
+    width: 100%;
+    height: auto;
+    margin-bottom: 10%;
+    background-color: #fadb6c;
+}
+
+.box1{   
+    width: 300px;
+    height: 370px;
+    margin: auto;
+    display: block;
+    background-color: #fdaa2e;
+}
+
+.box-down{
+    border: 1px solid rgb(195, 195, 195);
+    border-radius: 3px;
+    background-color: #fadb6c;
+    width: 100%;
+    height: auto;
+}
+
+.PhotoProduct{
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 4px;
+    background: #000;
+    padding: 2px;
+    width: 220px;
+    height: 180px;
+}
+
+.bg-ground{
+    background-color: #ffe480;
+}
+
+.tab-select{
+    width: 100%;
+    height: 0%;
+    margin: auto;
+    margin-bottom: 0;
+    background-color: rgba(132, 177, 41, 0);
+    
+}

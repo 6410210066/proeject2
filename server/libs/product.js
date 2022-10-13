@@ -26,5 +26,21 @@ module.exports={
         var sql = "SELECT * FROM product WHERE product_id = ?";
         sql = mysql.format(sql,[product_id]);
         return await pool.query(sql);
-    }
+    },
+
+    getByEmployeeproduct: async() => {
+        var sql = `SELECT 
+                    a.*,
+                    b.product_type_name
+                    FROM product a JOIN product_type b ON a.product_type_id = b.product_type_id WHERE b.product_type_id = ?`;
+        sql = mysql.format();
+        return await pool.query(sql);
+    },
+
+    updateImage: async (pool,product_img) => {
+        var sql = "UPDATE product SET image_url = ? "
+                    + "WHERE product_img = ?";
+        sql = mysql.format(sql, [product_img]);
+        return await pool.query(sql);
+    },
 }

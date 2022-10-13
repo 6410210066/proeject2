@@ -91,7 +91,7 @@ export default function Ownerbranch(){
                                         required
                                         type="text"
                                         value={branch_name}
-                                        placeholder="ค้นหาชื่อพนักงาน"
+                                        placeholder="ค้นหาชื่อสาขา"
                                         onChange={(e) => setBranch_name(e.target.value)}  
                                     />
                                     <Form.Control.Feedback type="invalid">
