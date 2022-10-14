@@ -2,7 +2,7 @@ import { Link,useNavigate,useParams} from "react-router-dom"
 import { useEffect, useState} from "react";
 import { AlertkModal, ConfirmModal, Detailmanagerrequest, PlusoOrTranferStockModal, PlusstockModal } from "../../modals";
 import { Button } from "react-bootstrap";
-import { API_POST,API_GAT, API_GET } from "../../api";
+import { API_POST,API_GET } from "../../api";
 import Ownernav from "./Ownernav";
 import SimpleDateTime  from 'react-simple-timestamp-to-date';
 
@@ -25,29 +25,45 @@ export default function ManagerRequestItem(props){
     const [plusstockamount,setPlusStockAmount]=useState(0);
     const [stock,setStock] =useState([]);
     const [request,setRequest] =useState({});
+    const [employee,setEmpolyee] =useState([]);
     const [branchname,setBranchname] =useState("");
-
+    const [mname,setMname] = useState("");
+    const [unit,setUnit] =useState("");
+    const [requestname,setRequstname]=useState("");
     useEffect(()=>{
         fetchRequest();
         setRequestid(params.request_id);
-        
+        fetchemp();
     },[]);
 
     useEffect(()=>{
         fetchStock();
+        
     },[request]);
 
     useEffect(()=>{
-        console.log(request);
+    
         stock.filter(stock => stock.stock_id == request.stock_id).map(item=>{
             setStockAmount(item.stock_amount);
             setBranchname(item.branch_name);
-            console.log(item);
+            setMname(item.m_name);
+            setUnit(item.m_unit);
         })
         setPlusStockAmount(request.request_amount);
     },[stock]);
 
-    
+    useEffect(()=>{
+        employee.filter(employee => employee.emp_id == request.emp_id).map(item=>{
+            setRequstname(item.firstname +" " +item.lastname);
+        })
+    },[employee]);
+
+    const fetchemp = async ()=>{
+        let json = await API_GET("employee");
+        if(json.result){
+            setEmpolyee(json.data);
+        }
+    }
     const fetchStock = async()=>{
         let json = await API_GET("stock");
         if(json.result){
@@ -181,19 +197,52 @@ export default function ManagerRequestItem(props){
                         <Ownernav page={page} />
                 </div>
                 <div className="col-lg-10 content overfloww" style={{padding:"0"}}>
-                    <div className="request-item-content">
+                    <div className="request-item-content mt-5">
                         <div className="row mb-5">
-                            <h3 className="header">รายละเอียดคำขอ</h3>
-                            <span className="col-5">รหัสคำขอที่ : {request.request_id}</span><span className="col-3">วันที่ : <SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":" showTime="0">{request.request_date}</SimpleDateTime></span>
-                                                                                           <span className="col-3 ps-1">เวลา : <SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":" showDate="0">{request.request_date}</SimpleDateTime></span>
-                            <span>สาขาที่ขอ : {branchname}</span>
-                            <span></span>
+                            <div className="row mb-3">
+                                <h3 className="header col-11 ps-5">รายละเอียดคำขอ</h3>
+                                <div className="col-1">
+                                    <Button className="btn  mt-3" variant="" href={`/request`} >
+                                        <i className="fa-sharp fa-solid fa-xmark"></i>
+                                    </Button>
+                                </div>
+                            </div>
+                          
+                            {console.log(request)}
+                            <span className="col-5">รหัสคำขอที่ : 
+                                <span className=" detail">{request.request_id}</span> 
+                            </span> 
+                            
+                            <span className="col-6">สถานะ : 
+                                <span className="detail">{request.status_name}</span>
+                            </span>
+                            <span className="col-5">วันที่ : 
+                                <span className="detail"> <SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":" showTime="0">{request.request_date}</SimpleDateTime></span>   
+                            </span>
+                            <span className="col-6 ">เวลา : 
+                                <span className="detail"> <SimpleDateTime format="MHS"  timeSeparator=":" showTime="1" showDate="0">{request.request_date}</SimpleDateTime></span>
+                            </span>
+                            <span>สาขาที่ขอ : 
+                                <span className="detail">{branchname}</span>
+                            </span>
+                            <span>ชื่อผู้ขอ : 
+                                <span className="detail">{requestname}</span>
+                            </span>
+                            <span className="col-12">รายการที่ขอ : 
+                                <span className="detail">{mname}</span>
+                            </span> 
+                            <span className="col-12">จำนวน : 
+                                <span className="detail">{request.request_amount} {unit}</span>
+                            </span>
+                            <span className="col-12">รายละเอียด : 
+                                <span className="detail">{request.request_description}</span>
+                            </span>
                         </div>
                         
-                        <div className="">
+                        <div className="mb-4">
                             <Button className="me-4" variant="success" onClick={approve}>อนุมัติ</Button>
                             <Button className="me-4" variant="danger" onClick={reject}>ไม่อนุมัติ</Button>
-                            <Button className="me-4" variant="danger" href={`/request`} >ย้อนกลับ</Button>
+                            {/* <Button className="me-4" variant="danger" href={`/request`} >ย้อนกลับ</Button> */}
                         </div>
                     </div>
                 </div>

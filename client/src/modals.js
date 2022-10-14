@@ -1,6 +1,6 @@
 import {Modal,Button,} from "react-bootstrap";
 import { Form,Col } from "react-bootstrap";
-
+import { SERVER_URL } from "./app.config";
 export  function Detailproductmodal(props) {
 
     return(
@@ -13,6 +13,9 @@ export  function Detailproductmodal(props) {
                 </Modal.Header>
                 <Modal.Body>
                         <div className="row">
+                            <div className="col-12">
+                                <img src={`${SERVER_URL}images/${props.info.product_img}`} width={150} alt="Upload status" />
+                            </div>
                             <div className="col-12">
                                 <h5>รหัสสินค้า :  {props.info.product_id}</h5>
                             </div>

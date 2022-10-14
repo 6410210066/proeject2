@@ -10,7 +10,7 @@ module.exports={
     },
 
     getByrequestId: async(pool,request_id) => {
-        var sql = "SELECT * FROM `stockrequest` WHERE request_id =? ";
+        var sql = "SELECT r.*,s.status_name FROM stockrequest r JOIN status s ON r.status_id = s.status_id WHERE request_id =? ";
         sql = mysql.format(sql,[request_id]);
         return await pool.query(sql);
     },
