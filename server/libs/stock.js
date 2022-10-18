@@ -49,9 +49,10 @@ module.exports={
         var sql ="SELECT s.m_id, SUM(s.stock_amount) as stock_count, m.m_name FROM stock s JOIN material m ON s.m_id = m.m_id GROUP BY m.m_id";
         return await pool.query(sql);
     },
-    checkStock : async(pool,m_id,stock_amount,branch_id) =>{
-        var sql = "SELECT s.*,m.m_name,m.m_unit,m.Minimum FROM stock s JOIN material m ON s.m_id = m.m_id WHERE m.m_id = ? AND s.stock_amount >= m.Minimum + ? AND s.branch_id <> ?;";
-        sql =mysql.format(sql,[m_id,stock_amount,branch_id]);
+    checkStock : async(pool,m_id,branch_id) =>{
+        // var sql = "SELECT sum(s.stock_amount) FROM stock s JOIN material m ON s.m_id = m.m_id WHERE m.m_id = ? AND s.stock_amount >= m.Minimum + ? AND s.branch_id <> ?;";
+        var sql = "SELECT sum(s.stock_amount)as sum ,m.Minimum,COUNT(*)as count FROM stock s JOIN material m ON s.m_id = m.m_id WHERE m.m_id = ? AND s.branch_id <> ?"
+        sql =mysql.format(sql,[m_id,branch_id]);
         return await pool.query(sql);
     }
 }

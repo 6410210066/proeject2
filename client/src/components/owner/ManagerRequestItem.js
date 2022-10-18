@@ -30,6 +30,7 @@ export default function ManagerRequestItem(props){
     const [mname,setMname] = useState("");
     const [unit,setUnit] =useState("");
     const [requestname,setRequstname]=useState("");
+    const [mid,setMid] =useState(0);
     useEffect(()=>{
         fetchRequest();
         setRequestid(params.request_id);
@@ -48,6 +49,7 @@ export default function ManagerRequestItem(props){
             setBranchname(item.branch_name);
             setMname(item.m_name);
             setUnit(item.m_unit);
+            setMid(item.m_id);
         })
         setPlusStockAmount(request.request_amount);
     },[stock]);
@@ -136,25 +138,21 @@ export default function ManagerRequestItem(props){
     const checkStock = async ()=>{
 
         let json = await API_POST("checkstock",{
-            m_id : request.m_id,
-            stock_amount : request.request_amount,
+            m_id : mid,
             branch_id : request.branch_id
         });
         if(json.result){
             addstockinfo(json.data);
         }
-       
-
     }
 
     const addstockinfo = async(stock)=>{
-        let data = [];
-        data.push(props.data);
-         stock.map(item=>{
-             data.push(item);
-        });
-        if(stock.length >0){
-            navigate('/transfer',{replace:true,state:data});
+       let data = stock[0];
+       let total = ( data.sum - parseInt((data.Minimum * data.count))) - request.request_amount ;
+       console.log(total);
+        if(total > 0){
+            console.log("go transfer");
+            navigate('/owner/transferrequest',{replace:true,state:request});
         }else{
             onAlert();
             console.log("go to add stock");
@@ -169,7 +167,7 @@ export default function ManagerRequestItem(props){
         });
         if(json.result){
             setShowrejectmodal(false);
-         
+            navigate('/request',{replace:true,state:request});
         }
 
     }
@@ -208,7 +206,7 @@ export default function ManagerRequestItem(props){
                                 </div>
                             </div>
                           
-                            {console.log(request)}
+                     
                             <span className="col-5">รหัสคำขอที่ : 
                                 <span className=" detail">{request.request_id}</span> 
                             </span> 
@@ -248,11 +246,6 @@ export default function ManagerRequestItem(props){
                 </div>
             </div>
         </div>
-           
-            
-            
-
-
 
             <ConfirmModal
             show={showrejectmodal}

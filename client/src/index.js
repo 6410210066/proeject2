@@ -32,6 +32,8 @@ import Reportstockbybranch from './components/owner/report/Reportstockbybranch';
 import ReportAllstock from './components/owner/report/ReportAllstock';
 import ManagerTransfer from './components/manager/ManagerTransfer';
 import ManagerRequestItem from './components/owner/ManagerRequestItem';
+import TransferReqeust from './components/owner/TransferRequest';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -62,6 +64,9 @@ root.render(
       <Route path="owner/reportallstock" element={<ReportAllstock />} />
       <Route path="manager/managetransfer" element={<ManagerTransfer/>} />
       <Route path="owner/maangerequest/:request_id" element={<ManagerRequestItem/>}/>
+      <Route path="owner/transferrequest" element={<TransferReqeust/>} />
+
+
     </Routes>
   </BrowserRouter>,
   // document.getElementById('root')

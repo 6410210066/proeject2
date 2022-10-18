@@ -14,6 +14,7 @@ export  function Detailproductmodal(props) {
                 <Modal.Body>
                         <div className="row">
                             <div className="col-12">
+                                {console.log(`${SERVER_URL}images/${props.info.product_img}`)}
                                 <img src={`${SERVER_URL}images/${props.info.product_img}`} width={150} alt="Upload status" />
                             </div>
                             <div className="col-12">

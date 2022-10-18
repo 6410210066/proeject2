@@ -171,7 +171,7 @@ export default function Transfer(){
 
     const checkStockAmount = async()=>{
         setCheckbtn(false);
-       if(stock_amount > (amount-minimum) || stock_amount < 1){
+       if(stock_amount > (amount- minimum) || stock_amount < 1){
             setCheckbtn(true);
        }
     }

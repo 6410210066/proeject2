@@ -69,7 +69,7 @@ export default function ProductForm(){
             product_price : product_price,
             product_size :product_size,
             product_weight :product_weight,
-            product_img :product_img,
+            product_img :imageUrl,
             product_type_id:product_type_id
         });
         if(json.result){
@@ -86,7 +86,7 @@ export default function ProductForm(){
             product_price : product_price,
             product_size :product_size,
             product_weight :product_weight,
-            product_img :product_img,
+            product_img :imageUrl,
             product_type_id:product_type_id
         });
         if(json.result){
@@ -104,7 +104,7 @@ export default function ProductForm(){
     const onUploadImage = async () => {
         const formData = new FormData();
         formData.append('file',selectedFile);
-
+        
         let response = await fetch(
             SERVER_URL + "api/product/upload/" + product_id,
             {

@@ -151,7 +151,7 @@ export default function OwnerStock(){
     const onSearch = async(event)=>{
         const form = event.currentTarget;
         event.preventDefault(); //ไม่ให้รีเฟรชหน้า
-
+        console.log(stock);
         if (form.checkValidity() === false) {
             event.stopPropagation();
         } else {
@@ -159,6 +159,7 @@ export default function OwnerStock(){
                 keys: ['stock_id', 'm_name']
             });
             let searchdata =  fuse.search(stockname);
+            console.log(searchdata);
             let data1 =[]
             searchdata.map(item =>{
                 data1.push(item.item);

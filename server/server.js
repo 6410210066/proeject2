@@ -341,7 +341,6 @@ app.get('/api/product', (req,res)=>{
 
 app.post('/api/product/add',checkAuth, async(req,res)=>{
     const input = req.body;
-    console.log(input.product_img);
     try{
         var result = await product.createProduct(pool,input.product_name,input.product_price,input.product_size,
                                                 input.product_weight,input.product_img,input.product_type_id);
@@ -360,7 +359,6 @@ app.post('/api/product/add',checkAuth, async(req,res)=>{
 
 app.post('/api/product/update',checkAuth,async(req,res)=>{
     const input = req.body;
-    
     try{
         var result = await product.updataProduct(pool,input.product_id,input.product_name,input.product_price,input.product_size,
                                                 input.product_weight,input.product_img,input.product_type_id);
@@ -403,7 +401,7 @@ app.get('/api/product/:product_id',async(req,res)=>{
             result: true,
             data: result
         });
-        console.log("re ="+ result);
+
 
     }catch(ex){
         res.json({
@@ -506,7 +504,7 @@ app.get('/api/employee/:emp_id',async(req,res)=>{
     }
 });
 app.get('/api/stock', (req,res)=>{
-    pool.query("SELECT a.stock_id,b.m_name, a.stock_amount, b.m_unit,c.branch_name,a.branch_id ,b.m_id FROM stock a join material b join branch c WHERE a.m_id = b.m_id AND a.branch_id =c.branch_id ORDER BY stock_id ASC",function(error,results,fields){
+    pool.query("SELECT a.stock_id,b.m_name, a.stock_amount, b.m_unit,b.minimum,c.branch_name,a.branch_id ,b.m_id FROM stock a join material b join branch c WHERE a.m_id = b.m_id AND a.branch_id =c.branch_id ORDER BY stock_id ASC",function(error,results,fields){
         if(error){
             res.json({
                 result: false,
@@ -531,7 +529,7 @@ app.post('/api/stock/add',async(req,res)=>{
     const input = req.body;
     try{
         var result = await stock.createStock(pool,input.m_id,input.stock_amount,input.branch_id);
-        console.log(result);
+
         res.json({
             result: true
         });
@@ -606,7 +604,7 @@ app.get('/api/branch', (req,res)=>{
 
 app.post('/api/branch/add',checkAuth,async(req,res)=>{
     const input = req.body;
-    console.log(input);
+   
     try{
         var result = await branch.createBranch(pool,input.branch_name,input.branch_address,input.emp_id);
         res.json({
@@ -791,7 +789,7 @@ app.post('/api/requestbyrequestid', async(req,res)=>{
     
     try{
         var result = await requeststock.getByrequestId(pool,input.request_id);
-        console.log(result);
+      
         res.json({
             result: true,
             data: result
@@ -985,9 +983,9 @@ app.get("/api/reportallstock",checkAuth, async(req,res)=>{
 
 app.post("/api/checkstock", async(req,res)=>{
     const input = req.body;
-
+    
     try{
-        var result = await stock.checkStock(pool,input.m_id,input.stock_amount,input.branch_id);
+        var result = await stock.checkStock(pool,input.m_id,input.branch_id);
         res.json({
             result: true,
             data: result

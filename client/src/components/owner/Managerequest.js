@@ -11,22 +11,22 @@ export default function Managerquest(){
 
     let page=5;
         const [data,setData] = useState([]);
-        const [showModal,setShowModal] = useState(false);
-        const [modelrequestInfo,setModelRequestInfo] = useState([]);
-        const [validated,setValidated] = useState(false);
+        // const [showModal,setShowModal] = useState(false);
+        // const [modelrequestInfo,setModelRequestInfo] = useState([]);
+        // const [validated,setValidated] = useState(false);
 
     useEffect(()=>{
         
         fetchStockrequest();
     },[])
 
-    const onConfirm = () => {
-        setShowModal(false);
-    }
+    // const onConfirm = () => {
+    //     setShowModal(false);
+    // }
 
-    const onShowDetail = async() => {
-        setShowModal(true);
-    }
+    // const onShowDetail = async() => {
+    //     setShowModal(true);
+    // }
 
     const fetchStockrequest = async()=> {
         let json = await API_GET("request");
