@@ -169,7 +169,7 @@ export default function ProductForm(){
                 </Form.Group>
 
                 <Form.Group controlId='validateProductwight'>
-                    <Form.Label>น้ำหนัก</Form.Label>
+                    <Form.Label>น้ำหนัก/กรัม</Form.Label>
                     <Form.Control 
                         type='text'
                         value={product_weight}
@@ -182,7 +182,7 @@ export default function ProductForm(){
                     </Form.Control.Feedback>
                 </Form.Group>
                 
-                <div className="container m-auto">
+                <div className="container m-auto ">
                 <Form>
                     <Row>
                         <Form.Group as={Col} md="3" controlId="formImage" className="mb-3">

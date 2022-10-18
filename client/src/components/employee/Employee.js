@@ -4,8 +4,9 @@ import { API_GET} from "../../api";
 import { Link } from "react-router-dom";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { SelectempProduct } from "../../modals";
+import { Selectbasket, SelectempProduct } from "../../modals";
 import { SERVER_URL } from "../../app.config";
+import { Button,Table } from "react-bootstrap";
 
 export default function Employee(){
 
@@ -18,12 +19,16 @@ export default function Employee(){
         const [ShowSelectempProduct,setShowSelectempProduct] = useState(false);
         const [selectproduct,setSelectproduct] = useState([]);
         const [selectdata,setSelectdata] = useState({});
+        const [ShowSelectbasket,setShowSelectbasket] = useState(false);
+        const [list,setList] = useState([]);
+        const [amountproduct,setAmountproduct] = useState(0);
+        const [net,setNet] = useState(0);
+
         const [validated,setValidated] =useState(false);
         const [imageUrl, setImageUrl] = useState("");
 
     useEffect(()=>{
         fetchData();
-
 
     },[])
     
@@ -43,10 +48,16 @@ export default function Employee(){
     const ONClick = (item)=>{
         setSelectdata(item);
         setShowSelectempProduct(true);
+        setShowSelectbasket(true);
     }
 
     const ONHide = ()=>{
         setShowSelectempProduct(false);
+        setShowSelectbasket(false);
+    }
+
+    const ondelete = async()=>{
+       
     }
 
     return(
@@ -57,7 +68,7 @@ export default function Employee(){
                         <Employeenav page={page}/>
                     </div>
                     <div className="col-lg-10 col-sm-12 content px-5 overfloww" style={{padding:"0"}}>
-                       <h1 className="header pt-4">สินค้า</h1>
+                       <h1 className="header pt-2">สินค้า</h1>
                         <div>
                             <Tabs
                                 id="controlled-tab-example"
@@ -73,15 +84,14 @@ export default function Employee(){
                                             
                                             <div class="box1 m-auto my-4 col-6 col-md-4 p-4 " onClick={event =>ONClick(item)} key={item.product_id}>
                                                 <div className="PhotoProduct m-auto">
-                                                    {/* <img src={`${SERVER_URL}images/${imageUrl}`} width={150} alt="Upload status" />
-                                                    {item.product_img} */}
+                                                    <img className="pic-size" src={`${SERVER_URL}images/${item.product_img}`} alt="Upload status" />
                                                 </div>
                                                     <div className="pt-3">
-                                                        <p>{item.product_name} {item.product_price} บาท</p>
-                                                        <p>ขนาดไซต์ {item.product_size}</p>
-
+                                                        <p>ชื่อสินค้า : {item.product_name} </p>
+                                                        <p>ขนาดไซต์ : {item.product_size}</p>
+                                                        <p>ราคา : {item.product_price} บาท</p>
+                                                        
                                                     </div> 
-                                                    
                                             </div>
                                             
                                         ))
@@ -94,12 +104,14 @@ export default function Employee(){
                                     {
                                         data.filter(data => data.product_type_id ==2).map(item => (
 
-                                            <div class="box1 m-auto my-4 col-6 col-md-4 p-4 ">
+                                            <div class="box1 m-auto my-4 col-6 col-md-4 p-4 " onClick={event =>ONClick(item)} key={item.product_id}>
                                                 <div className="PhotoProduct m-auto">
+                                                    <img className="pic-size" src={`${SERVER_URL}images/${item.product_img}`} alt="Upload status" />
                                                 </div> 
                                                     <div className="pt-3">
-                                                        <p>{item.product_name} {item.product_price} บาท</p>
-                                                        <p>ขนาดไซต์ {item.product_size}</p>
+                                                        <p>ชื่อสินค้า : {item.product_name} </p>
+                                                        <p>ขนาดไซต์ : {item.product_size}</p>
+                                                        <p>ราคา : {item.product_price} บาท</p>
                                                 
                                                     </div> 
                                             </div>
@@ -112,13 +124,35 @@ export default function Employee(){
                                 <div class="row bg-ground">
                                         {
                                             data.filter(data => data.product_type_id ==3).map(item => (
-                                                <div class="box1 m-auto my-4 col-6 col-md-4 p-4 ">
+                                                <div class="box1 m-auto my-4 col-6 col-md-4 p-4 " onClick={event =>ONClick(item)} key={item.product_id}>
                                                     <div className="PhotoProduct m-auto">
+                                                        <img className="pic-size" src={`${SERVER_URL}images/${item.product_img}`} alt="Upload status" />
                                                     </div> 
                                                         <div className="pt-3">
-                                                            <p>{item.product_name} {item.product_price} บาท</p>
-                                                            <p>ขนาดไซต์ {item.product_size}</p>
-                                                    
+                                                            <p>ชื่อสินค้า : {item.product_name} </p>
+                                                            <p>ขนาดไซต์ : {item.product_size}</p>
+                                                            <p>ราคา : {item.product_price} บาท</p>
+                                                        
+                                                        </div> 
+                                                </div>
+                                            ))
+                                        }
+                                        
+                                </div>
+                            </Tab>
+
+                            <Tab eventKey="product4" title="ท็อปปิ้ง">
+                                <div class="row bg-ground">
+                                        {
+                                            data.filter(data => data.product_type_id ==4).map(item => (
+                                                <div class="box1 m-auto my-4 col-6 col-md-4 p-4 " onClick={event =>ONClick(item)} key={item.product_id}>
+                                                    <div className="PhotoProduct m-auto">
+                                                        <img className="pic-size" src={`${SERVER_URL}images/${item.product_img}`} alt="Upload status" />
+                                                    </div> 
+                                                        <div className="pt-3">
+                                                            <p>ชื่อสินค้า : {item.product_name} </p>
+                                                            <p>ขนาดไซต์ : {item.product_size}</p>
+                                                            <p>ราคา : {item.product_price} บาท</p>
                                                         </div> 
                                                 </div>
                                             ))
@@ -129,18 +163,67 @@ export default function Employee(){
 
                             </Tabs>
                         </div>
-                            <h2 className="header pt-4">รายการการสั่ง</h2>
-                                <div className="box-down px-4 mt-2">
-                                    {/* <Users page={page}/> */} 
+
+                        <div class="mx-5 bg-ground1">
+                            <h2 className="header pt-4">รายการสินค้า</h2>
+                        
+                                <Table striped className="mx-5 grid">
+                                    <thead style={{backgroundColor:"#FFC700"}}>
+                                        <tr>
+                                            <th>ชื่อสินค้า</th>
+                                            <th>ขนาดสินค้า</th>
+                                            <th>ราคา</th>
+                                            <th>จำนวน</th>
+                                            <th>ราคารวม</th>
+                                            <th>ลบ</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody> 
+                                             {
+                                                list != null && 
+                                                list.map(item=>(
+                                                    
+                                                    <>
+                                                        <tr>
+                                                            <td>{item.product_name}</td>
+                                                            <td>{item.product_size}</td>
+                                                            <td>{item.product_price}</td>
+                                                            <td>{item.amount}</td>
+                                                            <td>{item.total}</td>
+                                                            <td className="align-middle"><button onClick={ondelete} className="btn btn-danger btn-sm">ลบ</button></td>
+                                                        </tr>
+                                                    </>
+                                                ))
+                                             }
+                                        
+                                        </tbody>
                                     
-                                    <h5>จำนวนสินค้า บาท</h5>
-                                    <h5>ราคารวม บาท</h5>
-                                    
-                                </div>
+                                        
+                                </Table>   
+                                    <div className="row box-down1 px-2 mt-2">
+                                        <h5 className="col-6">จำนวนสินค้า<input className="d-inline-block mx-1 textbox-plus form-control form-control-sm" value={amountproduct}></input>ชิ้น </h5> 
+                                        <h5 className="col-6">ราคารวม <input className="d-inline-block mx-1 textbox-plus form-control form-control-sm" value={net}></input>บาท</h5>
+                                    </div>  
+
+                                    <div class="d-grid px-5 gap-3 px-4 mt-4">
+                                        <Button className="btn" variant="success" onClick={ONHide}>ชำระเงิน</Button>
+                                    </div> 
+                        </div>
+
                     </div>
                 </div>
             </div>
-            <SelectempProduct show={ShowSelectempProduct} data={selectdata} onHide={ONHide}/>   
+            <SelectempProduct 
+                show={ShowSelectempProduct} 
+                data={selectdata} 
+                onHide={ONHide} 
+                setlist={setList} 
+                setAmountproduct={setAmountproduct} 
+                setNet={setNet} 
+                list={list}/>   
+                
+            {/* <Selectbasket show={ShowSelectbasket} data={selectdata} onHide={ONHide}/> */}
         </>
     )
 }

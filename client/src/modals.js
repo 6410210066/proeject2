@@ -1,6 +1,9 @@
 import {Modal,Button,} from "react-bootstrap";
 import { Form,Col } from "react-bootstrap";
 import { SERVER_URL } from "./app.config";
+import "./././components/employee/Employee.css";
+import { useState } from 'react';
+
 export  function Detailproductmodal(props) {
 
     return(
@@ -284,18 +287,123 @@ export function AlertkModal(props){
 }
 
 export function SelectempProduct(props){
+
+    const [number, setNumber] = useState(0);
+    const [calAmount, setCalAmount] = useState(0);
+    const [calNet , setCalNet] = useState(0);
+    let amount = 0;
+    let net = 0;
+
+    const PlusCount = () => {
+        setNumber(number + 1);
+    }
+
+    const MinusCount = () => {
+        if(number > 0){
+            setNumber(number - 1);
+        }
+    }
+
+    const onclickbasket = () =>{
+        let sum = parseInt(props.data.product_price) * number;
+        let data = [];
+        let list = props.list;
+        if(list.length >0){
+            console.log(list);
+            data.push(...list);
+
+        }else{
+
+        }
+       
+        let json ={
+            product_img: props.data.product_img,
+            product_name: props.data.product_name,
+            product_price : props.data.product_price,
+            product_size: props.data.product_size,
+            product_weight: props.data.product_weight,
+            amount : number,
+            total :sum
+
+
+        }
+        data.push(json);
+
+        amount = calAmount + number;
+        setCalAmount(amount);
+
+        net = calNet + sum;
+        setCalNet(net);
+
+        props.setAmountproduct(amount);
+        props.setNet(net);
+    
+        props.setlist(data);
+        setNumber(0);
+        props.onHide();
+    }
+
     return (
         <Modal show={props.show} onHide={props.onHide} centered >
             <Modal.Body>
                 <h3 style={{textAlign:"center"}}>สินค้า</h3>
-                <p><b>ชื่อสินค้า :</b> {props.data.product_name}</p>
-                <p><b>ราคา :</b> {props.data.product_price}</p>
-                <p><b>ขนาด :</b> {props.data.product_size}</p>
+                <div className="picsize">
+                    <img className="pic-size-m" src={`${SERVER_URL}images/${props.data.product_img}`} alt="Upload status" />
+                </div>
+                <div className="p-3 ">
+                    <p><b>ชื่อสินค้า :</b> {props.data.product_name}</p>
+                    <p><b>ราคา :</b> {props.data.product_price} <b>บาท</b></p>
+                    <p><b>ขนาดสินค้า :</b> {props.data.product_size}</p>
+
+                    <div className="row">
+                            <div className="col-2 text-start">
+                                <p><b>จำนวน :</b></p>
+                            </div>
+                            <div className="col-10 p-0">
+                                <div>
+                                    <button onClick={MinusCount} type="button" className="d-inline-block btn-sm btn btn-info">-</button>
+                                   
+                                    <input className="d-inline-block mx-2 textbox-plus form-control form-control-sm " value={number} type="number"></input>
+                        
+                                    <button onClick={PlusCount} type="button"  className="d-inline-block btn-sm btn btn-info">+</button>
+                                </div>
+                            </div>
+                    
+                    </div>
+                </div>
+                
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="success" onClick={props.onHide}>เพิ่ม</Button>
+                <div className="center-button">
+                <Button className="me-2 " variant="primary" onClick={onclickbasket}>เพิ่มสินค้าลงในตะกร้า</Button>
                 <Button variant="danger" onClick={props.onHide}>ยกเลิก</Button>
+                </div>
             </Modal.Footer>
         </Modal>
     )
 }
+
+// export function Selectbasket(props){
+
+//     return(
+//         <>
+//             <Modal show={props.show} onHide={props.onHide} centered >
+//                 <Modal.Header>
+//                     <Modal.Title>
+//                         <h4>ตะกร้าสินค้า</h4>
+//                     </Modal.Title>
+    
+//                 </Modal.Header>
+//                 <Modal.Body>
+//                     <p>{props.data.product_name} {props.data.product_price} {props.data.product_size}</p>
+                    
+//                 </Modal.Body>
+//                 <Modal.Footer>
+//                     <div className="center-button">
+//                         <Button className="me-2" variant="success" onClick={props.onHide}>ชำระเงิน</Button>
+//                     </div>
+//                 </Modal.Footer>
+//             </Modal>
+//         </>
+//     )
+// }
