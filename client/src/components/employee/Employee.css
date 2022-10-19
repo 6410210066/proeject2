@@ -40,7 +40,7 @@
     height: 370px;
     margin: auto;
     display: block;
-    background-color: #fdaa2e;
+    background-color: #ffcc7f;
 }
 
 .box-down{
@@ -61,7 +61,7 @@
 }
 
 .bg-ground{
-    background-color: #ffe480;
+    background-color: #f4f4f4;
 }
 
 .tab-select{
@@ -108,13 +108,15 @@
 }
 
 .bg-ground1{
-    background-color: #ffe8a4;
+    background-color: #ffe188;
+    height: auto;
 }
 
 .box-down1{
-    border: 1px solid rgb(195, 195, 195);
     border-radius: 3px;
-    background-color: #2f97ff;
-    width: 100%;
-    height: auto;
+    background-color: #2c95ff;
+    width: 90%;
+    height: 50px;
+    margin-right: 20px;
+    margin: auto;
 }

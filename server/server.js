@@ -24,6 +24,7 @@ const { request } = require("http");
 const material = require("./libs/material");
 const transfer = require("./libs/transfer");
 const { cp } = require("fs");
+const sellrecord = require("./libs/sellrecord");
 
 var pool = mysql.createPool({
     connectionLimit: 10,
@@ -1165,6 +1166,57 @@ app.post('/api/transfer/updatedescription/recipient', async(req,res)=>{
         })
     }
 
+});
+
+app.post('/api/sellrecord/add',checkAuth, async (req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await sellrecord.createSellrecord(pool,input.emp_id,input.branch_id,input.piece,input.total,
+                                                        input.getmoney,input.paychange);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+});
+
+app.post('/api/selllist/add',checkAuth, async (req,res)=>{
+    const input = req.body;
+
+    try{
+        var result = await sellrecord.createSelllist(pool,input.product_id,input.piece,input.branch_id,input.total,input.s_id);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+});
+
+app.get('/api/selectMaxId', checkAuth, async (req,res)=>{
+    
+    try{
+        var result = await sellrecord.selectMaxId(pool);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
 });
 
 app.listen(port, () => {

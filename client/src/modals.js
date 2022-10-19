@@ -317,6 +317,7 @@ export function SelectempProduct(props){
         }
        
         let json ={
+            product_id: props.data.product_id,
             product_img: props.data.product_img,
             product_name: props.data.product_name,
             product_price : props.data.product_price,

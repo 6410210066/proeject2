@@ -1,7 +1,7 @@
 import Employeenav from "./Employeenav";
 import { useEffect, useState } from "react";
-import { API_GET} from "../../api";
-import { Link } from "react-router-dom";
+import { API_GET, API_POST} from "../../api";
+import { Link, Navigate } from "react-router-dom";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import { Selectbasket, SelectempProduct } from "../../modals";
@@ -24,10 +24,18 @@ export default function Employee(){
         const [amountproduct,setAmountproduct] = useState(0);
         const [net,setNet] = useState(0);
 
+        const [emp_id,setEmp_id] = useState(0);
+        const [branch_id,setBranch_id] = useState(0);
+        const [piece,setPiece] = useState(0);
+        const [total,setTotal] = useState(0);
+        const [getmoney,setGetmoney] = useState(0);
+        const [paychange,setPaychange] = useState(0);
         const [validated,setValidated] =useState(false);
         const [imageUrl, setImageUrl] = useState("");
 
     useEffect(()=>{
+        let emp_id = localStorage.getItem("emp_id");
+        let branch_id = localStorage.getItem("branch_id");
         fetchData();
 
     },[])
@@ -56,6 +64,30 @@ export default function Employee(){
         setShowSelectbasket(false);
     }
 
+    const payment = async() => {
+        let getmoney = 100;
+        let paychange = 100;
+        const json = await API_POST("sellrecord/add",{
+            emp_id: emp_id,
+            branch_id: branch_id,
+            piece: amountproduct,
+            total: net,
+            getmoney: getmoney,
+            paychange: paychange
+        });
+            if(json.result){
+                console.log("เพิ่มสำเร็จ");
+            const json = await API_GET("selectMaxId");
+            console.log(json.data);
+
+                for(const i=0; i<amountproduct; i++){
+                    
+                }
+            }   
+            
+        }
+    
+
     const ondelete = async()=>{
        
     }
@@ -67,7 +99,7 @@ export default function Employee(){
                     <div className="col-lg-2  col-sm-12 " style={{padding:"0"}}>
                         <Employeenav page={page}/>
                     </div>
-                    <div className="col-lg-10 col-sm-12 content px-5 overfloww" style={{padding:"0"}}>
+                    <div className="col-lg-10 col-sm-12 content px-5 overfloww " style={{padding:"0"}}>
                        <h1 className="header pt-2">สินค้า</h1>
                         <div>
                             <Tabs
@@ -76,9 +108,9 @@ export default function Employee(){
                                 onSelect={(k) => setKey(k)}
                                 className="mb-0 tab-select mt-2"
                                 >
-                            <Tab eventKey="product1" title="เฟรนฟราย" className="m-0">
+                            <Tab eventKey="product1" title="เฟรนฟราย" className="m-0 Regular shadow">
                                 
-                                <div class="row bg-ground">
+                                <div class="row bg-ground ">
                                     {
                                         data.filter(data => data.product_type_id == 1).map(item => (
                                             
@@ -163,10 +195,9 @@ export default function Employee(){
 
                             </Tabs>
                         </div>
-
-                        <div class="mx-5 bg-ground1">
-                            <h2 className="header pt-4">รายการสินค้า</h2>
-                        
+                        <h2 className="header">รายการสินค้า</h2>
+                        <div class="mx-4 pt-4 bg-ground1 Regular shadow">
+                            
                                 <Table striped className="mx-5 grid">
                                     <thead style={{backgroundColor:"#FFC700"}}>
                                         <tr>
@@ -201,13 +232,14 @@ export default function Employee(){
                                     
                                         
                                 </Table>   
-                                    <div className="row box-down1 px-2 mt-2">
-                                        <h5 className="col-6">จำนวนสินค้า<input className="d-inline-block mx-1 textbox-plus form-control form-control-sm" value={amountproduct}></input>ชิ้น </h5> 
-                                        <h5 className="col-6">ราคารวม <input className="d-inline-block mx-1 textbox-plus form-control form-control-sm" value={net}></input>บาท</h5>
+                                    <div className="row box-down1 px-4 mt-2 ">
+                    
+                                        <h5 className="col-6 pt-2">จำนวนสินค้า<input className="d-inline-block mx-1 textbox-plus form-control form-control-sm" value={amountproduct}></input>ชิ้น </h5> 
+                                        <h5 className="col-6 pt-2">ราคารวม <input className="d-inline-block mx-1 textbox-plus form-control form-control-sm" value={net}></input>บาท</h5>
                                     </div>  
 
-                                    <div class="d-grid px-5 gap-3 px-4 mt-4">
-                                        <Button className="btn" variant="success" onClick={ONHide}>ชำระเงิน</Button>
+                                    <div class="d-grid px-5 gap-3 px-4 my-4 pb-4">
+                                        <Button className="btn" variant="success" onClick={payment}>ชำระเงิน</Button>
                                     </div> 
                         </div>
 
