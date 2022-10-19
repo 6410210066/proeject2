@@ -1131,6 +1131,42 @@ app.post("/api/product/upload/:productid", (req,res) => {
     });
 });
 
+
+app.post('/api/transfer/updatedescription/sender', async(req,res)=>{
+    const input = req.body;
+    console.log(input);
+    try{
+        result = await transfer.updateDescriptionSender(pool,input.t_description_sender,input.time_sender,input.t_id);
+        res.json({
+            result:true,
+            data: result
+        })
+    }catch(ex){
+        res.json({
+            result:true,
+            message: ex.message
+        })
+    }
+
+});
+
+app.post('/api/transfer/updatedescription/recipient', async(req,res)=>{
+    const input = req.body;
+    try{
+        result = await transfer.updataDescriptionRecipient(pool,input.t_description_recipient,input.time_recipient,input.t_id);
+        res.json({
+            result:true,
+            data: result
+        })
+    }catch(ex){
+        res.json({
+            result:true,
+            message: ex.message
+        })
+    }
+
+});
+
 app.listen(port, () => {
     console.log("Running");
 });

@@ -134,7 +134,7 @@ body{
 
 .request-item{
     background-color: rgba(181, 182, 179, 0.892);
-    width: 85%;
+    width: 90%;
     margin: auto; 
     border-radius: 8px;
     padding: 9px;
@@ -159,18 +159,25 @@ body{
 .transfer-tab{
     background-color: #ffffff;
     height: auto;
-    width: 70%;
+    width: 90%;
     margin: auto;
     color: #000000;
    
 }
 
 .transfer-item{
-    width: 85%;
+    width: 90%;
     height: auto;
     /* padding-top: 30px; */
     background-color: #ffffff;
     border: solid 2px #ababab;
+}
+.logo{
+    width: 150px;
+    height: 140px;
+    padding: 0;
+    margin: auto;
+    margin-top: 10px;
 }
 
 .transfer-item-text{

@@ -4,6 +4,7 @@ import {Form,Row,Col,Button} from 'react-bootstrap';
 import {API_GET,API_POST} from '../../api';
 import { useNavigate } from 'react-router-dom';
 
+
 export default function ManagerstockRequest(){
 
     let page =4;
@@ -18,6 +19,7 @@ export default function ManagerstockRequest(){
     // const [branch,setBranch] = useState([]);
     const [branch_id,setBranchid] =useState(0);
     const [stockrequest,setStockrequest] =useState([]);
+
 
     useEffect(()=>{
         fetchRequestStock();
@@ -84,13 +86,28 @@ export default function ManagerstockRequest(){
 
     const checkstatus = (status)=>{
         if(status==1){
-            return "pandding row request-item  my-2"
+            return "pandding row request-item  my-2 "
         }else if(status==5){
-            return "approve row request-item  my-2"
+            return "approve row request-item  my-2 "
         }else if(status==6){
-            return "reject row request-item  my-2"
+            return "reject row request-item  my-2 "
+        }else if(status==7){
+            return "reject row request-item  my-2 "
         }
     }
+
+    const cancelRequest= async(id) =>{
+        let statusID =7;
+        let json =  await API_POST("request/updatestatus",{
+            request_id: id,
+            status_id: statusID
+        });
+
+        if(json.result){
+            fetchRequestStock();
+        }
+    }
+
     return(
         <>
 
@@ -164,10 +181,10 @@ export default function ManagerstockRequest(){
                                 <div className="col-2 pb-0">
                                     รหัส
                                 </div>  
-                                <div className="col-3 ">
+                                <div className="col-2 ">
                                    รายการ
                                 </div> 
-                                <div className="col-2 ">
+                                <div className="col-1 ">
                                     จำนวน
                                 </div> 
                                 <div className="col-3 ">
@@ -175,7 +192,10 @@ export default function ManagerstockRequest(){
                                 </div> 
                                 <div className="col-2 ">
                                     สถานะ
-                                </div> 
+                                </div > 
+                                <div className="col-2">
+                                    ยกเลิก
+                                </div>
                             </div>
                            
                             {
@@ -190,10 +210,10 @@ export default function ManagerstockRequest(){
                                             <div className="col-2">
                                                 {item.request_id}
                                             </div>  
-                                            <div className="col-3">
+                                            <div className="col-2">
                                                 {item.m_name}
                                             </div> 
-                                            <div className="col-2">
+                                            <div className="col-1">
                                                 {item.request_amount}
                                             </div> 
                                             <div className="col-3">
@@ -201,7 +221,14 @@ export default function ManagerstockRequest(){
                                             </div> 
                                             <div className="col-2">
                                                 {item.status_name}
-                                            </div> 
+                                            </div>
+                                            <div className="col-2">
+                                                {
+                                                    item.status_id !=7 &&
+                                                    <button className="btn btn-danger" onClick={event => cancelRequest(item.request_id)}>ยกเลิก</button>
+                                                }
+                                                
+                                            </div>
                                         </div>
                                     </>
                                 ))
@@ -211,6 +238,8 @@ export default function ManagerstockRequest(){
                     </div>
                 </div>
             </div>
+
+
         </>
     )
 }

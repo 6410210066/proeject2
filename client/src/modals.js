@@ -1,8 +1,8 @@
-import {Modal,Button,} from "react-bootstrap";
+import {Modal,Button} from "react-bootstrap";
 import { Form,Col } from "react-bootstrap";
 import { SERVER_URL } from "./app.config";
 import "./././components/employee/Employee.css";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export  function Detailproductmodal(props) {
 
@@ -407,3 +407,266 @@ export function SelectempProduct(props){
 //         </>
 //     )
 // }
+
+export function ApproveModal(props){
+
+    const [checkorther,setCheckorther] =useState(true);
+    const [checkbtn,setCheckbtn] =useState(true);
+    const onSave = ()=>{
+        let item = props.data;
+        props.onConfirm(item);
+    }
+
+    const approvedatail = async(value)=>{
+
+       await props.approvedetail(value);
+       
+    }
+
+    const onCancel = ()=>{
+        props.onCancel();
+        
+    }
+    return(
+        <Modal show={props.show} onHide={props.onCancel} centered>
+        <Modal.Header>
+            <Modal.Title>
+                <p>{props.title}</p>
+            </Modal.Title>
+            <button className="btn" onClick={props.onCancel} ><i className="fa-sharp fa-solid fa-xmark"></i></button>
+        </Modal.Header>
+        <Modal.Body>
+
+            <Form >
+                    <Form.Check
+                        className="my-3"
+                        label="ได้รับสินค้าครบตามรายการ"
+                        name="group1"
+                        type={"radio"}
+                        value={"ได้รับสินค้าครบตามรายการ"}
+                        onChange={(e)=> { approvedatail(e.target.value); setCheckorther(true);setCheckbtn(false)}}
+                        id="1"
+                        
+                    />
+                    <Form.Check
+                        className="my-3"
+                        label="ได้รับไม่ครบตามรายการ"
+                        name="group1"
+                        type={"radio"}
+                        value={"ได้รับไม่ครบตามรายการ"}
+                        onChange={(e)=> { approvedatail(e.target.value); setCheckorther(true);setCheckbtn(false)}}
+                       
+                    />
+                    <Form.Check
+                        className="my-3"
+                        label="ได้รับไม่ถูกต้องตามรายการ"
+                        name="group1"
+                        type={"radio"}
+                        value={"ได้รับไม่ถูกต้องตามรายการ"}
+                        onChange={(e)=> { approvedatail(e.target.value); setCheckorther(true);setCheckbtn(false)}}
+                      
+                    />
+                    <Form.Check
+                        className="my-3"
+                        label="อื่น ๆ"
+                        name="group1"
+                        type={"radio"}
+                        value={false}
+                        onChange={(e)=> {setCheckorther(false);setCheckbtn(false)}}
+                        
+                    />
+                    <Form.Group as={Col} controlId="validateStockAmount">
+                        <Form.Label hidden={checkorther}>กรอกรายละเอียด</Form.Label>
+                        <Form.Control
+                            
+                            type="text"
+                            placeholder="โปรดระบุ"
+                            hidden={checkorther}
+                            onChange={(e)=> approvedatail(e.target.value)}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            กรุณากรอกจำนวน
+                        </Form.Control.Feedback>
+                    </Form.Group>
+            </Form>
+        </Modal.Body>
+        <Modal.Footer>
+            <Button variant="primary" onClick={onSave} disabled={checkbtn} centered>ตกลง</Button>
+            <Button variant="danger" onClick={onCancel}>ยกเลิก</Button>
+        </Modal.Footer>
+    </Modal>
+    )
+}
+
+export function RejectRecipitentModal(props){
+
+    const [checkorther,setCheckorther] =useState(true);
+    const [checkbtn,setCheckbtn] =useState(true);
+
+    const onSave = ()=>{
+        let item = props.data;
+        props.onConfirm(item);
+    }
+
+    const rejectdetail = async(value)=>{
+
+       await props.rejectdetail(value);
+       
+    }
+
+    const onCancel = ()=>{
+        props.onCancel();
+    }
+    return(
+        <Modal show={props.show} onHide={props.onCancel} centered>
+        <Modal.Header>
+            <Modal.Title>
+                <p>{props.title}</p>
+            </Modal.Title>
+            <button className="btn" onClick={props.onCancel} ><i className="fa-sharp fa-solid fa-xmark"></i></button>
+        </Modal.Header>
+        <Modal.Body>
+
+            <Form >
+                    <Form.Check
+                        className="my-3"
+                        label="สินค้ามีจำนวนไม่ครบ"
+                        name="group1"
+                        type={"radio"}
+                        value={"สินค้ามีจำนวนไม่ครบ"}
+                        onChange={(e)=> {rejectdetail(e.target.value); setCheckorther(true);setCheckbtn(false)}}
+                        id="1"
+                        
+                    />
+                    <Form.Check
+                        className="my-3"
+                        label="สินค้าไม่ตรงตามรายการ"
+                        name="group1"
+                        type={"radio"}
+                        value={"สินค้าไม่ตรงตามรายการ"}
+                        onChange={(e)=> { rejectdetail(e.target.value); setCheckorther(true);setCheckbtn(false)}}
+                       
+                    />
+                    <Form.Check
+                        className="my-3"
+                        label="สินค้าได้รับความชำรุดเสียหาย"
+                        name="group1"
+                        type={"radio"}
+                        value={"สินค้าได้รับความชำรุดเสียหาย"}
+                        onChange={(e)=> { rejectdetail(e.target.value); setCheckorther(true);setCheckbtn(false)}}
+                      
+                    />
+                    <Form.Check
+                        className="my-3"
+                        label="อื่น ๆ"
+                        name="group1"
+                        type={"radio"}
+                        value={false}
+                        onChange={(e)=> {setCheckorther(false);setCheckbtn(false)}}
+                        
+                    />
+                    <Form.Group as={Col} controlId="validateStockAmount">
+                        <Form.Label hidden={checkorther}>กรอกรายละเอียด</Form.Label>
+                        <Form.Control
+                            
+                            type="text"
+                            placeholder="โปรดระบุ"
+                            hidden={checkorther}
+                            onChange={(e)=> rejectdetail(e.target.value)}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            กรุณากรอกจำนวน
+                        </Form.Control.Feedback>
+                    </Form.Group>
+            </Form>
+        </Modal.Body>
+        <Modal.Footer>
+            <Button variant="primary" onClick={onSave} disabled={checkbtn} centered>ตกลง</Button>
+            <Button variant="danger" onClick={onCancel}>ยกเลิก</Button>
+        </Modal.Footer>
+    </Modal>
+    )
+}
+
+export function RejectSanderModal(props){
+
+    const [checkorther,setCheckorther] =useState(true);
+    const [checkbtn,setCheckbtn] =useState(true);
+
+    const onSave = ()=>{
+        let item = props.data;
+        props.onConfirm(item);
+    }
+
+    const rejectdetail = async(value)=>{
+
+       await props.rejectdetail(value);
+       
+    }
+
+    const onCancel = ()=>{
+        props.onCancel();
+    }
+    return(
+        <Modal show={props.show} onHide={props.onCancel} centered>
+        <Modal.Header>
+            <Modal.Title>
+                <p>{props.title}</p>
+            </Modal.Title>
+            <button className="btn" onClick={props.onCancel} ><i className="fa-sharp fa-solid fa-xmark"></i></button>
+        </Modal.Header>
+        <Modal.Body>
+
+            <Form >
+                    <Form.Check
+                        className="my-3"
+                        label="มีจำนวนสินค้าไม่เพียงพอ"
+                        name="group1"
+                        type={"radio"}
+                        value={"มีจำนวนสินค้าไม่เพียงพอ"}
+                        onChange={(e)=> {rejectdetail(e.target.value); setCheckorther(true);setCheckbtn(false)}}
+                        id="1"
+                        
+                    />
+                    <Form.Check
+                        className="my-3"
+                        label="รายการสินค้าไม่ถูกต้อง"
+                        name="group1"
+                        type={"radio"}
+                        value={"รายการสินค้าไม่ถูกต้อง"}
+                        onChange={(e)=> { rejectdetail(e.target.value); setCheckorther(true);setCheckbtn(false)}}
+                       
+                    />
+
+                    <Form.Check
+                        className="my-3"
+                        label="อื่น ๆ"
+                        name="group1"
+                        type={"radio"}
+                        value={false}
+                        onChange={(e)=> {setCheckorther(false);setCheckbtn(false)}}
+                        
+                    />
+                    <Form.Group as={Col} controlId="validateStockAmount">
+                        <Form.Label hidden={checkorther}>กรอกรายละเอียด</Form.Label>
+                        <Form.Control
+                            
+                            type="text"
+                            placeholder="โปรดระบุ"
+                            hidden={checkorther}
+                            onChange={(e)=> rejectdetail(e.target.value)}
+                        />
+                        <Form.Control.Feedback type="invalid">
+                            กรุณากรอกจำนวน
+                        </Form.Control.Feedback>
+                    </Form.Group>
+            </Form>
+        </Modal.Body>
+        <Modal.Footer>
+            <Button variant="primary" onClick={onSave} disabled={checkbtn} centered>ตกลง</Button>
+            <Button variant="danger" onClick={onCancel}>ยกเลิก</Button>
+        </Modal.Footer>
+    </Modal>
+    )
+}
+

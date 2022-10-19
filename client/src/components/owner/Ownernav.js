@@ -19,7 +19,7 @@ export default function Ownernav(props){
         <>
             <div className="container-fluid " style={{padding:"0"}}>
                 <div className="row a-style nav" style={{margin:"0"}}>
-                            <img src={logo} alt=""  className="logo" />
+                            <img src={logo} alt="" className='logo ' />
                             <h4 className='mx-3 mt-3 ' style={{width:"90%"}}>ผู้ใช้ : {localStorage.getItem("username")}</h4>                              
                             <Link className={props.page===1 && "active"} to="/home"><i class="fa-solid fa-house mx-3"></i>Dashboard</Link> 
                             <Link className={props.page===2 && "active"} to="/owner/stock"><i class="fa-solid fa-boxes-stacked mx-3"></i>จัดการสต๊อกสินค้า</Link>

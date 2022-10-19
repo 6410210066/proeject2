@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom"
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import "./manager.css"
+import "./manager.css";
+import logo from '../../image/logo.webp'
 export default function Managernav(props){
     const clear = ()=>{
         localStorage.clear();
@@ -17,6 +18,7 @@ export default function Managernav(props){
         <>
             <div className="navadmin" style={{padding:"0"}}>
                 <div className=" a-style" style={{margin:"0"}}> 
+                            
                             <h2>{localStorage.getItem("username")}</h2>                                  
                             <Link className={props.page===1 && "active"} to="/home">Dashboard</Link> 
                             <Link className={props.page===2 && "active"} to="/manager/stock">จัดการสต๊อกสินค้า</Link>

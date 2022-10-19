@@ -62,7 +62,7 @@ export default function TransferReqeust(){
         if(transferlist.length >0){
             setChecktransferlist(false);
         }
-    },[transferlist])
+    },[transferlist]);
     const fetchRequest = async(data)=>{
         
         setMname(data.m_name);
@@ -144,8 +144,7 @@ export default function TransferReqeust(){
                 }else{
                     data.push(item);
                 }
-
-            
+   
             });
         }
 
@@ -244,45 +243,22 @@ export default function TransferReqeust(){
 
     const transferstock = async ()=>{
         let stockamount;
-        let mid; 
-        let num = parseInt(stockid);
-        stock.filter(stock => stock.stock_id === num).map(item =>{
-            stockamount = parseInt(item.stock_amount) - parseInt(stock_amount);
-            mid = item.m_id;
-            
-        })
-        const json = await API_POST("stock/update",{
-            stock_id : stockid,
-            stock_amount: stockamount
+        transferlist.map(item=>{
+            allstock.filter(allstock => allstock.m_id == mid && allstock.branch_id== item.origin_branch ).map(item1 =>{
+                    updatestock(item1.stock_id,item.stock_amount);
+                    addtransferhitory(item.origin_branch,item.destination_branch,item.request_id,item.m_id,item.stock_amount);
+            })
         });
 
-        if(json.result){
-            clearForm();
-            setRequestid(0);
-            setFormdisabled(false);
-            setValidated(false);
-        }
-
-        const json1 = await API_POST("transferhistory/add",{
-            status_id : 4,
-            origin_branch: origin_branch,
-            destination_branch:destination_branch,
-            request_id: requestid,
-            m_id: mid,
-            stock_amount: stock_amount
-        });
-        
-        if(json1.result){
             requeststatusupdate();
-            // fetchTransferHistory();
-        }
+       
     }
     
     const requeststatusupdate = async()=>{
       
         if(requestid>0){
             let json2 = await API_POST("request/updatestatus",{
-                request_id : requestid,
+                request_id : request.request_id,
                 status_id : statusapprove
             });
 
@@ -292,7 +268,27 @@ export default function TransferReqeust(){
         }
     }
 
-    
+    const updatestock = async(stockid,stockamount)=>{
+        const json = await API_POST("stock/update",{
+            stock_id : stockid,
+            stock_amount: stockamount
+        });
+
+    }
+
+    const addtransferhitory =async (origin_branch,destination_branch,requestid,mid,stock_amount)=>{
+        const json = await API_POST("transferhistory/add",{
+            status_id : 4,
+            origin_branch: origin_branch,
+            destination_branch:destination_branch,
+            request_id: requestid,
+            m_id: mid,
+            stock_amount: stock_amount
+        });
+
+
+    }
+
     const clearForm = ()=>{
 
     }
@@ -420,14 +416,11 @@ export default function TransferReqeust(){
 
                                         <div className='my-3 text-center'>
                                             <button className='btn btn-danger me-4' onClick={clearList}>ยกเลิกทั้งหมด</button>
-                                            <button className='btn btn-success' onClick={ transferstock}>ย้ายสต๊อก</button>
+                                            <button className='btn btn-success' onClick={transferstock}>ย้ายสต๊อก</button>
                                         </div>
+
                                     </div>
-                                
-
-
                         </div>
-
                 </div>
             </div>
         </>

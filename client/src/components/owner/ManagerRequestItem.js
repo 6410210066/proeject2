@@ -31,6 +31,7 @@ export default function ManagerRequestItem(props){
     const [unit,setUnit] =useState("");
     const [requestname,setRequstname]=useState("");
     const [mid,setMid] =useState(0);
+    const [test,setTest] =useState("");
     useEffect(()=>{
         fetchRequest();
         setRequestid(params.request_id);
@@ -188,6 +189,7 @@ export default function ManagerRequestItem(props){
     }
     return(
         <>
+
         
         <div className="container-fluid">
             <div className="row">
@@ -198,6 +200,7 @@ export default function ManagerRequestItem(props){
                     <div className="request-item-content mt-5">
                         <div className="row mb-5">
                             <div className="row mb-3">
+                                <h3>Test : {test}</h3>
                                 <h3 className="header col-11 ps-5">รายละเอียดคำขอ</h3>
                                 <div className="col-1">
                                     <Button className="btn  mt-3" variant="" href={`/request`} >
@@ -205,7 +208,7 @@ export default function ManagerRequestItem(props){
                                     </Button>
                                 </div>
                             </div>
-                          
+                           
                      
                             <span className="col-5">รหัสคำขอที่ : 
                                 <span className=" detail">{request.request_id}</span> 

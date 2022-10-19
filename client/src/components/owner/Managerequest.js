@@ -41,6 +41,8 @@ export default function Managerquest(){
             return "approve row request-item  my-2"
         }else if(status==6){
             return "reject row request-item  my-2"
+        }else if(status==7){
+            return "reject row request-item  my-2"
         }
     }
     return(
