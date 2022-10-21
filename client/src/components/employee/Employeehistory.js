@@ -2,6 +2,7 @@ import Employeenav from "./Employeenav";
 import { useEffect, useState } from "react";
 import { API_GET, API_POST} from "../../api";
 import { Button,Table,Form } from "react-bootstrap";
+import { Detailsellrecordmodal } from "../../modals";
 
 export default function Employeehistory() {
     let page = 2;
@@ -9,12 +10,20 @@ export default function Employeehistory() {
         const [data,setData] = useState([]);
         const [emp_id,setEmpid] = useState(0);
         const [branch_id,setBranchid] = useState(0);
+        const [showsellrecordModal,setShowSellrecordModal] =useState(false);
+    
 
     useEffect(()=>{
         let user_id = localStorage.getItem("user_id");
         getBranchId(user_id);
-        fetchData();
+        
     },[])
+
+    useEffect(()=>{
+        console.log("in useEffec emp_id")
+        console.log(emp_id)
+        fetchData();
+    },[emp_id])
        
     const getBranchId = async(user_id) => {
         let json = await API_POST("getbranchId",{
@@ -28,7 +37,16 @@ export default function Employeehistory() {
         let json = await API_POST("sellrecordbyemp",{
             emp_id:emp_id
         });
+        console.log(json.data);
         setData(json.data);
+    }
+
+    const onShowDetail = async()=>{
+        setShowSellrecordModal(true);
+    }
+
+    const onCancel = ()=>{
+        setShowSellrecordModal(false);
     }
 
     return (
@@ -72,13 +90,11 @@ export default function Employeehistory() {
                                 ))}
                             </Form>
                        
-                 
-                            
                                 <Table striped className=" grid">
                                     <thead style={{backgroundColor:"#FFC700"}}>
                                         <tr>
                                             <th>เลขบิล</th>
-                                            <th>ชื่อพนักงาน</th>
+                                            <th>ชื่อ-สกุล</th>
                                             <th>สาขา</th>
                                             <th>จำนวน</th>
                                             <th>ราคารวม</th>
@@ -94,12 +110,13 @@ export default function Employeehistory() {
                                                     <>
                                                         <tr>
                                                             <td>{item.s_id}</td>
-                                                            <td>{item.emp_id}</td>
-                                                            <td>{item.branch_id}</td>
+                                                            <td>{item.firstname} {item.lastname}</td>
+                                                            <td>{item.branch_name}</td>
                                                             <td>{item.piece}</td>
                                                             <td>{item.total}</td>
-                                                            {/* <td className="align-middle"><button className="btn btn-danger btn-sm" onClick={event=>ondelete()} >ลบ</button></td> */}
+                                                            <td className="align-middle"><button className="button btn-detail btn-sm" onClick={onShowDetail}>รายละเอียด</button></td>
                                                         </tr>
+                                                     
                                                     </>
                                                 ))
                                              }
@@ -107,11 +124,16 @@ export default function Employeehistory() {
                                         </tbody>
                                     
                                 </Table> 
+                            </div>
                         </div>
+                    </div>
                 </div>
             </div>
-            </div>
-            </div>
+            <Detailsellrecordmodal 
+                show={showsellrecordModal}
+                onShowDetail={onShowDetail}
+                onCancel={onCancel} 
+            />
         </>
     )
 }

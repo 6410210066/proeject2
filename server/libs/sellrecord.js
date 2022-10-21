@@ -20,7 +20,7 @@ module.exports={
         return await pool.query(sql);
     },
     getSellrecordByEmp: async(pool,emp_id) => {
-        var sql = "SELECT e.firstname,e.lastname FROM sellrecord s JOIN employee e ON s.emp_id = e.emp_id WHERE emp_id = ?";
+        var sql = "SELECT s.*, e.firstname,e.lastname,b.branch_name FROM sellrecord s JOIN employee e ON s.emp_id = e.emp_id JOIN branch b ON s.branch_id = b.branch_id WHERE s.emp_id = ?";
         sql = mysql.format(sql,[emp_id]);
         return await pool.query(sql);
     },

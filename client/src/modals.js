@@ -432,10 +432,7 @@ export function Selectbasket(props){
         }
 
     }
-    const onCancel = ()=>{
-        props.onCancel();
-    }
-
+    
     const confirm = ()=>{
         if(getmoney>0 && change >0){
             props.onConfirm(getmoney,change);
@@ -875,5 +872,55 @@ export function TransferHistoryModal(props){
                 </Modal.Footer>
             </Modal>
         </>        
+    )
+}
+
+export function Detailsellrecordmodal(props){
+
+    
+    return (
+        <Modal show={props.show} onHide={props.onHide} centered >
+            <Modal.Header>
+                <Modal.Title>
+                    <h3 style={{textAlign:"center"}}>รายละเอียดคำสั่งซื้อสินค้า</h3>
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+          
+            <div className="row">          
+                <div className="col-5">
+                    <p><b>รหัส :</b></p>
+                    <p><b>วันที่ :</b></p>
+                    <p><b>ชื่อผู้ขาย :</b></p>
+                </div>
+                <div className="col-5">
+                    <p><b>เวลา :</b></p>
+                </div>   
+
+                    <div>
+                        <Table striped className="my-1">
+                                    <thead style={{backgroundColor:"#FFC700"}}>
+                                            <tr>
+                                                <th className="px-3">รหัสสินค้า</th>
+                                                <th className="px-3">ชื่อสินค้า</th>
+                                                <th className="px-3">ราคา</th>
+                                                <th className="px-3">จำนวน</th>
+                                                <th className="px-3">ราคารวม</th>
+                                            </tr>
+                                        </thead>
+                                    <tbody> 
+
+                                    </tbody> 
+                            </Table> 
+                    </div> 
+                    
+                    
+                    
+            </div>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="danger" onClick={props.onCancel}>ยกเลิก</Button>
+            </Modal.Footer>
+        </Modal>
     )
 }

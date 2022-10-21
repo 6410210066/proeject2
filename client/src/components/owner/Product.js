@@ -117,20 +117,13 @@ export default function Product(){
                             <div className="col-1"></div>
                         </div>
                     </Form>     
-                        <Detailproductmodal 
-                            show={showModal}
-                            info={modelProductInfo}
-                            onComfirm={onConfirm} 
-                        />
+                        
                         <Table striped className="mx-5 grid">
                             <thead>
                                 <tr>
                                     <th>รหัสสินค้า     </th>
-                                    {/* <th>ภาพ        </th> */}
                                     <th>ชื่อสินค้า     </th>
                                     <th>ราคาสินค้า   </th>
-                                    {/* <th>ขนาด       </th>
-                                    <th>น้ำหนัก      </th> */}
                                     <th>ประเภทสินค้า </th>
                                     <th>รายละเอียด</th>
                                     <th>แก้ไข       </th>
@@ -149,6 +142,11 @@ export default function Product(){
                     </div>
                 </div>
             </div>
+            <Detailproductmodal  
+                show={showModal}
+                info={modelProductInfo}
+                onComfirm={onConfirm} 
+            />
         </>
     )
 }
