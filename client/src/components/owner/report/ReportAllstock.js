@@ -59,7 +59,7 @@ export default function ReportAllstock(props){
                     {
                         label:"จำนวนสต๊อกสินค้ารวม",
                         data: data,
-                        backgroundColor: "rgba(255, 0, 30, 0.8)"
+                        backgroundColor: "rgba(6,75,132,255)"
                     }
                 ]
             }

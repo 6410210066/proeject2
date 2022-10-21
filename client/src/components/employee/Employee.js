@@ -37,12 +37,13 @@ export default function Employee(){
         const [showconfirm,setShowconfirm] = useState(false); // show modal confirm
         const [validated,setValidated] =useState(false);
         const [imageUrl, setImageUrl] = useState("");
+        const [stock,setStock] = useState([]);
 
     useEffect(()=>{
         fetchData();
         let user_id = localStorage.getItem("user_id");
         getBranchId(user_id);
-
+        fetchStock();
     },[])
     
     useEffect(()=>{
@@ -56,6 +57,13 @@ export default function Employee(){
         setData(json.data);
         setProduct(json.data);
         
+    }
+
+    const fetchStock = async()=>{
+        let json = await API_GET("stock");
+        if(json.result){
+            setStock(json.data);
+        }
     }
 
     const ONClick = (item)=>{
@@ -109,9 +117,6 @@ export default function Employee(){
     }
 
     const payment = async() => {
-        
-        
-
         const json = await API_POST("sellrecord/add",{
             emp_id: emp_id,
             branch_id: branch_id,
@@ -125,6 +130,7 @@ export default function Employee(){
 
             setSid(json.data.insertId);
             list.map(item=>{
+                // updateStock(item);
                 addselllist(item,json.data.insertId);
             })
            
@@ -154,6 +160,32 @@ export default function Employee(){
         }
 
     }
+
+   const updateStock = async(list)=>{
+        let num=0;
+        let stockID;
+        let stockamount=0;
+        let sumlist=0;
+        
+        stock.filter(stock => stock.m_id == list.m_id && stock.branch_id == branch_id).map(item=>{
+            console.log(item.stock_amount * 1000);
+            stockamount = parseInt(item.stock_amount) * 1000
+            sumlist= parseInt(list.product_weight)  * parseInt(list.amount);
+            num = (stockamount - sumlist)/1000;
+            stockID = item.stock_id;
+
+        });
+
+        const json = await API_POST("stock/update",{
+            stock_id : stockID,
+            stock_amount: num
+        });
+
+        if(json.result){
+            console.log("update stock success");
+        }
+
+   }
 
 
     const getBranchId = async(user_id) => {

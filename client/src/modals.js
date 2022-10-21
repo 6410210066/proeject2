@@ -327,7 +327,8 @@ export function SelectempProduct(props){
             product_size: props.data.product_size,
             product_weight: props.data.product_weight,
             amount : number,
-            total :sum
+            total :sum,
+            m_id: props.data.m_id
 
 
         }

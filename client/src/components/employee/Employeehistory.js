@@ -11,8 +11,7 @@ export default function Employeehistory() {
         const [emp_id,setEmpid] = useState(0);
         const [branch_id,setBranchid] = useState(0);
         const [showsellrecordModal,setShowSellrecordModal] =useState(false);
-    
-
+        
     useEffect(()=>{
         let user_id = localStorage.getItem("user_id");
         getBranchId(user_id);
@@ -101,7 +100,7 @@ export default function Employeehistory() {
                                             <th>รายละเอียด</th>
                                         </tr>
                                         </thead>
-                                        {console.log(data)}
+                                     
                                         <tbody> 
                                              {
                                                 data != null && 

@@ -78,7 +78,7 @@ export default function Reportstockbybranch() {
                 {
                     label: "จำนวนสต๊อกสินค้าแยกตามประเภทสินค้า",
                     data: data,
-                    backgroundColor: "rgba(255, 0, 30, 0.75)"
+                    backgroundColor: "rgba(6,75,132,255)"
                 }
             ]
         }
