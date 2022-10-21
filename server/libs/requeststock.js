@@ -23,5 +23,9 @@ module.exports={
         var sql  = "UPDATE stockrequest SET status_id = ? WHERE request_id = ?";
         sql = mysql.format(sql,[status_id,request_id]);
         return await pool.query(sql);
+    },
+    getOrderReqeust: async(pool)=>{
+        var sql ="SELECT sl.product_id,p.product_name ,SUM(sl.piece ) as sumpiece FROM sellrecord s JOIN sell_list sl ON s.s_id = sl.s_id JOIN product p ON p.product_id = sl.product_id WHERE MONTH(s.datetime) = MONTH(CURRENT_TIMESTAMP) GROUP BY sl.product_id ORDER BY sumpiece DESC";
+        return await pool.query(sql);
     }
 };

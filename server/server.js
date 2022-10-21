@@ -1219,6 +1219,69 @@ app.post('/api/sellrecordbyemp', checkAuth, async (req,res)=>{
     }
 });
 
+app.get('/api/sellrecord',checkAuth ,async(req,res)=>{
+
+    try{
+        var result = await sellrecord.getSellrecord(pool);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+});
+
+app.get('/api/sellrecorddashboard',async(req,res)=>{
+
+    try{
+        var result = await sellrecord.getSellrecordDashboard(pool);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+});
+
+app.get('/api/getOrderSelllist',async(req,res)=>{
+
+    try{
+        var result = await sellrecord.getOrderSelllist(pool);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+});
+
+app.get('/api/getorderreqeust',async(req,res)=>{
+
+    try{
+        var result = await sellrecord.getorderreqeust(pool);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+})
 
 app.post('/api/employeegettoken', async(req,res)=>{
     const input = req.body;

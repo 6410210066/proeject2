@@ -16,12 +16,20 @@ module.exports={
     },
 
     getSellrecord: async(pool) => {
-        var sql = "SELECT * FROM sellrecord";
+        var sql = "SELECT s.*, e.firstname,e.lastname,b.branch_name FROM sellrecord s JOIN employee e ON s.emp_id = e.emp_id JOIN branch b ON s.branch_id = b.branch_id";
         return await pool.query(sql);
     },
     getSellrecordByEmp: async(pool,emp_id) => {
         var sql = "SELECT e.firstname,e.lastname FROM sellrecord s JOIN employee e ON s.emp_id = e.emp_id WHERE emp_id = ?";
         sql = mysql.format(sql,[emp_id]);
+        return await pool.query(sql);
+    },
+    getSellrecordDashboard: async(pool)=>{
+        var sql ="SELECT s.s_id,SUM(piece)as sumpiece ,SUM(total) as sumtotal, COUNT(piece) as sumcustomer FROM sellrecord s JOIN employee e ON s.emp_id = e.emp_id JOIN branch b ON s.branch_id = b.branch_id WHERE DATE(datetime) = CURDATE();";
+        return await pool.query(sql);
+    },
+    getOrderSelllist: async(pool)=>{
+        var sql ="SELECT sl.product_id,p.product_name ,SUM(sl.piece ) as sumpiece FROM sellrecord s JOIN sell_list sl ON s.s_id = sl.s_id JOIN product p ON p.product_id = sl.product_id WHERE MONTH(s.datetime) = MONTH(CURRENT_TIMESTAMP) GROUP BY sl.product_id ORDER BY sumpiece DESC";
         return await pool.query(sql);
     }
 };

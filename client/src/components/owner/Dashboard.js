@@ -4,8 +4,12 @@ import Reportallstockitem from "./report/Reportallstockitem";
 import Reportstockbybranch from "./report/Reportstockbybranch";
 import { Form, } from "react-bootstrap";
 import { API_GET, API_POST } from "../../api";
+import { parsePath } from "react-router-dom";
 
 export default function Dashboard(props){
+
+    const datenow = Date.now();
+
     const [data,setData] = useState([]);
     const [checkChart,setCheckChart] =useState(0);
     const [mname,setMname] =useState("");
@@ -13,6 +17,15 @@ export default function Dashboard(props){
     const [total,setTotal] = useState(0);
     const [munit,setMunit ] =useState("");
     const [checkMid,setCheckMid] =useState(false);
+    const [sellrecord,setSellrecord] =useState([]);
+    const [sumnet,setSumnet] = useState(0);
+    const [sumpiece,setSumpiece] =useState(0);
+    const [sumcustomer,setSumcustomer] =useState(0);
+    const [orderselllist,setOrderselllist] =useState([]);
+    useEffect(()=>{
+        fetchsellrecord();
+        fetchOrderselllist();
+    },[])
 
     useEffect(()=>{
         let total =0 ;
@@ -25,7 +38,7 @@ export default function Dashboard(props){
         })
         
         setTotal(total);
-
+      
     },[data]);
 
     useEffect(() => {
@@ -36,36 +49,103 @@ export default function Dashboard(props){
             setCheckMid(false);
         }
     }, [mid]);
-    
+
+
+    const fetchsellrecord = async()=>{
+        let json = await API_GET("sellrecorddashboard");
+        if(json.result){
+            console.log(json.data);
+            setSumcustomer(json.data[0].sumcustomer);
+            setSumnet(json.data[0].sumtotal);
+            setSumpiece(json.data[0].sumpiece);
+        }
+    };
+
+    const fetchOrderselllist = async()=>{
+        let json = await API_GET("getOrderSelllist");
+        if(json.data){
+            setOrderselllist(json.data);
+        }
+    }
+    const convertDay = (date)=>{
+       
+        const Day = new Date(date).toLocaleString(
+        "en-US",
+            {
+            day: "2-digit",
+            }
+        );
+        
+        return parseInt(Day);
+    };
 
     return (
         <>
             <div className="container-fluid">
                 <h1 className="header">DashBoard</h1>
-                <div className="row ">
-                        <div className="col-3 card my-3 mx-5 border border-primary">
-                            <div className="card-body  ">
-                                <h5 className="header">ยอดขายวันนี้</h5>
-                                <h4 className="header mt-3">250 ฿</h4>
-                            </div>
-                        </div>
 
-                        <div className="col-3 card my-3 mx-5 border border-success">
-                            <div className="card-body  ">
-                                <h5 className="header">จำนวนที่ขายได้วันนี้</h5>
-                                <h4 className="header mt-3">20 รายการ</h4>
-                            </div>
-                        </div>
-
-                        <div className="col-3 card my-3 mx-5 border border-danger">
-                            <div className="card-body  ">
-                                <h5 className="header">จำนวนลูกค้าวันนี้</h5>
-                                <h4 className="header mt-3">5 คน</h4>
-                            </div>
+                {/* ยอดขายรายวัน */}
+                <div className="row">
+                    <div className="col-lg-1 ms-4 col-sm-0 "></div>
+                    <div className="col-lg-3 col-sm-12 card my-3 mx-2  border border-primary">
+                        <div className="card-body  ">
+                            <h5 className="header">ยอดขายวันนี้</h5>
+                            <h4 className="header mt-3">{sumnet} ฿</h4>
                         </div>
                     </div>
-                <div className="row dashboard-content Regular shadow" >
 
+                    <div className="col-lg-3 col-sm-12 card my-3  mx-2 border border-success">
+                        <div className="card-body  ">
+                            <h5 className="header">จำนวนที่ขายได้วันนี้</h5>
+                            <h4 className="header mt-3">{sumpiece} รายการ</h4>
+                        </div>
+                    </div>
+
+                    <div className="col-lg-3 col-sm-12 card my-3 mx-2 border border-danger">
+                        <div className="card-body  ">
+                            <h5 className="header">จำนวนลูกค้าวันนี้</h5>
+                            <h4 className="header mt-3">{sumcustomer} คน</h4>
+                        </div>
+                    </div>
+                </div>
+
+                {/* แสดงรายการขายดี */}
+                <div className="row ">
+                    <div className="col-lg-1 col-sm-0"></div>
+                    <div className="col-lg-5 col-sm-12 card mx-2 my-4 p-0 border border-primary">
+                        <div className="card-header text-center">
+                            รายการสินค้าขายดี
+                        </div>
+                        <div className="card-body">
+                                <ol>
+                                    {
+                                        orderselllist != null &&
+                                        orderselllist.map((item,index)=>(                                        
+                                            <li className="my-2" hidden={index >=3 && true}>{item.product_name} {item.sumpiece} ชิ้น</li>
+                                        ))
+                                    }
+                                    
+
+                                </ol>
+                        </div>
+                    </div>
+                    <div className="col-lg-5 col-sm-12 card mx-2 my-4 p-0 border border-primary">
+                        <div className="card-header text-center ">
+                            รายการวัตถุดิบที่ใช้เยอะ
+                        </div>
+                    
+                        <div className="card-body">
+                            <ol>
+                                <li className="my-2"></li>
+                                <li className="my-2"></li>
+                                <li className="my-2"></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                {/* กราฟสต๊อกสินค้ารวม */}
+                <div className="row dashboard-content Regular shadow" >
                    <div className="col-lg-8">
                         <ReportAllstock data={setData} checkChart={setCheckChart} />
                    </div>
@@ -88,14 +168,18 @@ export default function Dashboard(props){
                         }
                     </div>
                 </div>
-            </div>
 
+                {/* กราฟแสดงข้อมูลสต๊อกแต่ละสาขา */}
                 <h3 className="header my-4">กราฟแสดงข้อมูลสต๊อกแต่ละสาขา</h3>
-                    <div className="row dashboard-content Regular shadow" >
+                <div className="row dashboard-content Regular shadow" >
                         <div className="col-lg-12 col-sm-12">
                             <Reportstockbybranch data={setData} checkChart={setCheckChart} />
                         </div>
-                    </div>
+                </div>
+
+            </div>
+
+
         </>
     );
 }
