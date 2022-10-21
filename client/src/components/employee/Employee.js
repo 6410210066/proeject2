@@ -4,7 +4,7 @@ import { API_GET, API_POST} from "../../api";
 import { Link, Navigate } from "react-router-dom";
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import { Selectbasket, SelectempProduct } from "../../modals";
+import { ConfirmModal, Selectbasket, SelectempProduct } from "../../modals";
 import { SERVER_URL } from "../../app.config";
 import { Button,Table } from "react-bootstrap";
 
@@ -19,24 +19,29 @@ export default function Employee(){
         const [ShowSelectempProduct,setShowSelectempProduct] = useState(false);
         const [selectproduct,setSelectproduct] = useState([]);
         const [selectdata,setSelectdata] = useState({});
-        const [ShowSelectbasket,setShowSelectbasket] = useState(false);
+        
         const [list,setList] = useState([]);
         const [amountproduct,setAmountproduct] = useState(0);
         const [net,setNet] = useState(0);
 
-        const [emp_id,setEmp_id] = useState(0);
-        const [branch_id,setBranch_id] = useState(0);
+        const [emp_id,setEmpid] = useState(0);
+        const [branch_id,setBranchid] = useState(0);
         const [piece,setPiece] = useState(0);
         const [total,setTotal] = useState(0);
         const [getmoney,setGetmoney] = useState(0);
-        const [paychange,setPaychange] = useState(0);
+        const [change,setChange] = useState(0);
+        const [title,setTitle] = useState("");
+        const [message,setMessage] = useState("");
+        const [sid,setSid] =useState(0);
+        const [Showpayment,setShowpayment] = useState(false); //show modal คิดเงินทอน
+        const [showconfirm,setShowconfirm] = useState(false); // show modal confirm
         const [validated,setValidated] =useState(false);
         const [imageUrl, setImageUrl] = useState("");
 
     useEffect(()=>{
-        let emp_id = localStorage.getItem("emp_id");
-        let branch_id = localStorage.getItem("branch_id");
         fetchData();
+        let user_id = localStorage.getItem("user_id");
+        getBranchId(user_id);
 
     },[])
     
@@ -56,42 +61,110 @@ export default function Employee(){
     const ONClick = (item)=>{
         setSelectdata(item);
         setShowSelectempProduct(true);
-        setShowSelectbasket(true);
+       
     }
 
     const ONHide = ()=>{
         setShowSelectempProduct(false);
-        setShowSelectbasket(false);
+        setShowpayment(false);
+        setShowconfirm(false);
+    }
+
+    const onComfirm = async()=>{
+        setShowpayment(true);
+    }    
+
+    const onSelectConfirm  =(getmoney,change)=>{
+        setGetmoney(getmoney);
+        setChange(change);
+        setShowconfirm(true);
+        setTitle("ยืนยันการชำระเงิน");
+        setMessage("คุณต้องการยืนยันการชำระเงินใช่หรือไม่");
+    }
+
+    const ondelete = async(num,net,amountproduct)=>{
+        let data = [];
+
+       if(list.length>0){
+            list.map((item,index) =>{
+                if(index != num){
+                    data.push(item);
+                }else{
+                    setNet(net - parseInt(item.total));
+                    setAmountproduct(amountproduct - item.amount);
+
+                }
+        });
+        setList(data);
+        if(data.length == 0){
+            setSelectdata(true);
+        }
+       }
+    }
+
+    const clearList = () => {
+        setNet(0);
+        setAmountproduct(0);
+        setList([]);
     }
 
     const payment = async() => {
-        let getmoney = 100;
-        let paychange = 100;
+        
+        
+
         const json = await API_POST("sellrecord/add",{
             emp_id: emp_id,
             branch_id: branch_id,
             piece: amountproduct,
             total: net,
             getmoney: getmoney,
-            paychange: paychange
+            paychange: change
         });
-            if(json.result){
-                console.log("เพิ่มสำเร็จ");
-            const json = await API_GET("selectMaxId");
-            console.log(json.data);
 
-                for(const i=0; i<amountproduct; i++){
-                    
-                }
-            }   
+        if(json.result){
+
+            setSid(json.data.insertId);
+            list.map(item=>{
+                addselllist(item,json.data.insertId);
+            })
+           
+        }
+        setList([]);
+        setAmountproduct(0);
+        setGetmoney(0);
+        setChange(0);
+        setNet(0);
+        setShowpayment(false);
+        setShowconfirm(false);
+    }
+    
+    const addselllist = async(item,sid)=>{
+
+  
+        let json = await API_POST('selllist/add',{
+            product_id: item.product_id,
+            piece: item.amount,
+            branch_id: branch_id,
+            total: item.total,
+            s_id:sid
+        });
+
+        if(json.result){
             
         }
-    
 
-    const ondelete = async()=>{
-       
     }
 
+
+    const getBranchId = async(user_id) => {
+        let json = await API_POST("getbranchId",{
+            user_id : user_id
+        });
+        
+        setBranchid(json.data[0].branch_id);
+        setEmpid(json.data[0].emp_id);
+        return json.data[0].branch_id;
+    }
     return(
         <>
              <div  className="container-fluid ">
@@ -198,7 +271,7 @@ export default function Employee(){
                         <h2 className="header">รายการสินค้า</h2>
                         <div class="mx-4 pt-4 bg-ground1 Regular shadow">
                             
-                                <Table striped className="mx-5 grid">
+                                <Table striped className=" grid">
                                     <thead style={{backgroundColor:"#FFC700"}}>
                                         <tr>
                                             <th>ชื่อสินค้า</th>
@@ -213,7 +286,7 @@ export default function Employee(){
                                         <tbody> 
                                              {
                                                 list != null && 
-                                                list.map(item=>(
+                                                list.map((item,index)=>(
                                                     
                                                     <>
                                                         <tr>
@@ -222,7 +295,7 @@ export default function Employee(){
                                                             <td>{item.product_price}</td>
                                                             <td>{item.amount}</td>
                                                             <td>{item.total}</td>
-                                                            <td className="align-middle"><button onClick={ondelete} className="btn btn-danger btn-sm">ลบ</button></td>
+                                                            <td className="align-middle"><button className="btn btn-danger btn-sm" onClick={event=>ondelete(index,net,amountproduct)} >ลบ</button></td>
                                                         </tr>
                                                     </>
                                                 ))
@@ -230,17 +303,22 @@ export default function Employee(){
                                         
                                         </tbody>
                                     
-                                        
                                 </Table>   
                                     <div className="row box-down1 px-4 mt-2 ">
                     
-                                        <h5 className="col-6 pt-2">จำนวนสินค้า<input className="d-inline-block mx-1 textbox-plus form-control form-control-sm" value={amountproduct}></input>ชิ้น </h5> 
-                                        <h5 className="col-6 pt-2">ราคารวม <input className="d-inline-block mx-1 textbox-plus form-control form-control-sm" value={net}></input>บาท</h5>
+                                        <h5 className="col-6 my-2">จำนวนสินค้า<input className="d-inline-block mx-1 textbox-plus form-control form-control-sm" value={amountproduct}></input>ชิ้น </h5> 
+                                        <h5 className="col-6 my-2">ราคารวม <input className="d-inline-block mx-1 textbox-plus form-control form-control-sm" value={net}></input>บาท</h5>
                                     </div>  
 
-                                    <div class="d-grid px-5 gap-3 px-4 my-4 pb-4">
-                                        <Button className="btn" variant="success" onClick={payment}>ชำระเงิน</Button>
-                                    </div> 
+
+                                    <div className="row my-4">
+                                        <div className="col-2"></div>
+                                            <div className="col-8">
+                                                <Button className="col-5 btn my-3 mx-4" variant="danger" onClick={clearList}>ลบทั้งหมด</Button>
+                                                <Button className="col-5 btn my-3" variant="success" onClick={onComfirm}>สรุปรายการสินค้า</Button>
+                                            </div>
+                                        <div className="col-2"></div>
+                                    </div>
                         </div>
 
                     </div>
@@ -255,7 +333,21 @@ export default function Employee(){
                 setNet={setNet} 
                 list={list}/>   
                 
-            {/* <Selectbasket show={ShowSelectbasket} data={selectdata} onHide={ONHide}/> */}
+            <Selectbasket 
+                show={Showpayment} 
+                data={list} 
+                onConfirm={onSelectConfirm}
+                Amountproduct={amountproduct}
+                Net={net}
+                onHide={ONHide}/>
+            
+            <ConfirmModal
+                show={showconfirm}
+                onCancel={ONHide}
+                onConfirm={payment}
+                title={title}
+                message={message}
+            />
         </>
     )
 }

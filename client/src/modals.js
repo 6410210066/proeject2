@@ -1,11 +1,12 @@
 import {Modal,Button} from "react-bootstrap";
-import { Form,Col } from "react-bootstrap";
+import { Form,Col,Table } from "react-bootstrap";
 import { SERVER_URL } from "./app.config";
 import "./././components/employee/Employee.css";
 import { useEffect, useState } from 'react';
 import SimpleDateTime from "react-simple-timestamp-to-date";
 
 
+import "./index.css"
 export  function Detailproductmodal(props) {
 
     return(
@@ -346,6 +347,11 @@ export function SelectempProduct(props){
         props.onHide();
     }
 
+    const setNum = (num)=>{
+        let num1  = parseInt(num);
+        setNumber(num1)
+    }
+
     return (
         <Modal show={props.show} onHide={props.onHide} centered >
             <Modal.Body>
@@ -363,12 +369,31 @@ export function SelectempProduct(props){
                                 <p><b>จำนวน :</b></p>
                             </div>
                             <div className="col-10 p-0">
-                                <div>
-                                    <button onClick={MinusCount} type="button" className="d-inline-block btn-sm btn btn-info">-</button>
+                                <div className="row">
+                                    <div className="col-1 mx-2 px-1">
+                                    <button onClick={MinusCount} type="button" className="d-inline-block btn-sm btn-info">-</button>
+                                    </div>
+                                    <Form className="col-2 p-0" >
+                                        <Form.Group as={Col} controlId="validateStockAmount">
+                                            <Form.Control
+                                                required
+                                                type="number"
+                                                value={number}
+                                                placeholder=""
+                                                min={0}
+                                                step={1}
+                                                onChange={(e) => setNum(e.target.value)}
+                                                className="border-secondary"
+                                            />
+                                            <Form.Control.Feedback type="invalid">
+                                              
+                                            </Form.Control.Feedback>
+                                        </Form.Group>
+                                    </Form>
+                                    <div className="col-2"> 
+                                        <button onClick={PlusCount} type="button"  className="d-inline-block btn-sm btn-info">+</button>
+                                    </div>
                                    
-                                    <input className="d-inline-block mx-2 textbox-plus form-control form-control-sm " value={number} type="number"></input>
-                        
-                                    <button onClick={PlusCount} type="button"  className="d-inline-block btn-sm btn btn-info">+</button>
                                 </div>
                             </div>
                     
@@ -386,30 +411,143 @@ export function SelectempProduct(props){
     )
 }
 
-// export function Selectbasket(props){
+export function Selectbasket(props){
 
-//     return(
-//         <>
-//             <Modal show={props.show} onHide={props.onHide} centered >
-//                 <Modal.Header>
-//                     <Modal.Title>
-//                         <h4>ตะกร้าสินค้า</h4>
-//                     </Modal.Title>
-    
-//                 </Modal.Header>
-//                 <Modal.Body>
-//                     <p>{props.data.product_name} {props.data.product_price} {props.data.product_size}</p>
+    let data = props.data;
+    const [getmoney,setGetmoney] = useState(0);
+    const [change,setChange] =useState(0);
+
+    useEffect(()=>{
+        if(getmoney == 0){
+            setChange(0);
+        }
+    },[getmoney])
+    const calChange = ()=>{
+        let net = props.Net;
+        if(getmoney > net || getmoney == net){
+            let change = getmoney - net;
+            setChange(change);
+        }else{
+            alert('จำนวนเงินไม่พอ');
+        }
+
+    }
+    const onCancel = ()=>{
+        props.onCancel();
+    }
+
+    const confirm = ()=>{
+        if(getmoney>0 && change >0){
+            props.onConfirm(getmoney,change);
+            setGetmoney(0);
+            setChange(0);
+        }else{
+            alert('ยังไม่ได้คำนวณเงินทอน');
+        }
+    }
+
+    return(
+        <>
+            <Modal  show={props.show}  centered >
+            <Modal.Body>
+                    <div className="row">
+                        <div className="col-10"></div>
+                        <div className="col-2 px-4">
+                            <Button className="btn btn-danger btn-sm mx-1"  onClick={props.onHide} variant="" >
+                                <i className="fa-sharp fa-solid fa-xmark" ></i>
+                            </Button>
+                        </div>
+                    </div>
+
+                    <h3 style={{textAlign:"center"}}>ชำระเงิน</h3>
                     
-//                 </Modal.Body>
-//                 <Modal.Footer>
-//                     <div className="center-button">
-//                         <Button className="me-2" variant="success" onClick={props.onHide}>ชำระเงิน</Button>
-//                     </div>
-//                 </Modal.Footer>
-//             </Modal>
-//         </>
-//     )
-// }
+                <div>          
+                    <div className="">
+                        <h5>สรุปรายการขาย</h5>
+                    </div>
+
+                    <div >
+                        <Table striped className=" m-0">
+                                    <thead style={{backgroundColor:"#FFC700"}}>
+                                            <tr>
+                                                <th className="px-3">ชื่อสินค้า</th>
+                                                <th className="px-3">ขนาดสินค้า</th>
+                                                <th className="px-3">ราคา</th>
+                                                <th className="px-3">จำนวน</th>
+                                                <th className="px-3">ราคารวม</th>
+                                            </tr>
+                                        </thead>
+                                    <tbody> 
+
+                                        {
+                                            data != null && 
+                                            data.map(item=>(
+                                                        
+                                            <>
+                                                <tr>
+                                                                <td>{item.product_name}</td>
+                                                                <td>{item.product_size}</td>
+                                                                <td>{item.product_price}</td>
+                                                                <td>{item.amount}</td>
+                                                                <td>{item.total}</td>
+                                                            </tr>
+                                            </>
+                                            ))
+                                        }
+                                        
+                                    </tbody> 
+                            </Table>   
+                    </div>
+                                        
+                    <div className="row">
+                        <div className="col-6"></div>
+                        <p className="col-6 pt-4 my-1">ยอดรวมสุทธิ<input className="d-inline-block mx-1 textbox-plus1 form-control" value={props.Net}></input>บาท</p>
+                    </div>
+                    
+                </div>    
+
+                <div className="box-select4 my-3">
+                    <div className="row ps-3 my-3">
+                        <h6 className="pt-2 col-2">รับเงิน</h6>
+                        <Form className="col-4 p-0 " >
+                            <Form.Group as={Col} controlId="validateStockAmount">
+                                <Form.Control
+                                    required
+                                    type="number"
+                                    value={getmoney}
+                                    placeholder="กรอกจำนวนเงิน"
+                                    min={0}
+                                    step={0.01}
+                                    onChange={(e) => setGetmoney(e.target.value)}
+                                    className="border border-secondary"
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    กรุณากรอกจำนวนเงิน
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Form>
+                        {/* <input className="col-4  mx-1 px-5 "></input> */}
+                        <h6 className=" pt-2 col-2">บาท</h6>
+                        <Button className="col-3 px-1 btn-sm" variant="secondary" onClick={calChange}>คำนวณเงินทอน</Button> 
+                       
+                    </div> 
+                    <div className="row ps-3 mb-3">
+                        <h6 className="col-2 pt-2">ทอนเงิน</h6>
+                        <input className="col-4  px-3 border border-secondary rounded" value={change}></input>
+                        <h6 className=" pt-2 col-2">บาท</h6>
+                    </div>
+                     
+                </div>
+            </Modal.Body>
+                <Modal.Footer>
+                    <div className="center-button">
+                        <Button className="me-2 px-5" variant="success" onClick={confirm}>ชำระเงิน</Button>
+                    </div>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}
 
 export function ApproveModal(props){
 

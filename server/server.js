@@ -1188,7 +1188,7 @@ app.post('/api/sellrecord/add',checkAuth, async (req,res)=>{
 
 app.post('/api/selllist/add',checkAuth, async (req,res)=>{
     const input = req.body;
-
+   
     try{
         var result = await sellrecord.createSelllist(pool,input.product_id,input.piece,input.branch_id,input.total,input.s_id);
         res.json({
@@ -1203,10 +1203,10 @@ app.post('/api/selllist/add',checkAuth, async (req,res)=>{
     }
 });
 
-app.get('/api/selectMaxId', checkAuth, async (req,res)=>{
-    
+app.post('/api/sellrecordbyemp', checkAuth, async (req,res)=>{
+    const input = req.body;
     try{
-        var result = await sellrecord.selectMaxId(pool);
+        var result = await sellrecord.getSellrecordByEmp(pool,input.emp_id);
         res.json({
             result: true,
             data: result

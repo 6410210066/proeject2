@@ -15,9 +15,13 @@ module.exports={
         return await pool.query(sql);
     },
 
-    selectMaxId : async(pool) => {
-        var sql = "SELECT MAX(s_id) AS s_id FROM sellrecord";
-        sql = mysql.format(sql,[]);
+    getSellrecord: async(pool) => {
+        var sql = "SELECT * FROM sellrecord";
+        return await pool.query(sql);
+    },
+    getSellrecordByEmp: async(pool,emp_id) => {
+        var sql = "SELECT e.firstname,e.lastname FROM sellrecord s JOIN employee e ON s.emp_id = e.emp_id WHERE emp_id = ?";
+        sql = mysql.format(sql,[emp_id]);
         return await pool.query(sql);
     }
 };
