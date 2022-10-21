@@ -5,6 +5,7 @@ import {API_GET,API_POST} from '../../api';
 import { useNavigate,useLocation } from 'react-router-dom';
 import Ownernav from "./Ownernav";
 import './owner.css';
+import { AlertkModal, ConfirmModal } from '../../modals';
 
 
 export default function TransferReqeust(){
@@ -34,14 +35,26 @@ export default function TransferReqeust(){
     const [transferamount,setTransferamount] =useState(0);
     const [mid,setMid] =useState(0);
     const [checktransferlist,setChecktransferlist] =useState(true);
-    const [checksuccessamount,setChecksuccesssamount] = useState(false);
+    const [showconfirm,setShowconfirm] = useState(false);
+    const [showalert,setShowalert] =useState(false);
+    const [title,setTitle] =useState("");
+    const [message,setMessage] =useState("");
+    const [checkmodaltype,setCheckmodaltype] = useState(0);
+    
+
     useEffect(()=>{
         fetchRequest(state);
         fetchDataBranch();
         fetchAllstock();
         setTransferamount(0);
         setRequest(state);
-    },[])
+    },[]);
+
+    useEffect(()=>{
+        if(transferamount > request.request_amount){
+            onAlert();
+        }
+    },[transferamount])
 
     useEffect(()=>{
         allstock.filter(allstock => allstock.stock_id == request.stock_id ).map(item=>{
@@ -63,6 +76,8 @@ export default function TransferReqeust(){
             setChecktransferlist(false);
         }
     },[transferlist]);
+
+    
     const fetchRequest = async(data)=>{
         
         setMname(data.m_name);
@@ -80,7 +95,7 @@ export default function TransferReqeust(){
             let json = await API_GET("stock");
             let data =json.data;
             setAllStock(data);
-            
+            setStock(data);
     }
 
     const checkbranchname = (branchID)=>{
@@ -91,7 +106,6 @@ export default function TransferReqeust(){
 
         return branchname
     }
-
 
     const checkStockAmount = async()=>{
         setCheckbtn(false);
@@ -231,8 +245,7 @@ export default function TransferReqeust(){
 
          setAllStock(data);
     }
-
-    
+ 
     const colorcheck = ()=>{
         if(transferamount < request.request_amount ){
             return {color:"red"};
@@ -242,16 +255,14 @@ export default function TransferReqeust(){
     }
 
     const transferstock = async ()=>{
-        let stockamount;
+
         transferlist.map(item=>{
             allstock.filter(allstock => allstock.m_id == mid && allstock.branch_id== item.origin_branch ).map(item1 =>{
-                    updatestock(item1.stock_id,item.stock_amount);
+                    updatestock(item1.stock_id,item1.stock_amount);
                     addtransferhitory(item.origin_branch,item.destination_branch,item.request_id,item.m_id,item.stock_amount);
             })
         });
-
             requeststatusupdate();
-       
     }
     
     const requeststatusupdate = async()=>{
@@ -269,6 +280,7 @@ export default function TransferReqeust(){
     }
 
     const updatestock = async(stockid,stockamount)=>{
+ 
         const json = await API_POST("stock/update",{
             stock_id : stockid,
             stock_amount: stockamount
@@ -289,13 +301,42 @@ export default function TransferReqeust(){
 
     }
 
-    const clearForm = ()=>{
-
+    const onTransfer = (type)=>{
+        setShowconfirm(true);
+        setTitle("ย้ายสต๊อกสินค้าทั้งหมด");
+        setMessage("คุณต้องการยืนยันการย้ายสต๊อกสินค้าทั้งหมดหรือไม่");
+        setCheckmodaltype(type);
     }
 
+    const onClearlist= (type)=>{
+        setShowconfirm(true);
+        setTitle("ยกเลิกรายการทั้งหมด");
+        setMessage("คุณต้องการยกเลิกรายการทั้งหมดหรือไม่");
+        setCheckmodaltype(type);
+    }
+
+    const checkModal = ()=>{
+        if(checkmodaltype ==1){
+            clearList();
+            setShowconfirm(false);
+        }else if(checkmodaltype ==2){
+            transferstock();
+            setShowconfirm(false);
+        }
+    }
+
+    const onCancel =()=>{
+        setShowconfirm(false);
+        setShowalert(false);
+    }
+
+    const onAlert = ()=>{
+        setShowalert(true);
+        setTitle("แจ้งเตือน !");
+        setMessage("จำนวนที่ย้ายมากกว่าจำนวนที่ขอ");
+    }
     return(
         <>
-        
             <div  className="container-fluid " >
                 <div className="row ">
                     <div className="col-lg-2 nav" style={{padding:"0"}}>
@@ -306,6 +347,7 @@ export default function TransferReqeust(){
                                 <div className="formtranfer Regular shadow">
                                 <Link to="/transfer"> <button className="btn " style={{float:"right"}}><i className="fa-sharp fa-solid fa-xmark"></i></button></Link> 
                                 <h2 className="header ">ย้ายสต๊อกสินค้า</h2> 
+                                    
                                     <div className='row mt-3 '>
                                         <div className='col-12 my-2'>
                                             <p><b>รหัสคำขอ :</b> {request.request_id}</p>
@@ -388,41 +430,53 @@ export default function TransferReqeust(){
                                 </div>
                                 {/* รายการ */}
 
-                                    <div hidden={checktransferlist} className='formtranfer Regular shadow '>
-                                        <h3 className='header mb-3'>รายการย้าย</h3>
-                                        <div className='heading row transfer-item'>
-                                            <div className='col-1'>ลำดับ</div>
-                                            <div className='col-3'>สาขาต้นทาง</div>
-                                            <div className='col-3'>สาขาปลายทาง</div>
-                                            <div className='col-2'>รายการ</div>
-                                            <div className='col-1'>จำนวน</div>
-                                            <div className='col-2'>ยกเลิก</div>
-                                        </div>
-                                    
-                                        {
-                                            transferlist.map((item,index)=>(
-                                                <>
-                                                    <div className=' row transfer-item my-2'>
-                                                        <div className='col-1'>{index+1}</div>
-                                                        <div className='col-3'>{checkbranchname(item.origin_branch)}</div>
-                                                        <div className='col-3'>{checkbranchname(item.destination_branch)}</div>
-                                                        <div className='col-2'>{mname}</div>
-                                                        <div className='col-1'>{item.stock_amount}</div>
-                                                        <div className='col-2 btn btn-delete' onClick={event=>deleteList(index)}>ยกเลิก</div>
-                                                    </div>
-                                                </>
-                                            ))  
-                                        }
-
-                                        <div className='my-3 text-center'>
-                                            <button className='btn btn-danger me-4' onClick={clearList}>ยกเลิกทั้งหมด</button>
-                                            <button className='btn btn-success' onClick={transferstock}>ย้ายสต๊อก</button>
-                                        </div>
-
+                                <div hidden={checktransferlist} className='formtranfer Regular shadow '>
+                                    <h3 className='header mb-3'>รายการย้าย</h3>
+                                    <div className='heading row transfer-item'>
+                                        <div className='col-1'>ลำดับ</div>
+                                        <div className='col-3'>สาขาต้นทาง</div>
+                                        <div className='col-3'>สาขาปลายทาง</div>
+                                        <div className='col-2'>รายการ</div>
+                                        <div className='col-1'>จำนวน</div>
+                                        <div className='col-2'>ยกเลิก</div>
                                     </div>
+                                
+                                    {
+                                        transferlist.map((item,index)=>(
+                                            <>
+                                                <div className=' row transfer-item my-2'>
+                                                    <div className='col-1'>{index+1}</div>
+                                                    <div className='col-3'>{checkbranchname(item.origin_branch)}</div>
+                                                    <div className='col-3'>{checkbranchname(item.destination_branch)}</div>
+                                                    <div className='col-2'>{mname}</div>
+                                                    <div className='col-1'>{item.stock_amount}</div>
+                                                    <div className='col-2 btn btn-delete' onClick={event=>deleteList(index)}>ยกเลิก</div>
+                                                </div>
+                                            </>
+                                        ))  
+                                    }
+                                    <div className='my-3 text-center'>
+                                        <button className='btn btn-danger me-4' onClick={event => onClearlist(1)}>ยกเลิกทั้งหมด</button>
+                                        <button className='btn btn-success' onClick={event => onTransfer(2)}>ย้ายสต๊อกทั้งหมด</button>
+                                    </div>
+                                </div>
                         </div>
                 </div>
             </div>
+            <ConfirmModal
+                show={showconfirm}
+                title={title}
+                message={message}
+                onConfirm={checkModal}
+                onCancel={onCancel}
+            />
+
+            <AlertkModal
+                show={showalert}
+                title={title}
+                message={message}
+                onCancel={onCancel}
+            />
         </>
     )
 }

@@ -33,8 +33,6 @@ export default function ManagerTransfer(){
         
     },[]);
 
-
-
     const fetchTransfer = async (id)=>{
         let json = await API_POST("manager/transferhitory",{
             branch_id: id
@@ -48,12 +46,13 @@ export default function ManagerTransfer(){
         let json = await API_GET("branch");
         setBranch(json.data);
        
-    };
+    }
 
     const fetchstock = async()=>{
         let json = await API_GET("stock");
         setStock(json.data);
     }
+
     const getBranchId = async(user_id) => {
         let json = await API_POST("getbranchId",{
             user_id : user_id
@@ -139,7 +138,8 @@ export default function ManagerTransfer(){
 
     const approvesendertransfer = ()=>{
         updateTransferstatus(data.t_id,3);
-
+        updateSenderdetail(data.t_id,"ยืนยันแล้ว");
+        setShowapprovesender(false);
     }
 
     const approveTransfer = async(item)=>{
@@ -148,7 +148,6 @@ export default function ManagerTransfer(){
         updateRecipientdetail(item.t_id,approvedetail);
         setShowapprove(false);
     }
-
 
     const updateRecipientdetail = async(t_id,detail)=>{
         const date = Date.now();
@@ -166,6 +165,7 @@ export default function ManagerTransfer(){
 
         
     }
+
     const updateSenderdetail = async(t_id,detail)=>{
         const date = Date.now();
         const dataformat = new  Date(date);
@@ -202,6 +202,7 @@ export default function ManagerTransfer(){
         setTitle("ปฏิเสธการรับสินค้า");
         setData(item);
     }
+
     const onConfirmrejectsender = (item) =>{
         setShowrejectsender(true);
         setTitle("ปฏิเสธการส่งสินค้า");
@@ -220,6 +221,7 @@ export default function ManagerTransfer(){
         setMessage("คุณต้องการยืยยันการส่งสินค้าหรือไม่");
         setData(item);
     }
+
     const checkstatus= (status_id)=>{
         if(status_id ==4){
             return "รอจัดส่ง"
@@ -227,6 +229,7 @@ export default function ManagerTransfer(){
             return "รอรับสินค้า"
         }
     }
+
     const onCancel = ()=>{
         setShowapprove(false);
         setShowrejectrecipinet(false);
@@ -242,7 +245,7 @@ export default function ManagerTransfer(){
                         </div>
                         <div className="col-lg-10 col-sm-12 content overfloww" style={{padding:"0"}}>
                             <h3 className="header mb-4">รายการขอย้ายสต๊อก</h3>
-                            <div>
+                        <div>
                             <div   className="transfer-tab pt-3 pb-3 Regular shadow">
                                     {transferItem()}
                                     {transfer != null && 
@@ -314,9 +317,7 @@ export default function ManagerTransfer(){
                                         ))                  
                                     }
                                 </div>
-
                             </div>
-                            
                     </div>
                 </div>
             </div>

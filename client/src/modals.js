@@ -3,6 +3,8 @@ import { Form,Col } from "react-bootstrap";
 import { SERVER_URL } from "./app.config";
 import "./././components/employee/Employee.css";
 import { useEffect, useState } from 'react';
+import SimpleDateTime from "react-simple-timestamp-to-date";
+
 
 export  function Detailproductmodal(props) {
 
@@ -419,9 +421,7 @@ export function ApproveModal(props){
     }
 
     const approvedatail = async(value)=>{
-
        await props.approvedetail(value);
-       
     }
 
     const onCancel = ()=>{
@@ -626,7 +626,7 @@ export function RejectSanderModal(props){
                         type={"radio"}
                         value={"มีจำนวนสินค้าไม่เพียงพอ"}
                         onChange={(e)=> {rejectdetail(e.target.value); setCheckorther(true);setCheckbtn(false)}}
-                        id="1"
+                        
                         
                     />
                     <Form.Check
@@ -671,3 +671,71 @@ export function RejectSanderModal(props){
     )
 }
 
+export function TransferHistoryModal(props){
+    let data = props.data;
+    return(
+        <>
+            <Modal show={props.show} onHide={props.onCancel} centered>
+                <Modal.Body>
+                    {console.log(data)}
+                    <h4 className="header mb-4">{props.title}</h4>
+                    <div className="row ms-2">
+                            <span className="col-6 detail-header">รหัสการย้าย : 
+                                <span className=" detail">{data.t_id}</span> 
+                            </span> 
+                            <span className="col-6 detail-header">สถานะ : 
+                                <span className="detail">{data.status_name}</span>
+                            </span>
+                            <span className="col-6 detail-header">วันที่อนุมัติ : 
+                                <span className="detail"> <SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":" showTime="0">{data.t_date}</SimpleDateTime></span>   
+                            </span>
+                            <span className="col-6 detail-header">เวลา : 
+                                <span className="detail"> <SimpleDateTime format="MHS"  timeSeparator=":" showTime="1" showDate="0">{data.t_date}</SimpleDateTime></span>
+                            </span>
+                            {
+                                data.request_id != 0 &&
+                                <span className="col-12 detail-header">รหัสคำขอที่ : 
+                                    <span className="detail">{data.request_id}</span>
+                                </span>
+                            }
+                            <span className="col-12 detail-header">สาขาต้นทาง : 
+                                <span className="detail">{props.checkbranchname(data.origin_branch)}</span>
+                            </span>
+                            <span className="col-12 detail-header">สาขาปลายทาง : 
+                                <span className="detail">{props.checkbranchname(data.destination_branch)}</span>
+                            </span>
+                            <span className="col-12 detail-header">รายการ: 
+                                <span className="detail">{data.m_name} {data.stock_amount} {data.m_unit} </span>
+                            </span>
+                            <div class="container mt-5 mb-5">
+                            <div class="row">
+                                <div class="col-md-9   offset-md-1">
+                                  
+                                    <ul class="timeline">
+                                        <li className="mb-5">
+                                            <p className="mb-0">
+                                                {props.convertDate(data.t_date)}
+                                            </p>
+                                            <span>เจ้าของร้าน : สร้างรายการย้าย</span>
+                                            
+                                        </li>
+                                        {
+                                            props.checkOriginstatus(data)
+                                        }
+                                        {
+                                            props.checkDestinationstatus(data)
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="primary" onClick={props.onCancel} centered>ปิด</Button>
+                </Modal.Footer>
+            </Modal>
+        </>        
+    )
+}

@@ -35,13 +35,37 @@ export default function Dashboard(props){
         } else {
             setCheckMid(false);
         }
-    }, [mid])
+    }, [mid]);
+    
 
     return (
         <>
             <div className="container-fluid">
                 <h1 className="header">DashBoard</h1>
+                <div className="row ">
+                        <div className="col-3 card my-3 mx-5 border border-primary">
+                            <div className="card-body  ">
+                                <h5 className="header">ยอดขายวันนี้</h5>
+                                <h4 className="header mt-3">250 ฿</h4>
+                            </div>
+                        </div>
+
+                        <div className="col-3 card my-3 mx-5 border border-success">
+                            <div className="card-body  ">
+                                <h5 className="header">จำนวนที่ขายได้วันนี้</h5>
+                                <h4 className="header mt-3">20 รายการ</h4>
+                            </div>
+                        </div>
+
+                        <div className="col-3 card my-3 mx-5 border border-danger">
+                            <div className="card-body  ">
+                                <h5 className="header">จำนวนลูกค้าวันนี้</h5>
+                                <h4 className="header mt-3">5 คน</h4>
+                            </div>
+                        </div>
+                    </div>
                 <div className="row dashboard-content Regular shadow" >
+
                    <div className="col-lg-8">
                         <ReportAllstock data={setData} checkChart={setCheckChart} />
                    </div>
@@ -57,8 +81,6 @@ export default function Dashboard(props){
                             <div className="mt-3"><p></p></div>
                         </div>
                     </div>
-
-
                     <div className="col-lg-12 py-4">
                         {
                             checkChart == 1 &&

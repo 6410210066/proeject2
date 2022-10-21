@@ -1,6 +1,6 @@
 import { useEffect, useState} from 'react';
 import {Form,Row,Col,Button, ModalDialog} from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useParams,Link } from 'react-router-dom';
 import {API_GET,API_POST} from '../../api';
 import { useNavigate,useLocation } from 'react-router-dom';
 import Ownernav from "./Ownernav";
@@ -23,6 +23,7 @@ export default function Transfer(){
     const [unit,setUnit] =useState("");
     const [checkbtn,setCheckbtn] = useState(false);
     const [checkoriginbranchID,setCheckOriginBranchID] =useState(0);
+    const [checkoriginbranchname,setCheckOriginBranchname] =useState("");
     const [mname , setMname] =useState(0);
     const [allstock,setAllStock] =useState([]);
     const [request,setRequest] =useState([]);
@@ -212,6 +213,7 @@ export default function Transfer(){
         let stockamount;
         let mid; 
         let num = parseInt(stockid);
+        let linemessage;
         stock.filter(stock => stock.stock_id === num).map(item =>{
             stockamount = parseInt(item.stock_amount) - parseInt(stock_amount);
             mid = item.m_id;
@@ -237,15 +239,38 @@ export default function Transfer(){
             m_id: mid,
             stock_amount: stock_amount
         });
+
+        linemessage = "แจ้งเตือนมีคำขอให้ส่งของไปยังสาขา"+ checkbranchname(destination_branch) +" มีรายการดั้งนี้ :"+mname +" จำนวน "+ stock_amount +" "+unit ;
+
         
+        getLinetoken(origin_branch,linemessage);
+
         if(json1.result){
             requeststatusupdate();
             fetchTransferHistory();
         }
 
-
     }
 
+
+    const getLinetoken = async(emp_id,linemessage)=>{
+        
+        let json =await API_POST("employeegettoken",{
+            emp_id: emp_id
+        })
+
+        if(json.result){
+            lineAlert(json.data[0].token,linemessage);
+        }
+    }
+
+    const lineAlert = async(token,text)=>{
+      
+        let json =await API_POST("linenotify",{
+            token : token,
+            message: text
+        });
+    }
     const requeststatusupdate = async()=>{
       
         if(requestid>0){
@@ -295,6 +320,9 @@ export default function Transfer(){
                     </div>
                         <div className="col-lg-10 content overfloww" style={{padding:"0"}}>
                             <h1 className="header">ย้ายสต๊อกสินค้า</h1>
+                                <div className='btnheader'>
+                                    <Link className='btn btn-success'  to="/owner/transferhistory">ประวัติการย้ายสต๊อก</Link>
+                                </div>
                                 <div className="formtranfer Regular shadow">
                                     <Form noValidate validated={validated} onSubmit={onsave} >
                                         <Form.Group as={Col} className="form-group" controlId='validateOriginBranch'>
@@ -454,7 +482,7 @@ export default function Transfer(){
 
                                 {/* transfer history */}
 
-                                <div className='formtranfer Regular shadow mb-3'>
+                                {/* <div className='formtranfer Regular shadow mb-3'>
 
                                     <h3 className='header'>ประวัติการย้ายสต๊อก</h3> 
 
@@ -477,42 +505,39 @@ export default function Transfer(){
                                         <div className="col-2">
                                             สถานะ
                                         </div> 
-                                        {/* <div className="col-1 ">
-                                            <i class="fa-solid fa-magnifying-glass"></i>
-                                        </div>  */}
-                                    </div> 
+                                    </div>  */}
                                     
                                     {
-                                        transfer != null &&
-                                        transfer.map(item =>(
-                                            <>
-                                                <div className={checkstatus(item.status_id)}>
-                                                    <div className="col-1 pb-0">
-                                                        {item.t_id}
-                                                    </div>  
-                                                    <div className="col-2 ">
-                                                        {item.m_name}
-                                                    </div> 
-                                                    <div className="col-2 ">
-                                                        {item.stock_amount} {item.m_unit}
-                                                    </div> 
-                                                    <div className="col-2 ">
-                                                        {checkbranchname(item.origin_branch)}
-                                                    </div> 
-                                                    <div className="col-2 ">
-                                                        {checkbranchname(item.destination_branch)}
-                                                    </div> 
-                                                    <div className="col-2 ">
-                                                        {item.status_name}
-                                                    </div> 
-                                                  <div className="col-1 ">
-                                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                                    </div> 
-                                                </div> 
-                                            </>
-                                        ))
+                                        // transfer != null &&
+                                        // transfer.map(item =>(
+                                        //     <>
+                                        //         <div className={checkstatus(item.status_id)}>
+                                        //             <div className="col-1 pb-0">
+                                        //                 {item.t_id}
+                                        //             </div>  
+                                        //             <div className="col-2 ">
+                                        //                 {item.m_name}
+                                        //             </div> 
+                                        //             <div className="col-2 ">
+                                        //                 {item.stock_amount} {item.m_unit}
+                                        //             </div> 
+                                        //             <div className="col-2 ">
+                                        //                 {checkbranchname(item.origin_branch)}
+                                        //             </div> 
+                                        //             <div className="col-2 ">
+                                        //                 {checkbranchname(item.destination_branch)}
+                                        //             </div> 
+                                        //             <div className="col-2 ">
+                                        //                 {item.status_name}
+                                        //             </div> 
+                                        //           <div className="col-1 ">
+                                        //                 <i class="fa-solid fa-magnifying-glass"></i>
+                                        //             </div> 
+                                        //         </div> 
+                                        //     </>
+                                        // ))
                                     }                    
-                                </div>
+                                 {/* </div> */}
                         </div>
 
                 </div>

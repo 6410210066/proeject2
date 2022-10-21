@@ -32,4 +32,9 @@ module.exports={
         sql = mysql.format(sql,[emp_id]);
         return await pool.query(sql);
     },
+    getTokenByEmpID: async (pool,emp_id) =>{
+        var sql = "SELECT token FROM employee WHERE emp_id = ?";
+        sql = mysql.format(sql,[emp_id]);
+        return await pool.query(sql);
+    }
 };

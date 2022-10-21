@@ -1,6 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-
+var request = require('request');
 const app = express();
 const port = 8080;
 const bodyParser = require('body-parser');
@@ -20,7 +20,7 @@ const employee = require("./libs/employee");
 const branch = require("./libs/branch");
 const stock = require("./libs/stock");
 const requeststock = require("./libs/requeststock");
-const { request } = require("http");
+// const { request } = require("http");
 const material = require("./libs/material");
 const transfer = require("./libs/transfer");
 const { cp } = require("fs");
@@ -705,7 +705,7 @@ app.post('/api/stock/update',async(req,res)=>{
         res.json({
             result: true
         });
-
+        console.log(input.stock_id)
     }catch(ex){
         res.json({
             result: false,
@@ -1217,6 +1217,50 @@ app.get('/api/selectMaxId', checkAuth, async (req,res)=>{
             message:ex.message
         });
     }
+});
+
+
+app.post('/api/employeegettoken', async(req,res)=>{
+    const input = req.body;
+    try{
+        var result = await employee. getTokenByEmpID(pool,input.emp_id);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+})
+
+app.post('/api/linenotify', async(req,res)=>{
+    const token = req.body.token;
+    const message = req.body.message;
+    request({
+        method: 'POST',
+        uri: 'https://notify-api.line.me/api/notify',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        auth: {
+          'bearer': token
+        },
+        form: {
+          message: message
+        }
+      }, (err, httpResponse, body) => {
+        if(err){
+          console.log(err);
+        } else {
+          res.json({
+            httpResponse: httpResponse,
+            body: body
+          });
+        }
+      });
 });
 
 app.listen(port, () => {

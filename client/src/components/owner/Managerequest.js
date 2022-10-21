@@ -2,8 +2,6 @@ import Ownernav from "./Ownernav";
 import { Button,Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { API_GET, API_POST } from "../../api";
-import { Detailmanagerrequest } from "../../modals";
-import ManagerRequestItem from "./ManagerRequestItem";
 import "../owner/owner.css";
 import { Link } from "react-router-dom";
 
@@ -55,6 +53,10 @@ export default function Managerquest(){
                     </div>
                     <div className="col-lg-10 content overfloww" style={{padding:"0"}}>
                         <h1 className="header">จัดการคำขอสต๊อกสินค้า</h1>
+                            <div className="btnheader">
+                            <Link className='btn btn-success'  to="/owner/requesthistory">ประวัติคำขอ</Link>
+                            </div>
+                          
                             <div className="p-4 requestcontent ">
                                 <div >
                                     <Table borderless>
@@ -93,8 +95,8 @@ export default function Managerquest(){
                                 </div>
                             </div>
 
-
-                            <div className="request-hetory Regular shadow ">
+                            {/* ประวัติคำขอ */}
+                            {/* <div className="request-hetory Regular shadow ">
                                 <h3 className="header pb-4">ประวัติคำขอ</h3>
                                 <div className="row request-item my-2">
                                     <div className="col-2 pb-0">
@@ -140,7 +142,7 @@ export default function Managerquest(){
                                     ))
                                 }           
 
-                            </div>
+                            </div> */}
                     </div>
                 </div>
             </div>

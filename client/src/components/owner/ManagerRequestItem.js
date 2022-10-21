@@ -151,7 +151,7 @@ export default function ManagerRequestItem(props){
        let data = stock[0];
        let total = ( data.sum - parseInt((data.Minimum * data.count))) - request.request_amount ;
        console.log(total);
-        if(total > 0){
+        if(total > -1){
             console.log("go transfer");
             navigate('/owner/transferrequest',{replace:true,state:request});
         }else{

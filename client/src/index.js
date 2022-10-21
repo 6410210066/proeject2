@@ -33,7 +33,8 @@ import ReportAllstock from './components/owner/report/ReportAllstock';
 import ManagerTransfer from './components/manager/ManagerTransfer';
 import ManagerRequestItem from './components/owner/ManagerRequestItem';
 import TransferReqeust from './components/owner/TransferRequest';
-
+import RequestHistory from './components/owner/RequestHistory';
+import TransferHistory from './components/owner/TransferHistory';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -65,7 +66,8 @@ root.render(
       <Route path="manager/managetransfer" element={<ManagerTransfer/>} />
       <Route path="owner/maangerequest/:request_id" element={<ManagerRequestItem/>}/>
       <Route path="owner/transferrequest" element={<TransferReqeust/>} />
-
+      <Route path="owner/requesthistory" element={<RequestHistory />} />
+      <Route path="owner/transferhistory" element={<TransferHistory />} />
 
     </Routes>
   </BrowserRouter>,
