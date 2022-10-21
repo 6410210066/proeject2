@@ -25,7 +25,7 @@ module.exports={
         return await pool.query(sql);
     },
     getOrderReqeust: async(pool)=>{
-        var sql ="SELECT sl.product_id,p.product_name ,SUM(sl.piece ) as sumpiece FROM sellrecord s JOIN sell_list sl ON s.s_id = sl.s_id JOIN product p ON p.product_id = sl.product_id WHERE MONTH(s.datetime) = MONTH(CURRENT_TIMESTAMP) GROUP BY sl.product_id ORDER BY sumpiece DESC";
+        var sql ="SELECT m.m_name, m.m_unit,SUM(sq.request_amount)as sumamount FROM stockrequest sq JOIN stock s ON sq.stock_id = s.stock_id JOIN material m ON s.m_id = m.m_id WHERE MONTH(sq.request_date) = MONTH(CURRENT_TIMESTAMP) GROUP BY m.m_id ORDER BY sumamount DESC";
         return await pool.query(sql);
     }
 };

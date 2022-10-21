@@ -221,7 +221,7 @@ export default function ManagerstockRequest(){
                                             </div>
                                             <div className="col-2">
                                                 {
-                                                    item.status_id !=7 &&
+                                                    item.status_id == 1 &&
                                                     <button className="btn btn-danger" onClick={event => cancelRequest(item.request_id)}>ยกเลิก</button>
                                                 }
                                                 

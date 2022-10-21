@@ -255,16 +255,40 @@ export default function TransferReqeust(){
     }
 
     const transferstock = async ()=>{
-
+        let linemessage;
         transferlist.map(item=>{
             allstock.filter(allstock => allstock.m_id == mid && allstock.branch_id== item.origin_branch ).map(item1 =>{
                     updatestock(item1.stock_id,item1.stock_amount);
                     addtransferhitory(item.origin_branch,item.destination_branch,item.request_id,item.m_id,item.stock_amount);
+                    linemessage = "แจ้งเตือนมีคำขอให้ส่งของไปยังสาขา"+ checkbranchname(item.destination_branch) +" มีรายการดั้งนี้ :"+ item1.m_name +" จำนวน "+ item.stock_amount +" "+item1.m_unit ;
+                    getLinetoken(item.origin_branch,linemessage);
             })
         });
+
+          
             requeststatusupdate();
     }
     
+
+    const getLinetoken = async(emp_id,linemessage)=>{
+        
+        let json =await API_POST("employeegettoken",{
+            emp_id: emp_id
+        })
+
+        if(json.result){
+            lineAlert(json.data[0].token,linemessage);
+        }
+    }
+
+    const lineAlert = async(token,text)=>{
+      
+        let json =await API_POST("linenotify",{
+            token : token,
+            message: text
+        });
+    }
+
     const requeststatusupdate = async()=>{
       
         if(requestid>0){

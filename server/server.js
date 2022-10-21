@@ -1270,7 +1270,7 @@ app.get('/api/getOrderSelllist',async(req,res)=>{
 app.get('/api/getorderreqeust',async(req,res)=>{
 
     try{
-        var result = await sellrecord.getorderreqeust(pool);
+        var result = await requeststock.getOrderReqeust(pool);
         res.json({
             result: true,
             data: result

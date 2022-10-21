@@ -22,9 +22,11 @@ export default function Dashboard(props){
     const [sumpiece,setSumpiece] =useState(0);
     const [sumcustomer,setSumcustomer] =useState(0);
     const [orderselllist,setOrderselllist] =useState([]);
+    const [orderreqeust,setOrderrequest] =useState([]);
     useEffect(()=>{
         fetchsellrecord();
         fetchOrderselllist();
+        fetchOrderreqeust();
     },[])
 
     useEffect(()=>{
@@ -65,6 +67,14 @@ export default function Dashboard(props){
         let json = await API_GET("getOrderSelllist");
         if(json.data){
             setOrderselllist(json.data);
+        }
+    }
+
+    const fetchOrderreqeust = async ()=>{
+        let json = await API_GET("getorderreqeust");
+        console.log(json.data);
+        if(json.data){
+            setOrderrequest(json.data);
         }
     }
     const convertDay = (date)=>{
@@ -136,9 +146,12 @@ export default function Dashboard(props){
                     
                         <div className="card-body">
                             <ol>
-                                <li className="my-2"></li>
-                                <li className="my-2"></li>
-                                <li className="my-2"></li>
+                            {
+                                        orderreqeust != null &&
+                                        orderreqeust.map((item,index)=>(                                        
+                                            <li className="my-2" hidden={index >=3 && true}>{item.m_name} {item.sumamount} {item.m_unit}</li>
+                                        ))
+                                    }
                             </ol>
                         </div>
                     </div>
