@@ -6,7 +6,7 @@ import Admin from "./components/admin/Admin";
 import Owner from "./components/owner/Owner";
 import Employee from "./components/employee/Employee";
 import Manager from "./components/manager/Manager";
-
+import Managerstock from "./components/manager/Managerstock";
 export default function Home() {
 
     const [roleid,setRole] = useState(0);
@@ -45,7 +45,7 @@ export default function Home() {
                 {roleid === 5 && <Navigate to="/" replace />}
                 {roleid === 1 && <Admin/>}
                 {roleid === 2 && <Employee />}
-                {roleid === 3 && <Manager />}
+                {roleid === 3 && <Managerstock />}
                 {roleid === 4 && <Owner />} 
         </>
        

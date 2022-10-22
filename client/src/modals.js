@@ -178,7 +178,7 @@ export function PlusoreditstockModal(props){
                         <p>{props.message}</p>                
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={onAdd}>เพิ่ม</Button>
+                    <Button variant="primary" hidden={props.num == 1 && true} onClick={onAdd}>เพิ่ม</Button>
                     <Button variant="danger" onClick={onEdit}>แก้ไข</Button>
                 </Modal.Footer>
             </Modal>            

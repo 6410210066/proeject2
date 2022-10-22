@@ -4,7 +4,7 @@ import SimpleDateTime  from 'react-simple-timestamp-to-date';
 import { useState ,useEffect} from "react";
 export default function Manager(){
 
-    let page=1;
+    let page=2;
 
 
    
@@ -18,7 +18,7 @@ export default function Manager(){
                     </div>
                     <div className="col-lg-10 col-sm-12 content " style={{padding:"0"}}>
                         <div className='user-grid'>
-                            
+                             
                         </div>
                     </div>
                 </div>

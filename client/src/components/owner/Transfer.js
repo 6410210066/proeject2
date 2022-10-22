@@ -252,7 +252,6 @@ export default function Transfer(){
 
     }
 
-
     const getLinetoken = async(emp_id,linemessage)=>{
         
         let json =await API_POST("employeegettoken",{

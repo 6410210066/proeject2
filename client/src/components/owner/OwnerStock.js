@@ -286,7 +286,7 @@ export default function OwnerStock(){
                                             <button className="button btn-search" as="input" type="submit" ><i class="fa-solid fa-magnifying-glass me-2"></i>ค้นหา</button>
                                         </div>
                                         <div className="col-2 ">                             
-                                            <Link to={`/owner/stock/add`} className="button btn-add setbtn">เพิ่ม</Link>
+                                            <Link to={`/owner/stock/add`} className="button btn-add setbtn">เพิ่มสต๊อก</Link>
                                         </div>
                                         <div className="col-1"></div>
                                     </div>
@@ -336,6 +336,9 @@ export default function OwnerStock(){
                                                 }
                                                 </Form.Select>
                                             </Form.Group>
+                                        </div>
+                                        <div className="col-lg-4 col-sm-10 ">
+                                        <Link to={`/owner/material`} className="btn btn-primary setbtn ms-4">จัดการวัตถุดิบ</Link>
                                         </div>
                                     </div>
                                 </Form>
@@ -404,6 +407,7 @@ export default function OwnerStock(){
                                 message={message}
                                 onConfirm={onPlusoredit}
                                 onCancel={onCancel}
+                               
                             />
 
                             <PlusstockModal

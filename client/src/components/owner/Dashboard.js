@@ -133,7 +133,7 @@ export default function Dashboard(props){
                                     {
                                         orderselllist != null &&
                                         orderselllist.map((item,index)=>(                                        
-                                            <li className="my-2" hidden={index >=3 && true}>{item.product_name} {item.sumpiece} ชิ้น</li>
+                                            <li className="my-2" hidden={index >=3 && true}>{item.product_name} {item.sumpiece} </li>
                                         ))
                                     }
                                     

@@ -876,26 +876,19 @@ app.post('/api/stock/request',checkAuth, async (req,res)=>{
 
 
 
-app.get('/api/material',checkAuth, async(req,res)=>{
-    pool.query("SELECT * FROM material",function(error,results,fields){
-        if(error){
-            res.json({
-                result: false,
-                message: error.message
-            });
-        }
-        if(results.length){
-            res.json({
-                result:true,
-                data: results
-            });
-        }else{
-            res.json({
-                result: false,
-                message: "ไม่ข้อมูลวัตถุดิบ"
-            });
-        }
-    });
+app.get('/api/material', async(req,res)=>{
+    try{
+        var result = await material.getMaterial(pool);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
 });
 
 app.post('/api/checkmaterialbybranch',checkAuth, async (req,res)=>{
@@ -915,7 +908,7 @@ app.post('/api/checkmaterialbybranch',checkAuth, async (req,res)=>{
     }
 });
 
-app.get('/api/material/:m_id',checkAuth, async(req,res) =>{
+app.get('/api/material/:m_id',async(req,res) =>{
     const m_id = req.params.m_id;
 
     try{
@@ -1330,6 +1323,59 @@ app.get('/api/getselllist',async(req,res)=>{
 
     try{
         var result = await sellrecord.getSelllist(pool);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+});
+
+
+app.post('/api/material/add',async(req,res)=>{
+    const input =req.body;
+    console.log(input)
+    try{
+        var result = await material.createMaterial(pool,input.m_name,input.m_unit,input.m_type,input.Minimum);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+});
+
+
+app.post('/api/material/edit',checkAuth,async(req,res)=>{
+    const input =req.body;
+
+    try{
+        var result = await material.editMaterial(pool,input.m_id,input.m_name,input.m_unit,input.m_type,input.Minimum);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
+});
+
+app.post('/api/material/delete',checkAuth,async(req,res)=>{
+    const input =req.body;
+    console.log(input)
+    try{
+        var result = await material.deleteMaterial(pool,input.m_id);
         res.json({
             result: true,
             data: result

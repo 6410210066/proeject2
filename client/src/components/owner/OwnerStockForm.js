@@ -121,7 +121,6 @@ export default function OwnerStockForm(){
     }
     return(
         <>
-            {console.log("mid : "+mid)}
             <div className="Formstyle">
                 <div className=""></div>
                 <div className="FormGroup mt-5">

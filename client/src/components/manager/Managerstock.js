@@ -212,10 +212,6 @@ export default function Managerstock(){
         setCurrentPage(pageCount - 1);
     }
 
-
-
-
-
     return(
         <>
             <div  className="container-fluid ">
@@ -316,6 +312,7 @@ export default function Managerstock(){
                                         message={message}
                                         onConfirm={onPlusoredit}
                                         onCancel={onCancel}
+                                        num={1}
                                     />
 
                                     <PlusstockModal

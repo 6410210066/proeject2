@@ -132,7 +132,7 @@ export default function Employee(){
 
             setSid(json.data.insertId);
             list.map(item=>{
-                // updateStock(item);
+                updateStock(item);
                 addselllist(item,json.data.insertId);
             })
            
@@ -165,27 +165,28 @@ export default function Employee(){
 
    const updateStock = async(list)=>{
         let num=0;
+        let num1=0;
         let stockID;
         let stockamount=0;
         let sumlist=0;
-        
-        stock.filter(stock => stock.m_id == list.m_id && stock.branch_id == branch_id).map(item=>{
+        let data1 = [];
+        let json1 ={}
+         stock.filter(stock => stock.m_id == list.m_id && stock.branch_id == branch_id).map(item=>{
             console.log(item.stock_amount * 1000);
             stockamount = parseInt(item.stock_amount) * 1000
-            sumlist= parseInt(list.product_weight)  * parseInt(list.amount);
+            sumlist= parseInt(list.product_weight)  * parseInt(list.amount);   
             num = (stockamount - sumlist)/1000;
-            stockID = item.stock_id;
-
         });
+        data1.push(json1);
 
         const json = await API_POST("stock/update",{
             stock_id : stockID,
             stock_amount: num
         });
 
-        if(json.result){
-            console.log("update stock success");
-        }
+        // if(json.result){
+        //     console.log("update stock success");
+        // }
 
    }
 
