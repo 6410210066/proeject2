@@ -123,7 +123,7 @@ export default function Dashboard(props){
                     <div className="col-lg-1 col-sm-0"></div>
                     <div className="col-lg-5 col-sm-12 card mx-2 my-4 p-0 border border-primary">
                         <div className="card-header text-center">
-                            รายการสินค้าขายดี
+                            รายการสินค้าขายดี 3 อันดับประจำเดือน
                         </div>
                         <div className="card-body">
                                 <ol>
@@ -146,7 +146,7 @@ export default function Dashboard(props){
                     </div>
                     <div className="col-lg-5 col-sm-12 card mx-2 my-4 p-0 border border-primary">
                         <div className="card-header text-center ">
-                            รายการวัตถุดิบที่ใช้เยอะ
+                            รายการวัตถุดิบที่ใช้เยอะสุด 3 อันดับประจำเดือน 
                         </div>
                     
                         <div className="card-body">

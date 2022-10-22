@@ -66,7 +66,7 @@ export default function Employeehistory() {
                     <div className="col-lg-2  col-sm-12 " style={{ padding: "0" }}>
                         <Employeenav page={page} />
                     </div>
-                    <div className="col-lg-10 col-sm-12 content  " style={{ padding: "0" }}>
+                    <div className="col-lg-10 col-sm-12 content overfloww " style={{ padding: "0" }}>
                         <div className='user-grid'>
                             <h1 className="header">ประวัติการขาย</h1>
 
