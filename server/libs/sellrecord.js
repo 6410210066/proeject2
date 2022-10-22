@@ -36,5 +36,23 @@ module.exports={
     getSelllist: async(pool)=>{
         var sql ="SELECT s.*,p.product_name FROM sell_list s JOIN product p ON s.product_id = p.product_id";
         return await pool.query(sql);
-    }
+    },
+
+    getReportsellrecord : async (pool) => {
+        var sql = `SELECT SUM(total) AS sell,
+                    b.branch_name
+                    FROM sellrecord s JOIN branch b ON s.branch_id = b.branch_id WHERE DATE(datetime) = CURDATE()
+                    GROUP BY b.branch_id `;
+        return await pool.query(sql);
+    },
+
+    getReportsellrecordmonth : async (pool) => {
+        var sql = `SELECT SUM(total) AS sell,
+                    b.branch_name
+                    FROM sellrecord s JOIN branch b ON s.branch_id = b.branch_id WHERE MONTH(s.datetime) = MONTH(CURRENT_TIMESTAMP)
+                    GROUP BY b.branch_id `;
+        return await pool.query(sql);
+    },
+
+    
 };

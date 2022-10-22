@@ -5,6 +5,7 @@ import Reportstockbybranch from "./report/Reportstockbybranch";
 import { Form, } from "react-bootstrap";
 import { API_GET, API_POST } from "../../api";
 import { parsePath } from "react-router-dom";
+import Reportsellrecord from "./report/Reportsellrecord";
 
 export default function Dashboard(props){
 
@@ -23,6 +24,7 @@ export default function Dashboard(props){
     const [sumcustomer,setSumcustomer] =useState(0);
     const [orderselllist,setOrderselllist] =useState([]);
     const [orderreqeust,setOrderrequest] =useState([]);
+    
     useEffect(()=>{
         fetchsellrecord();
         fetchOrderselllist();
@@ -187,6 +189,14 @@ export default function Dashboard(props){
                 <div className="row dashboard-content Regular shadow" >
                         <div className="col-lg-12 col-sm-12">
                             <Reportstockbybranch data={setData} checkChart={setCheckChart} />
+                        </div>
+                </div>
+
+                 {/* กราฟแสดงข้อมูลแสดงการขาย */}
+                 <h3 className="header my-4">กราฟแสดงยอดขายรวมของแต่ละสาขา</h3>
+                <div className="row dashboard-content Regular shadow" >
+                        <div className="col-lg-12 col-sm-12">
+                            <Reportsellrecord data={setData}  checkChart={setCheckChart} />
                         </div>
                 </div>
 

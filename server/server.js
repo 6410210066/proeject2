@@ -1342,6 +1342,36 @@ app.get('/api/getselllist',async(req,res)=>{
     }
 });
 
+app.get("/api/reportsellrecord",checkAuth, async(req,res)=>{
+    try{
+        var result = await sellrecord.getReportsellrecord(pool);
+        res.json({
+            result:true,
+            data:result
+        })
+    }catch(ex){
+        res.json({
+            result:false,
+            message:ex.message
+        })
+    }
+});
+
+app.get("/api/reportsellrecordmonth",checkAuth, async(req,res)=>{
+    try{
+        var result = await sellrecord.getReportsellrecordmonth(pool);
+        res.json({
+            result:true,
+            data:result
+        })
+    }catch(ex){
+        res.json({
+            result:false,
+            message:ex.message
+        })
+    }
+});
+
 app.listen(port, () => {
     console.log("Running");
 });

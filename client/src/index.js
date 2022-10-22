@@ -35,6 +35,7 @@ import ManagerRequestItem from './components/owner/ManagerRequestItem';
 import TransferReqeust from './components/owner/TransferRequest';
 import RequestHistory from './components/owner/RequestHistory';
 import TransferHistory from './components/owner/TransferHistory';
+import Reportsellrecord from './components/owner/report/Reportsellrecord';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
@@ -68,7 +69,7 @@ root.render(
       <Route path="owner/transferrequest" element={<TransferReqeust/>} />
       <Route path="owner/requesthistory" element={<RequestHistory />} />
       <Route path="owner/transferhistory" element={<TransferHistory />} />
-
+      <Route path="owner/Reportsellrecord" element={<Reportsellrecord/>} />
     </Routes>
   </BrowserRouter>,
   // document.getElementById('root')
