@@ -9,6 +9,7 @@ import Reportsellrecord from "./report/Reportsellrecord";
 
 export default function Dashboard(props){
 
+    let totalpiece=0;
     const datenow = Date.now();
 
     const [data,setData] = useState([]);
@@ -24,7 +25,8 @@ export default function Dashboard(props){
     const [sumcustomer,setSumcustomer] =useState(0);
     const [orderselllist,setOrderselllist] =useState([]);
     const [orderreqeust,setOrderrequest] =useState([]);
-    
+    const [sum1,setSum1] =useState(0);
+    const [sum2,setSum2] =useState(0);
     useEffect(()=>{
         fetchsellrecord();
         fetchOrderselllist();
@@ -54,6 +56,12 @@ export default function Dashboard(props){
         }
     }, [mid]);
 
+    useEffect(()=>{
+        orderselllist.map(item =>{
+            totalpiece = parseInt(totalpiece) + parseInt(item.sumpiece)
+         })
+         setSum1(totalpiece)
+    },[orderselllist]);
 
     const fetchsellrecord = async()=>{
         let json = await API_GET("sellrecorddashboard");
@@ -69,9 +77,9 @@ export default function Dashboard(props){
         let json = await API_GET("getOrderSelllist");
         if(json.data){
             setOrderselllist(json.data);
-        }
-    }
 
+         }
+}
     const fetchOrderreqeust = async ()=>{
         let json = await API_GET("getorderreqeust");
         console.log(json.data);
@@ -79,17 +87,6 @@ export default function Dashboard(props){
             setOrderrequest(json.data);
         }
     }
-    const convertDay = (date)=>{
-       
-        const Day = new Date(date).toLocaleString(
-        "en-US",
-            {
-            day: "2-digit",
-            }
-        );
-        
-        return parseInt(Day);
-    };
 
     return (
         <>
@@ -131,13 +128,19 @@ export default function Dashboard(props){
                         <div className="card-body">
                                 <ol>
                                     {
-                                        orderselllist != null &&
-                                        orderselllist.map((item,index)=>(                                        
-                                            <li className="my-2" hidden={index >=3 && true}>{item.product_name} {item.sumpiece} </li>
+                                        orderselllist != null  &&
+                                        orderselllist.map((item,index)=>(  
+                                        <> 
+
+                                            {
+                                                sum1 !=0 &&
+                                                <li className="my-2" hidden={index >=3 && true}>{item.product_name} {parseFloat(item.sumpiece * 100/ parseInt(sum1)).toFixed(2)}  %</li>
+                                            }
+                                           
+                                        </>                                      
+                                            
                                         ))
                                     }
-                                    
-
                                 </ol>
                         </div>
                     </div>

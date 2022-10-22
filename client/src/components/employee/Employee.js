@@ -165,41 +165,37 @@ export default function Employee(){
 
    const updateStock = async(list)=>{
         let num=0;
-        let num1=0;
         let stockID;
         let stockamount=0;
         let sumlist=0;
-        let data1 = [];
-        let json1 ={}
          stock.filter(stock => stock.m_id == list.m_id && stock.branch_id == branch_id).map(item=>{
             console.log(item.stock_amount * 1000);
             stockamount = parseInt(item.stock_amount) * 1000
             sumlist= parseInt(list.product_weight)  * parseInt(list.amount);   
             num = (stockamount - sumlist)/1000;
+            stockID = item.stock_id;
         });
-        data1.push(json1);
+
 
         const json = await API_POST("stock/update",{
             stock_id : stockID,
             stock_amount: num
         });
 
-        // if(json.result){
-        //     console.log("update stock success");
-        // }
-
+        if(json.result){
+            console.log("update stock success");
+        }
    }
-
 
     const getBranchId = async(user_id) => {
         let json = await API_POST("getbranchId",{
             user_id : user_id
         });
-        
         setBranchid(json.data[0].branch_id);
         setEmpid(json.data[0].emp_id);
         return json.data[0].branch_id;
     }
+    
     return(
         <>
              <div  className="container-fluid ">

@@ -438,6 +438,7 @@ export default function Transfer(){
                                                         { 
                                                             branch != null &&                                         
                                                                 branch.filter(branch => branch.branch_id !== checkoriginbranchID).map(item => (
+                                                                    
                                                                     <option key={item.branch_id} value={item.branch_id}> 
                                                                         {item.branch_name} 
                                                                     </option>
