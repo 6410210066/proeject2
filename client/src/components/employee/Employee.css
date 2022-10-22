@@ -113,8 +113,9 @@
 }
 
 .bg-ground1{
-    background-color: #f8f8f8;
+    background-color: #fbfbfbf6;
     height: auto;
+    padding-bottom: 20px;
 }
 
 .box-down1{

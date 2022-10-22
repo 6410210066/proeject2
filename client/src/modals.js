@@ -877,8 +877,8 @@ export function TransferHistoryModal(props){
 }
 
 export function Detailsellrecordmodal(props){
-
-    
+    let data = props.data;
+    let list = props.list;
     return (
         <Modal show={props.show} onHide={props.onHide} centered >
             <Modal.Header>
@@ -890,12 +890,12 @@ export function Detailsellrecordmodal(props){
           
             <div className="row">          
                 <div className="col-5">
-                    <p><b>รหัส :</b></p>
-                    <p><b>วันที่ :</b></p>
-                    <p><b>ชื่อผู้ขาย :</b></p>
+                    <p><b>รหัส : </b>{props.data.s_id}</p>
+                    <p><b>วันที่ : </b><SimpleDateTime dateFormat="DMY" dateSeparator="/"  timeSeparator=":" showTime="0">{props.data.datetime}</SimpleDateTime></p>
+                    <p><b>ชื่อผู้ขาย : </b> {props.data.firstname} {props.data.lastname}</p>
                 </div>
                 <div className="col-5">
-                    <p><b>เวลา :</b></p>
+                    <p><b>เวลา : </b><SimpleDateTime format="MHS"  timeSeparator=":" showTime="1" showDate="0">{props.data.datetime}</SimpleDateTime></p>
                 </div>   
 
                     <div>
@@ -904,15 +904,39 @@ export function Detailsellrecordmodal(props){
                                             <tr>
                                                 <th className="px-3">รหัสสินค้า</th>
                                                 <th className="px-3">ชื่อสินค้า</th>
-                                                <th className="px-3">ราคา</th>
                                                 <th className="px-3">จำนวน</th>
                                                 <th className="px-3">ราคารวม</th>
                                             </tr>
                                         </thead>
                                     <tbody> 
-
+                                    {
+                                            
+                                           list.filter(list => list.s_id == data.s_id).map(item=>(      
+                                            <>
+                                                <tr>
+                                                                <td>{item.list_id}</td>
+                                                                <td>{item.product_name}</td>
+                                                                <td>{item.piece}</td>
+                                                                <td>{item.total}</td>
+                                                                
+                                                </tr>
+                                            </>
+                                            ))
+                                        }
                                     </tbody> 
                             </Table> 
+                            <div className="row">
+                                <div className="col-6"></div>
+                                <p className="col-6 pt-4">ราคารวมสุทธิ<input className="d-inline-block mx-1 textbox-plus1 form-control" value={props.data.total}></input>บาท</p>
+                            </div>
+                            <div className="row">
+                                <div className="col-6"></div>
+                                <p className="col-6">รับเงิน<input className="d-inline-block me-4 textbox-plus1 form-control" value={props.data.getmoney}></input>บาท</p>
+                            </div>
+                            <div className="row">
+                                <div className="col-6"></div>
+                                <p className="col-6">เงินทอน<input className="d-inline-block me-3 textbox-plus1 form-control" value={props.data.paychange}></input>บาท</p>
+                            </div>
                     </div> 
                     
                     
@@ -920,7 +944,7 @@ export function Detailsellrecordmodal(props){
             </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="danger" onClick={props.onCancel}>ยกเลิก</Button>
+                <Button variant="danger" onClick={props.onCancel}>ปิด</Button>
             </Modal.Footer>
         </Modal>
     )

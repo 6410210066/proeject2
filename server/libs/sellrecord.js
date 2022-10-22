@@ -31,5 +31,10 @@ module.exports={
     getOrderSelllist: async(pool)=>{
         var sql ="SELECT sl.product_id,p.product_name ,SUM(sl.piece ) as sumpiece FROM sellrecord s JOIN sell_list sl ON s.s_id = sl.s_id JOIN product p ON p.product_id = sl.product_id WHERE MONTH(s.datetime) = MONTH(CURRENT_TIMESTAMP) GROUP BY sl.product_id ORDER BY sumpiece DESC";
         return await pool.query(sql);
+    },
+
+    getSelllist: async(pool)=>{
+        var sql ="SELECT s.*,p.product_name FROM sell_list s JOIN product p ON s.product_id = p.product_id";
+        return await pool.query(sql);
     }
 };

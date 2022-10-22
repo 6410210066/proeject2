@@ -117,6 +117,8 @@ export default function Employee(){
     }
 
     const payment = async() => {
+        
+
         const json = await API_POST("sellrecord/add",{
             emp_id: emp_id,
             branch_id: branch_id,

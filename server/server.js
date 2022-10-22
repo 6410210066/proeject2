@@ -1281,7 +1281,7 @@ app.get('/api/getorderreqeust',async(req,res)=>{
             message:ex.message
         });
     }
-})
+});
 
 app.post('/api/employeegettoken', async(req,res)=>{
     const input = req.body;
@@ -1324,6 +1324,22 @@ app.post('/api/linenotify', async(req,res)=>{
           });
         }
       });
+});
+
+app.get('/api/getselllist',async(req,res)=>{
+
+    try{
+        var result = await sellrecord.getSelllist(pool);
+        res.json({
+            result: true,
+            data: result
+        });
+    }catch(ex){
+        res.json({
+            result: false,
+            message:ex.message
+        });
+    }
 });
 
 app.listen(port, () => {

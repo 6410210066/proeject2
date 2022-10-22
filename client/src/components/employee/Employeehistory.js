@@ -8,18 +8,20 @@ export default function Employeehistory() {
     let page = 2;
 
         const [data,setData] = useState([]);
+        const [selectdata,setSelectdata] = useState({});
         const [emp_id,setEmpid] = useState(0);
         const [branch_id,setBranchid] = useState(0);
         const [showsellrecordModal,setShowSellrecordModal] =useState(false);
-        
+        const [list,setList] = useState([]);
+
     useEffect(()=>{
         let user_id = localStorage.getItem("user_id");
         getBranchId(user_id);
-        
+        selllist();
     },[])
 
     useEffect(()=>{
-        console.log("in useEffec emp_id")
+        console.log("in useEffec emp_id");
         console.log(emp_id)
         fetchData();
     },[emp_id])
@@ -40,8 +42,17 @@ export default function Employeehistory() {
         setData(json.data);
     }
 
-    const onShowDetail = async()=>{
+    const selllist = async()=>{
+        let json = await API_GET("getselllist");
+        console.log(json.data);
+        if(json.result){
+            setList(json.data);
+        }
+    }
+
+    const onShowDetail = async(item)=>{
         setShowSellrecordModal(true);
+        setSelectdata(item);
     }
 
     const onCancel = ()=>{
@@ -60,36 +71,8 @@ export default function Employeehistory() {
                             <h1 className="header">ประวัติการขาย</h1>
 
                             <div class="mx-4 pt-4 bg-ground1 Regular shadow">
-                            <Form>
-                                {['radio'].map((type) => (
-                                <div key={`inline-${type}`} className="mb-3">
-                                    <Form.Check
-                                        inline
-                                        label="รายวัน"
-                                        name="group1"
-                                        type={type}
-                                        id={`inline-${type}-1`}
-                                    />
-                                    <Form.Check
-                                        inline
-                                        label="รายเดือน"
-                                        name="group1"
-                                        type={type}
-                                        id={`inline-${type}-2`}
-                                    />
-                                    <Form.Check
-                                        inline
-                                        label="รายปี"
-                                        name="group1"
-                                        type={type}
-                                        id={`inline-${type}-3`}
-                                    />
-                                    
-                                </div>
-                                ))}
-                            </Form>
-                       
-                                <Table striped className=" grid">
+                
+                                <Table striped className="grid ">
                                     <thead style={{backgroundColor:"#FFC700"}}>
                                         <tr>
                                             <th>เลขบิล</th>
@@ -113,7 +96,11 @@ export default function Employeehistory() {
                                                             <td>{item.branch_name}</td>
                                                             <td>{item.piece}</td>
                                                             <td>{item.total}</td>
-                                                            <td className="align-middle"><button className="button btn-detail btn-sm" onClick={onShowDetail}>รายละเอียด</button></td>
+                                                            {
+                                                                list != null &&
+                                                                <td className="align-middle"><button className="button btn-detail btn-sm" onClick={event =>onShowDetail(item)} >รายละเอียด</button></td>
+                                                            }
+                                                            
                                                         </tr>
                                                      
                                                     </>
@@ -131,7 +118,9 @@ export default function Employeehistory() {
             <Detailsellrecordmodal 
                 show={showsellrecordModal}
                 onShowDetail={onShowDetail}
+                data={selectdata}
                 onCancel={onCancel} 
+                list={list}
             />
         </>
     )
